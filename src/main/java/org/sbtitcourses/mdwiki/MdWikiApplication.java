@@ -1,5 +1,9 @@
 package org.sbtitcourses.mdwiki;
 
+/**
+ * Запуск wiki-сервиса
+ */
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

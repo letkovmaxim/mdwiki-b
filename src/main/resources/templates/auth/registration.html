@@ -18,9 +18,8 @@
 
     <input type="text" th:field="*{patronymic}" placeholder="Отчество (если оно имеется)" id="patronymic"/>
     <br>
-    <div style="color:red" th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}"></div>
 
-    <input type="text" th:field="*{username}" placeholder="UserName" id="username"/>
+    <input type="text" th:field="*{username}" placeholder="Логин" id="username"/>
     <br>
     <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
 
@@ -30,11 +29,10 @@
 
     <input type="password" th:field="*{password}" placeholder="Пароль" id="password"/>
     <br>
+    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
 
     <input type="password" name="repeatPassword" placeholder="Повторите пароль" id="repeatPassword"/>
     <br>
-    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-
 
     <input type="submit" value="Sign up!"/>
 </form>

@@ -1,50 +1,87 @@
 package org.sbtitcourses.mdwiki.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+/**
+ * Данный класс описывает какие данные необходимо ввести юзеру при регистрации
+ * (role и active заполняются автоматически в RegistrationService.register)
+ */
 
+import javax.persistence.*;
+import javax.validation.constraints.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "person")
 public class Person {
+
+    /**
+     * id пользователя в базе данных
+     */
     @Id
+    @NotNull
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @NotEmpty(message = "Имя не должно быть пустым")
+    /**
+     * Имя пользователя
+     */
+    @NotEmpty(message = "Поле имя не должно быть пустым")
     @Column(name = "name")
     private String name;
 
-    @NotEmpty(message = "Фамилия не должно быть пустым")
+    /**
+     * Фамилия пользователя
+     */
+    @NotEmpty(message = "Поле фамилия не должно быть пустым")
     @Column(name = "surname")
     private String surname;
 
+    /**
+     * Отчество пользователя
+     * (поле может быть путсым)
+     */
     @Column(name = "patronymic")
     private String patronymic;
 
-    @NotEmpty(message = "username не должно быть пустым")
+    /**
+     * Логин пользователя
+     */
+    @NotEmpty(message = "Поле логин не должно быть пустым")
     @Column(name = "username")
     private String username;
 
-    @NotEmpty(message = "email не должно быть пустым")
+    /**
+     * Email пользователя
+     */
+    @Email(message = "Неккоректно введен email")
+    @NotEmpty(message = "Поле email не должно быть пустым")
     @Column(name = "email")
     private String email;
 
-    @NotEmpty(message = "Пароль не может быть пустым")
+    /**
+     * Пароль пользователя
+     */
+    @NotEmpty(message = "Поле пароль не должно быть пустым")
     @Size(min = 6, max = 100, message = "Пароль должен состоять минимум из 6 символов")
     @Column(name = "password")
     private String password;
 
+    /**
+     * Роль пользователя
+     */
     @Column(name = "role")
     private String role;
 
+    /**
+     * Тип аккаунта
+     * Активный (true) или заблокированный (false)
+     */
     @Column(name = "active")
     private Boolean active;
 
+    /**
+     * Создание экземпляра класса
+     */
     public Person() {
     }
 
