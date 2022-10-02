@@ -1,9 +1,5 @@
 package org.sbtitcourses.mdwiki.service;
 
-/**
- * Класс описывающий бизнес логику регистрации
- */
-
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +7,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+/**
+ * Класс описывающий бизнес логику регистрации
+ */
 @Service
 public class RegistrationService {
 

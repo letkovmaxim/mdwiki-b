@@ -1,9 +1,5 @@
 package org.sbtitcourses.mdwiki.controller;
 
-/**
- * Контроллер для страниц login и registration
- */
-
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.service.RegistrationService;
 import org.sbtitcourses.mdwiki.util.PersonValidator;
@@ -16,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.Valid;
 
+/**
+ * Контроллер для страниц login и registration
+ */
 @Controller
 @RequestMapping("/auth")
 public class AuthController {

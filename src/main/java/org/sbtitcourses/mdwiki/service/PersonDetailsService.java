@@ -1,9 +1,5 @@
 package org.sbtitcourses.mdwiki.service;
 
-/**
- * Сервис для Spring Security, загружает пользователя
- */
-
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
 import org.sbtitcourses.mdwiki.security.PersonDetails;
@@ -12,9 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
+/**
+ * Сервис для Spring Security, загружает пользователя
+ */
 @Service
 public class PersonDetailsService implements UserDetailsService {
 

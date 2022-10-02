@@ -1,18 +1,16 @@
 package org.sbtitcourses.mdwiki.security;
 
-/**
- * Обертка над сущностью, для работы не напрямую с Person
- * Стандартные методы
- */
-
 import org.sbtitcourses.mdwiki.model.Person;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Обертка над сущностью, для работы не напрямую с Person
+ * Стандартные методы
+ */
 public class PersonDetails implements UserDetails {
 
     /**

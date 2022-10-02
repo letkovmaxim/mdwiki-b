@@ -1,14 +1,13 @@
 package org.sbtitcourses.mdwiki.model;
 
-/**
- * Данный класс описывает какие данные необходимо ввести юзеру при регистрации
- * (role и active заполняются автоматически в RegistrationService.register)
- */
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
+/**
+ * Данный класс описывает какие данные необходимо ввести юзеру при регистрации
+ * (role и active заполняются автоматически в RegistrationService.register)
+ */
 @Entity
 @Table(name = "person")
 public class Person {
@@ -28,20 +27,6 @@ public class Person {
     @NotEmpty(message = "Поле имя не должно быть пустым")
     @Column(name = "name")
     private String name;
-
-    /**
-     * Фамилия пользователя
-     */
-    @NotEmpty(message = "Поле фамилия не должно быть пустым")
-    @Column(name = "surname")
-    private String surname;
-
-    /**
-     * Отчество пользователя
-     * (поле может быть путсым)
-     */
-    @Column(name = "patronymic")
-    private String patronymic;
 
     /**
      * Логин пользователя
@@ -99,22 +84,6 @@ public class Person {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
     }
 
     public String getUsername() {

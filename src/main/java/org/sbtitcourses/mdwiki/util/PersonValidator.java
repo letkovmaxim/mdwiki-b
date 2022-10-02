@@ -1,9 +1,5 @@
 package org.sbtitcourses.mdwiki.util;
 
-/**
- * Класс валидатор, который реализует все необходимые проверки полей ввода при регистрации класса Person
- */
-
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +7,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * Класс валидатор, который реализует все необходимые проверки полей ввода при регистрации класса Person
+ */
 @Component
 public class PersonValidator implements Validator {
 

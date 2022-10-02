@@ -8,16 +8,9 @@
 
 <form th:method="POST" th:action="@{/auth/registration}" th:object="${person}">
 
-    <input type="text" th:field="*{surname}" placeholder="Фамилия" id="surname"/>
-    <br>
-    <div style="color:red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
-
     <input type="text" th:field="*{name}" placeholder="Имя" id="name"/>
     <br>
     <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-
-    <input type="text" th:field="*{patronymic}" placeholder="Отчество (если оно имеется)" id="patronymic"/>
-    <br>
 
     <input type="text" th:field="*{username}" placeholder="Логин" id="username"/>
     <br>

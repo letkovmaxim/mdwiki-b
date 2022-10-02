@@ -1,14 +1,13 @@
 package org.sbtitcourses.mdwiki.repository;
 
-/**
- * Интерфейс для поиска пользователей в базе данных
- */
-
 import org.sbtitcourses.mdwiki.model.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
+/**
+ * Интерфейс для поиска пользователей в базе данных
+ */
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
     /**
