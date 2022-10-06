@@ -2,7 +2,11 @@ package org.sbtitcourses.mdwiki.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.Date;
+import java.util.List;
+
 import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.TemporalType.TIMESTAMP;
 
 /**
  * Данный класс описывает какие данные необходимо ввести юзеру при регистрации
@@ -22,32 +26,19 @@ public class Person {
     private int id;
 
     /**
-     * Имя пользователя
-     */
-    @NotEmpty(message = "Поле имя не должно быть пустым")
-    @Column(name = "name")
-    private String name;
-
-    /**
      * Логин пользователя
      */
-    @NotEmpty(message = "Поле логин не должно быть пустым")
+    @NotEmpty(message = "Логин не должен быть пустым")
+    @Min(value = 4, message = "Логин не должен быть короче 4 символов")
+    @Max(value = 50, message = "Логин не должен быть длинее 50 символов")
     @Column(name = "username")
     private String username;
 
     /**
-     * Email пользователя
-     */
-    @Email(message = "Неккоректно введен email")
-    @NotEmpty(message = "Поле email не должно быть пустым")
-    @Column(name = "email")
-    private String email;
-
-    /**
      * Пароль пользователя
      */
-    @NotEmpty(message = "Поле пароль не должно быть пустым")
-    @Size(min = 6, max = 100, message = "Пароль должен состоять минимум из 6 символов")
+    @NotEmpty(message = "Пароль не должен быть пустым")
+    @Min(value = 6, message = "Пароль не должен быть короче 6 символов")
     @Column(name = "password")
     private String password;
 
@@ -58,11 +49,47 @@ public class Person {
     private String role;
 
     /**
+     * Имя пользователя
+     */
+    @NotEmpty(message = "Имя не должно быть пустым")
+    @Max(value = 128, message = "Имя не должно быть длинее 128 символов")
+    @Column(name = "name")
+    private String name;
+
+    /**
+     * Email пользователя
+     */
+    @NotEmpty(message = "Email не должен быть пустым")
+    @Email(message = "Email введен неккоректно")
+    @Column(name = "email")
+    private String email;
+
+    /**
+     * Точное время создания пользователя
+     */
+    @Temporal(TIMESTAMP)
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    /**
+     * Точное время обновления пользователя
+     */
+    @Temporal(TIMESTAMP)
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+    /**
      * Тип аккаунта
      * Активный (true) или заблокированный (false)
      */
-    @Column(name = "active")
-    private Boolean active;
+    @Column(name = "is_enabled")
+    private Boolean isEnabled;
+
+    /**
+     * Список пространств, принадлежащих пользователю
+     */
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    private List<Space> spaces;
 
     /**
      * Создание экземпляра класса
@@ -78,28 +105,12 @@ public class Person {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPassword() {
@@ -118,11 +129,51 @@ public class Person {
         this.role = role;
     }
 
-    public Boolean getActive() {
-        return active;
+    public String getName() {
+        return name;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Boolean getEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public List<Space> getSpaces() {
+        return spaces;
+    }
+
+    public void setSpaces(List<Space> spaces) {
+        this.spaces = spaces;
     }
 }

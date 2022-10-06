@@ -6,10 +6,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Интерфейс для поиска пользователей в базе данных
+ * Репозиторий для взаимодействия с сущностью Person
  */
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
+
     /**
      * Поиск по Логину пользователя
      * @param username логин пользоватлея
