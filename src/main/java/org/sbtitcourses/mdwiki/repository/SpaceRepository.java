@@ -22,8 +22,7 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
 
     /**
      * Поиск публичных пространств
-     * @param isPublic статус публичности пространства
      * @return возвращает список найденых пространтсв
      */
-    List<Space> findByPublic(boolean isPublic);
+    List<Space> findByIsPublicTrue();
 }

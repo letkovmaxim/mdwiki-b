@@ -29,8 +29,7 @@ public class Person {
      * Логин пользователя
      */
     @NotEmpty(message = "Логин не должен быть пустым")
-    @Min(value = 4, message = "Логин не должен быть короче 4 символов")
-    @Max(value = 50, message = "Логин не должен быть длинее 50 символов")
+    @Size(min = 4, max = 50, message = "Логин не должен быть короче 4 и длинее 50 символов")
     @Column(name = "username")
     private String username;
 
@@ -38,7 +37,7 @@ public class Person {
      * Пароль пользователя
      */
     @NotEmpty(message = "Пароль не должен быть пустым")
-    @Min(value = 6, message = "Пароль не должен быть короче 6 символов")
+    @Size(min = 6, message = "Пароль не должен быть короче 6 символов")
     @Column(name = "password")
     private String password;
 
@@ -52,7 +51,7 @@ public class Person {
      * Имя пользователя
      */
     @NotEmpty(message = "Имя не должно быть пустым")
-    @Max(value = 128, message = "Имя не должно быть длинее 128 символов")
+    @Size(max = 128, message = "Имя не должно быть длинее 128 символов")
     @Column(name = "name")
     private String name;
 

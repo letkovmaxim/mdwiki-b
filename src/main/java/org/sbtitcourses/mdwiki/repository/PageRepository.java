@@ -23,8 +23,7 @@ public interface PageRepository extends JpaRepository<Page, Integer> {
 
     /**
      * Поиск публичных записей
-     * @param isPublic статус публичности записи
      * @return возвращает список найденых записнй
      */
-    List<Page> findByPublic(boolean isPublic);
+    List<Page> findByIsPublicTrue();
 }
