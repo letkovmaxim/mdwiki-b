@@ -67,6 +67,11 @@ public class Space {
     public Space() {
     }
 
+    public Space(String name, Boolean isPublic) {
+        this.name = name;
+        this.isPublic = isPublic;
+    }
+
     public int getId() {
         return id;
     }

@@ -96,6 +96,18 @@ public class Person {
     public Person() {
     }
 
+    public Person(String username, String password, String name, String email) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+    }
+
+    public Person(String username, String email) {
+        this.username = username;
+        this.email = email;
+    }
+
     public int getId() {
         return id;
     }
