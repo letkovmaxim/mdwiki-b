@@ -80,6 +80,11 @@ public class Page {
     public Page() {
     }
 
+    public Page(String name, Boolean isPublic) {
+        this.name = name;
+        this.isPublic = isPublic;
+    }
+
     public int getId() {
         return id;
     }

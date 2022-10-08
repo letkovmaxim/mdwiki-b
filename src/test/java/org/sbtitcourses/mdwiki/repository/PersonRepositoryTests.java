@@ -7,14 +7,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ * Тест для репозитория сущности Person
+ */
 @DataJpaTest
 class PersonRepositoryTests {
     
     private final TestEntityManager entityManager;
     private final PersonRepository personRepository;
-    private final Person person = new Person("testUsername", "testPassword", "testName","testEmail@test.test");
+    private final Person person = new Person(
+            "testUsername",
+            "testPassword",
+            "testName",
+            "testEmail@test.test"
+    );
 
     @Autowired
     PersonRepositoryTests(TestEntityManager entityManager, PersonRepository personRepository) {
@@ -23,32 +34,34 @@ class PersonRepositoryTests {
     }
 
     @BeforeEach
-    void setUp() {
-        entityManager.persist(person);
-        entityManager.flush();
+    public void setUp() {
+        entityManager.persistAndFlush(person);
+        entityManager.clear();
     }
 
     @Test
-    public void test_username() {
-        Person found = personRepository.findByUsername(person.getUsername()).orElse(new Person());
+    public void whenFindByUsername_thenReturnPerson() {
+        Optional<Person> found = personRepository.findByUsername(person.getUsername());
 
-        assertEquals(person.getUsername(), found.getUsername());
+        assertTrue(found.isPresent());
+        assertEquals(person.getId(), found.get().getId());
     }
 
     @Test
-    public void test_email() {
-        Person found = personRepository.findByEmail(person.getEmail()).orElse(new Person());
+    public void whenFindByEmail_thenReturnPerson() {
+        Optional<Person> found = personRepository.findByEmail(person.getEmail());
 
-        assertEquals(person.getEmail(), found.getEmail());
+        assertTrue(found.isPresent());
+        assertEquals(person.getId(), found.get().getId());
     }
 
     @Test
-    public void test_username_or_email() {
-        Person foundByUsername = personRepository.findByUsernameOrEmail(person.getUsername(), "").orElse(new Person());
-        Person foundByEmail = personRepository.findByUsernameOrEmail("", person.getEmail()).orElse(new Person());
+    public void whenFindByUsernameOrEmail_thenReturnPerson() {
+        Optional<Person> foundByUsername = personRepository.findByUsernameOrEmail(person.getUsername(), "");
+        Optional<Person> foundByEmail = personRepository.findByUsernameOrEmail("", person.getEmail());
 
-        assertEquals(person.getUsername(), foundByUsername.getUsername());
-        assertEquals(person.getEmail(), foundByEmail.getEmail());
-        assertEquals(foundByUsername, foundByEmail);
+        assertTrue(foundByUsername.isPresent() && foundByEmail.isPresent());
+        assertEquals(person.getId(), foundByUsername.get().getId());
+        assertEquals(person.getId(), foundByEmail.get().getId());
     }
 }

@@ -8,9 +8,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Тест для репозитория сущности Space
+ */
 @DataJpaTest
 class SpaceRepositoryTests {
 
@@ -25,23 +29,24 @@ class SpaceRepositoryTests {
     }
 
     @BeforeEach
-    void setUp() {
-        entityManager.persist(space);
-        entityManager.flush();
+    public void setUp() {
+        entityManager.persistAndFlush(space);
+        entityManager.clear();
     }
 
     @Test
-    public void test_name() {
-        Space found = spaceRepository.findByName(space.getName()).orElse(new Space());
+    public void whenFindByName_thenReturnSpace() {
+        Optional<Space> found = spaceRepository.findByName(space.getName());
 
-        assertEquals(space.getName(), found.getName());
+        assertTrue(found.isPresent());
+        assertEquals(space.getId(), found.get().getId());
     }
 
     @Test
-    public void test_public() {
+    public void whenFindByIsPublicTrue_thenReturnSpace() {
         List<Space> found = spaceRepository.findByIsPublicTrue();
 
-        assertEquals(space, found.get(0));
+        assertFalse(found.isEmpty());
+        assertEquals(space.getId(), found.get(0).getId());
     }
-
 }
