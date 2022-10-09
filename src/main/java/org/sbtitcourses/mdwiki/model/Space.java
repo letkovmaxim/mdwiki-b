@@ -40,7 +40,6 @@ public class Space {
      */
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
-    @Cascade(ALL)
     private Person owner;
 
     /**

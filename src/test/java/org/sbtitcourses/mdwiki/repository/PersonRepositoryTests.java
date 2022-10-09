@@ -40,7 +40,7 @@ class PersonRepositoryTests {
     }
 
     @Test
-    public void whenFindByUsername_thenReturnPerson() {
+    public void findByUsernameShouldReturnPerson() {
         Optional<Person> found = personRepository.findByUsername(person.getUsername());
 
         assertTrue(found.isPresent());
@@ -48,7 +48,7 @@ class PersonRepositoryTests {
     }
 
     @Test
-    public void whenFindByEmail_thenReturnPerson() {
+    public void findByEmailShouldReturnPerson() {
         Optional<Person> found = personRepository.findByEmail(person.getEmail());
 
         assertTrue(found.isPresent());
@@ -56,7 +56,7 @@ class PersonRepositoryTests {
     }
 
     @Test
-    public void whenFindByUsernameOrEmail_thenReturnPerson() {
+    public void findByUsernameOrEmailShouldReturnPerson() {
         Optional<Person> foundByUsername = personRepository.findByUsernameOrEmail(person.getUsername(), "");
         Optional<Person> foundByEmail = personRepository.findByUsernameOrEmail("", person.getEmail());
 

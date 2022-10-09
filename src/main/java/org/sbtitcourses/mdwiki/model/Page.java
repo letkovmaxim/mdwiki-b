@@ -47,7 +47,6 @@ public class Page {
      */
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
-    @Cascade(ALL)
     private Page parent;
 
     /**
@@ -55,7 +54,6 @@ public class Page {
      */
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "space_id", referencedColumnName = "id")
-    @Cascade(ALL)
     private Space space;
 
     /**
@@ -82,6 +80,7 @@ public class Page {
      * Список документов, принадлжащих данной записи
      */
     @OneToOne(mappedBy = "page", fetch = LAZY)
+    @Cascade(ALL)
     private Document documents;
 
     public Page() {

@@ -35,7 +35,7 @@ class SpaceRepositoryTests {
     }
 
     @Test
-    public void whenFindByName_thenReturnSpace() {
+    public void findByNameShouldReturnSpace() {
         Optional<Space> found = spaceRepository.findByName(space.getName());
 
         assertTrue(found.isPresent());
@@ -43,7 +43,7 @@ class SpaceRepositoryTests {
     }
 
     @Test
-    public void whenFindByIsPublicTrue_thenReturnSpace() {
+    public void findByIsPublicTrueShouldReturnSpace() {
         List<Space> found = spaceRepository.findByIsPublicTrue();
 
         assertFalse(found.isEmpty());

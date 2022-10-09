@@ -35,7 +35,7 @@ class PageRepositoryTests {
     }
 
     @Test
-    public void whenFindByName_thenReturnPage() {
+    public void findByNameShouldReturnPage() {
         Optional<Page> found = pageRepository.findByName(page.getName());
 
         assertTrue(found.isPresent());
@@ -43,7 +43,7 @@ class PageRepositoryTests {
     }
 
     @Test
-    public void whenFindByIsPublicTrue_thenReturnPage() {
+    public void findByIsPublicTrueShouldReturnPage() {
         List<Page> found = pageRepository.findByIsPublicTrue();
 
         assertFalse(found.isEmpty());
