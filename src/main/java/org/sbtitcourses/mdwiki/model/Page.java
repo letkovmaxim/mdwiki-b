@@ -1,13 +1,17 @@
 package org.sbtitcourses.mdwiki.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import java.util.Date;
 import java.util.List;
 
+import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.TemporalType.TIMESTAMP;
+import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
  * Сущность пользовательских записей.
@@ -34,21 +38,24 @@ public class Page {
     /**
      * Список подстраниц данной страницы
      */
-    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "parent", fetch = EAGER)
+    @Cascade(ALL)
     private List<Page> subpages;
 
     /**
      * Запись-родитель, которая содержит эту запись
      */
-    @ManyToOne
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    @Cascade(ALL)
     private Page parent;
 
     /**
      * Пространство, которое содержит эту запись
      */
-    @ManyToOne
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "space_id", referencedColumnName = "id")
+    @Cascade(ALL)
     private Space space;
 
     /**
@@ -74,7 +81,7 @@ public class Page {
     /**
      * Список документов, принадлжащих данной записи
      */
-    @OneToOne(mappedBy = "page", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "page", fetch = LAZY)
     private Document documents;
 
     public Page() {
@@ -147,5 +154,13 @@ public class Page {
 
     public void setPublic(Boolean aPublic) {
         isPublic = aPublic;
+    }
+
+    public Document getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(Document documents) {
+        this.documents = documents;
     }
 }

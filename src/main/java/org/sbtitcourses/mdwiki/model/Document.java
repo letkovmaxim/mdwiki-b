@@ -3,6 +3,7 @@ package org.sbtitcourses.mdwiki.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 
@@ -31,7 +32,7 @@ public class Document {
     /**
      * Запись, содержащая этот докумет
      */
-    @OneToOne
+    @OneToOne(fetch = EAGER)
     @JoinColumn(name = "page_id", referencedColumnName = "id")
     private Page page;
 

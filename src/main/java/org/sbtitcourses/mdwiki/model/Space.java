@@ -1,13 +1,17 @@
 package org.sbtitcourses.mdwiki.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import java.util.Date;
 import java.util.List;
 
+import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.TemporalType.TIMESTAMP;
+import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
  * Сущность пользовательских пространств.
@@ -36,6 +40,7 @@ public class Space {
      */
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @Cascade(ALL)
     private Person owner;
 
     /**
@@ -61,7 +66,8 @@ public class Space {
     /**
      * Список записей, принадлежащих данному пространству
      */
-    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "space", fetch = LAZY)
+    @Cascade(ALL)
     private List<Page> pages;
 
     public Space() {

@@ -22,7 +22,6 @@ class PageRepositoryTests {
     private final PageRepository pageRepository;
     private final Page page = new Page("testName", true);
 
-
     @Autowired
     PageRepositoryTests(TestEntityManager entityManager, PageRepository pageRepository) {
         this.entityManager = entityManager;

@@ -1,12 +1,16 @@
 package org.sbtitcourses.mdwiki.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
 
+import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.TemporalType.TIMESTAMP;
+import static org.hibernate.annotations.CascadeType.*;
 
 /**
  * Данный класс описывает какие данные необходимо ввести юзеру при регистрации
@@ -87,7 +91,8 @@ public class Person {
     /**
      * Список пространств, принадлежащих пользователю
      */
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "owner", fetch = LAZY)
+    @Cascade(ALL)
     private List<Space> spaces;
 
     /**
