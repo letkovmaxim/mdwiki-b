@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.GenerationType.SEQUENCE;
 
 
 /**
@@ -18,9 +19,9 @@ public class Document {
      * ID документа
      */
     @Id
-    @NotNull
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue(strategy = SEQUENCE, generator = "documentSequence")
+    @SequenceGenerator(name = "documentSequence", initialValue = 1, allocationSize = 1, sequenceName = "document_sequence")
+    @Column(name = "id", nullable = false)
     private int id;
 
     /**
