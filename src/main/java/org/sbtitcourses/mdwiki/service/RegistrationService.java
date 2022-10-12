@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * Класс описывающий бизнес логику регистрации
  */
@@ -22,7 +24,6 @@ public class RegistrationService {
      * Класс для шифрования пароля
      */
     private final PasswordEncoder passwordEncoder;
-
 
     /**
      * Инициализация полей
@@ -43,10 +44,11 @@ public class RegistrationService {
     @Transactional
     public void register(Person person) {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-
         person.setRole("ROLE_USER");
-
-        person.setActive(true);
+        Date now = new Date();
+        person.setCreatedAt(now);
+        person.setUpdatedAt(now);
+        person.setEnabled(true);
 
         peopleRepository.save(person);
     }
