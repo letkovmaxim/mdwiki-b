@@ -2,7 +2,7 @@ package org.sbtitcourses.mdwiki.service;
 
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
-import org.sbtitcourses.mdwiki.security.PersonDetails;
+import org.sbtitcourses.mdwiki.repository.security.PersonDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

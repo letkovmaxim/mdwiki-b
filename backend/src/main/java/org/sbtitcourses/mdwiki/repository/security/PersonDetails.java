@@ -1,4 +1,4 @@
-package org.sbtitcourses.mdwiki.security;
+package org.sbtitcourses.mdwiki.repository.security;
 
 import org.sbtitcourses.mdwiki.model.Person;
 import org.springframework.security.core.GrantedAuthority;
