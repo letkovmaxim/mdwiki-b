@@ -1,10 +1,15 @@
 package org.sbtitcourses.mdwiki.controller;
 
 import org.modelmapper.ModelMapper;
+import org.sbtitcourses.mdwiki.dto.PersonRequest;
 import org.sbtitcourses.mdwiki.dto.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.service.PersonService;
+import org.sbtitcourses.mdwiki.util.PersonErrorResponse;
+import org.sbtitcourses.mdwiki.util.exception.PersonNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -24,10 +29,10 @@ public class PersonController {
     }
 
     @PostMapping
-    public Person create(@RequestBody PersonResponse personResponse) {
-        Person personToCreate = modelMapper.map(personResponse, Person.class);
+    public PersonResponse create(@RequestBody PersonRequest personRequest) {
+        Person personToCreate = modelMapper.map(personRequest, Person.class);
 
-        return personService.create(personToCreate);
+        return modelMapper.map(personService.create(personToCreate), PersonResponse.class);
     }
 
     @GetMapping
@@ -48,9 +53,24 @@ public class PersonController {
     }
 
     @PutMapping("/{id}")
-    public Person update(@PathVariable int id, @RequestBody PersonResponse updatedPersonResponse) {
-        Person personToUpdate = modelMapper.map(updatedPersonResponse, Person.class);
+    public PersonResponse update(@PathVariable int id, @RequestBody PersonRequest personRequest) {
+        Person updatedPerson = modelMapper.map(personRequest, Person.class);
 
-        return personService.update(id, personToUpdate);
+        return modelMapper.map(personService.update(id, updatedPerson), PersonResponse.class);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id) {
+        personService.delete(id);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<PersonErrorResponse> handleException(PersonNotFoundException e) {
+        PersonErrorResponse response = new PersonErrorResponse(
+                "Человек не найден",
+                System.currentTimeMillis()
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }

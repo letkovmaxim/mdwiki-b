@@ -108,9 +108,8 @@ public class Person {
         this.email = email;
     }
 
-    public Person(String username, String email) {
-        this.username = username;
-        this.email = email;
+    public Person(int id) {
+        this.id = id;
     }
 
     public int getId() {

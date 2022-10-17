@@ -1,52 +1,37 @@
 package org.sbtitcourses.mdwiki.dto;
 
-import java.util.Date;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
-public class PersonResponse {
-
-    /**
-     * id пользователя в базе данных
-     */
-    private int id;
+public class PersonRequest {
 
     /**
      * Логин пользователя
      */
+    @NotEmpty(message = "Логин не должен быть пустым")
+    @Size(min = 4, max = 50, message = "Логин не должен быть короче 4 и длинее 50 символов")
     private String username;
 
     /**
      * Имя пользователя
      */
+    @NotEmpty(message = "Имя не должно быть пустым")
+    @Size(max = 128, message = "Имя не должно быть длинее 128 символов")
     private String name;
 
     /**
      * Email пользователя
      */
+    @NotEmpty(message = "Email не должен быть пустым")
+    @Email(message = "Email введен неккоректно")
     private String email;
-
-    /**
-     * Точное время создания пользователя
-     */
-    private Date createdAt;
-
-    /**
-     * Точное время обновления пользователя
-     */
-    private Date updatedAt;
 
     /**
      * Тип аккаунта
      * Активный (true) или заблокированный (false)
      */
     private Boolean isEnabled;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -70,22 +55,6 @@ public class PersonResponse {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public Boolean getEnabled() {
