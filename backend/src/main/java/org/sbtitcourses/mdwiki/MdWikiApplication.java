@@ -23,11 +23,4 @@ public class MdWikiApplication {
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
-
-	@Bean
-	CommandLineRunner run(RegistrationService registrationService) {
-		return args -> {
-			registrationService.register(new Person("admin", "adminadmin", "admin", "admin@mail.com"));
-		};
-	}
 }

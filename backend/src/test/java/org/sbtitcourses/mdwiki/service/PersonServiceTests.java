@@ -23,11 +23,28 @@ class PersonServiceTests {
     private PersonRepository personRepository;
     @InjectMocks
     private PersonService personService;
+    private final Person personToCreate;
+    private final Person personWithId;
+    private final Person personToUpdateWith;
+
+    {
+        personToCreate = new Person();
+
+        personWithId = new Person();
+        personWithId.setId(1);
+
+        personToUpdateWith = new Person();
+        personToUpdateWith.setId(1);
+        personToUpdateWith.setUsername("newUsername");
+        personToUpdateWith.setName("newName");
+        personToUpdateWith.setEmail("newEmail@mail.com");
+        personToUpdateWith.setEnabled(false);
+    }
+
 
     @Test
     public void createShouldReturnPerson() {
-        Person personToCreate = new Person();
-        when(personRepository.save(personToCreate)).thenReturn(new Person(1));
+        when(personRepository.save(personToCreate)).thenReturn(personWithId);
 
         Person createdPerson = personService.create(personToCreate);
 
@@ -39,21 +56,19 @@ class PersonServiceTests {
     @Test
     public void getAllShouldReturnPersonList() {
         List<Person> people = new LinkedList<>();
-        people.add(new Person(1));
-        people.add(new Person(2));
+        people.add(personWithId);
         when(personRepository.findAll()).thenReturn(people);
 
         List<Person> gottenPeople = personService.getAll();
 
-        assertEquals(2, gottenPeople.size());
-        assertEquals(1, gottenPeople.get(0).getId());
-        assertEquals(2, gottenPeople.get(1).getId());
+        assertEquals(people.size(), gottenPeople.size());
+        assertEquals(personWithId.getId(), gottenPeople.get(0).getId());
         verify(personRepository).findAll();
     }
 
     @Test
     public void getShouldReturnPerson() {
-        when(personRepository.findById(1)).thenReturn(Optional.of(new Person(1)));
+        when(personRepository.findById(1)).thenReturn(Optional.of(personWithId));
         when(personRepository.findById(2)).thenReturn(Optional.empty());
 
         Person gottenPerson = personService.get(1);
@@ -65,31 +80,25 @@ class PersonServiceTests {
 
     @Test
     public void updateShouldReturnPerson() {
-        Person personToUpdate = new Person(1);
-        Person newPerson = new Person();
-        newPerson.setUsername("newUsername");
-        newPerson.setName("newName");
-        newPerson.setEmail("newEmail@mail.com");
-        newPerson.setEnabled(true);
-        when(personRepository.findById(1)).thenReturn(Optional.of(personToUpdate));
+        when(personRepository.findById(1)).thenReturn(Optional.of(personWithId));
         when(personRepository.findById(2)).thenReturn(Optional.empty());
 
-        Person updatedPerson = assertDoesNotThrow(() -> personService.update(1, newPerson));
+        Person updatedPerson = assertDoesNotThrow(() -> personService.update(1, personToUpdateWith));
 
         assertEquals(1, updatedPerson.getId());
-        assertEquals("newUsername", updatedPerson.getUsername());
-        assertEquals("newName", updatedPerson.getName());
-        assertEquals("newEmail@mail.com", updatedPerson.getEmail());
-        assertTrue(updatedPerson.getEnabled());
-        assertThrows(PersonNotFoundException.class, () -> personService.update(2, newPerson));
+        assertEquals(personToUpdateWith.getUsername(), updatedPerson.getUsername());
+        assertEquals(personToUpdateWith.getName(), updatedPerson.getName());
+        assertEquals(personToUpdateWith.getEmail(), updatedPerson.getEmail());
+        assertEquals(personToUpdateWith.getEnabled(), updatedPerson.getEnabled());
+        assertThrows(PersonNotFoundException.class, () -> personService.update(2, personToUpdateWith));
         verify(personRepository).findById(1);
-        verify(personRepository).save(personToUpdate);
+        verify(personRepository).save(personWithId);
         verify(personRepository).findById(2);
     }
 
     @Test
     public void deleteShouldRemovePerson() {
-        when(personRepository.findById(1)).thenReturn(Optional.of(new Person(1))).thenReturn(Optional.empty());
+        when(personRepository.findById(1)).thenReturn(Optional.of(personWithId)).thenReturn(Optional.empty());
 
         assertDoesNotThrow(() -> personService.delete(1));
         assertThrows(PersonNotFoundException.class, () -> personService.get(1));

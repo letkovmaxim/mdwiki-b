@@ -5,7 +5,7 @@ import org.sbtitcourses.mdwiki.dto.PersonRequest;
 import org.sbtitcourses.mdwiki.dto.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.service.PersonService;
-import org.sbtitcourses.mdwiki.util.PersonErrorResponse;
+import org.sbtitcourses.mdwiki.util.ErrorResponse;
 import org.sbtitcourses.mdwiki.util.exception.PersonNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,8 +65,8 @@ public class PersonController {
     }
 
     @ExceptionHandler
-    private ResponseEntity<PersonErrorResponse> handleException(PersonNotFoundException e) {
-        PersonErrorResponse response = new PersonErrorResponse(
+    private ResponseEntity<ErrorResponse> handleException(PersonNotFoundException e) {
+        ErrorResponse response = new ErrorResponse(
                 "Человек не найден",
                 System.currentTimeMillis()
         );

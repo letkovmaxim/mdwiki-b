@@ -1,5 +1,6 @@
 package org.sbtitcourses.mdwiki.repository;
 
+import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -25,4 +26,10 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
      * @return возвращает список найденых пространтсв
      */
     List<Space> findByIsPublicTrue();
+
+    /**
+     * Поиск пространств, принадлежащих пользователю
+     * @return возвращает список найденых пространтсв
+     */
+    List<Space> findByOwner(Person owner);
 }

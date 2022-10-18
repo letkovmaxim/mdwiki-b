@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,8 +23,14 @@ public class SpaceService implements CrudService<Space> {
 
     @Override
     @Transactional
-    public Space create(Space entity) {
-        return null;
+    public Space create(Space spaceToSave) {
+        Date now = new Date();
+        spaceToSave.setCreatedAt(now);
+        spaceToSave.setUpdatedAt(now);
+        spaceToSave.setPublic(false);
+        spaceToSave.setId(spaceRepository.save(spaceToSave).getId());
+
+        return spaceToSave;
     }
 
     @Override
@@ -40,8 +47,8 @@ public class SpaceService implements CrudService<Space> {
     @Transactional
     public Space update(int id, Space updatedSpace) {
         Space spaceToUpdate = spaceRepository.findById(id).orElseThrow(SpaceNotFoundException::new);
-
         spaceToUpdate.setName(updatedSpace.getName());
+        spaceToUpdate.setPublic(updatedSpace.getPublic());
 
         spaceRepository.save(spaceToUpdate);
 

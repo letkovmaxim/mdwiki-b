@@ -28,7 +28,6 @@ public class PersonService implements CrudService<Person> {
         personToSave.setCreatedAt(now);
         personToSave.setUpdatedAt(now);
         personToSave.setEnabled(true);
-
         personToSave.setId(personRepository.save(personToSave).getId());
 
         return personToSave;
@@ -48,7 +47,6 @@ public class PersonService implements CrudService<Person> {
     @Transactional
     public Person update(int id, Person updatedPerson) {
         Person personToUpdate = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
-
         personToUpdate.setUsername(updatedPerson.getUsername());
         personToUpdate.setName(updatedPerson.getName());
         personToUpdate.setEmail(updatedPerson.getEmail());

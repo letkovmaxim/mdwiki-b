@@ -20,7 +20,13 @@ class PageRepositoryTests {
 
     private final TestEntityManager entityManager;
     private final PageRepository pageRepository;
-    private final Page page = new Page("testName", true);
+    private final Page page;
+
+    {
+        page = new Page();
+        page.setName("testName");
+        page.setPublic(true);
+    }
 
     @Autowired
     PageRepositoryTests(TestEntityManager entityManager, PageRepository pageRepository) {
