@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.sbt-itcourses</groupId>
-	<artifactId>mdwiki</artifactId>
+	<artifactId>mdwiki-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>MdWiki</name>
 	<description>Markdown based wiki project for Spring Boot</description>

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.sbt-itcourses</groupId>
-    <artifactId>mdwiki-modules</artifactId>
+    <artifactId>mdwiki</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
 
