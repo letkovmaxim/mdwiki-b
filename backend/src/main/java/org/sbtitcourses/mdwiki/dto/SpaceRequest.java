@@ -1,5 +1,7 @@
 package org.sbtitcourses.mdwiki.dto;
 
+import org.sbtitcourses.mdwiki.model.Person;
+
 import javax.validation.constraints.Size;
 
 public class SpaceRequest {

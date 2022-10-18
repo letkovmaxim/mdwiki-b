@@ -1,10 +1,6 @@
 package org.sbtitcourses.mdwiki;
 
 import org.modelmapper.ModelMapper;
-import org.sbtitcourses.mdwiki.model.Person;
-import org.sbtitcourses.mdwiki.service.PersonService;
-import org.sbtitcourses.mdwiki.service.RegistrationService;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

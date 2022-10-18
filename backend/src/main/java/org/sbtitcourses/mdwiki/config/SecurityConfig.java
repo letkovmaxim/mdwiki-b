@@ -45,21 +45,25 @@ public class SecurityConfig{
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(personDetailsService).passwordEncoder(passwordEncoder());
 
+//        http
+//                .authorizeRequests()
+//                    .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
+//                    .anyRequest().hasAnyRole("USER", "ADMIN")
+//                .and()
+//                .formLogin()
+//                    .loginPage("/auth/login")
+//                    .loginProcessingUrl("/process_login")
+//                    .defaultSuccessUrl("/main", true)
+//                    .failureUrl("/auth/login?error")
+//                .and()
+//                .logout()
+//                    .logoutUrl("/logout")
+//                    .logoutSuccessUrl("/auth/login");
         http
+                .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
-                    .anyRequest().hasAnyRole("USER", "ADMIN")
-                .and()
-                .formLogin()
-                    .loginPage("/auth/login")
-                    .loginProcessingUrl("/process_login")
-                    .defaultSuccessUrl("/main", true)
-                    .failureUrl("/auth/login?error")
-                .and()
-                .logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/auth/login");
-
+                .anyRequest()
+                .permitAll();
         return http.build();
     }
 

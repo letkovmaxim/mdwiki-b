@@ -13,6 +13,8 @@ public class PersonRequest {
     @Size(min = 4, max = 50, message = "Логин не должен быть короче 4 и длинее 50 символов")
     private String username;
 
+    private String password;
+
     /**
      * Имя пользователя
      */
@@ -63,5 +65,13 @@ public class PersonRequest {
 
     public void setEnabled(Boolean enabled) {
         isEnabled = enabled;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

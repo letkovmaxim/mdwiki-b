@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class PersonService implements CrudService<Person> {
+public class PersonService {
 
     private final PersonRepository personRepository;
 
@@ -21,7 +21,6 @@ public class PersonService implements CrudService<Person> {
         this.personRepository = personRepository;
     }
 
-    @Override
     @Transactional
     public Person create(Person personToSave) {
         Date now = new Date();
@@ -33,17 +32,14 @@ public class PersonService implements CrudService<Person> {
         return personToSave;
     }
 
-    @Override
     public List<Person> getAll() {
         return personRepository.findAll();
     }
 
-    @Override
     public Person get(int id) {
         return personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
     }
 
-    @Override
     @Transactional
     public Person update(int id, Person updatedPerson) {
         Person personToUpdate = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
@@ -58,7 +54,6 @@ public class PersonService implements CrudService<Person> {
         return personToUpdate;
     }
 
-    @Override
     @Transactional
     public void delete(int id) {
         Person personToDelete = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);

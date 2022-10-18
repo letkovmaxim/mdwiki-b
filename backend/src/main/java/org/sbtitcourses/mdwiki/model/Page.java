@@ -1,5 +1,6 @@
 package org.sbtitcourses.mdwiki.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -46,6 +47,7 @@ public class Page {
      */
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    @JsonIgnore
     private Page parent;
 
     /**
@@ -53,6 +55,7 @@ public class Page {
      */
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "space_id", referencedColumnName = "id")
+    @JsonIgnore
     private Space space;
 
     /**
@@ -78,9 +81,9 @@ public class Page {
     /**
      * Список документов, принадлжащих данной записи
      */
-    @OneToOne(mappedBy = "page", fetch = LAZY)
+    @OneToOne(mappedBy = "page", fetch = EAGER)
     @Cascade(ALL)
-    private Document documents;
+    private Document document;
 
     public Page() {
     }
@@ -149,11 +152,11 @@ public class Page {
         isPublic = aPublic;
     }
 
-    public Document getDocuments() {
-        return documents;
+    public Document getDocument() {
+        return document;
     }
 
-    public void setDocuments(Document documents) {
-        this.documents = documents;
+    public void setDocument(Document document) {
+        this.document = document;
     }
 }

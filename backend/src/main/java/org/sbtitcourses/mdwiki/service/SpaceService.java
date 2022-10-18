@@ -1,5 +1,6 @@
 package org.sbtitcourses.mdwiki.service;
 
+import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.repository.SpaceRepository;
 import org.sbtitcourses.mdwiki.util.exception.SpaceNotFoundException;
@@ -27,7 +28,6 @@ public class SpaceService implements CrudService<Space> {
         Date now = new Date();
         spaceToSave.setCreatedAt(now);
         spaceToSave.setUpdatedAt(now);
-        spaceToSave.setPublic(false);
         spaceToSave.setId(spaceRepository.save(spaceToSave).getId());
 
         return spaceToSave;
@@ -45,10 +45,10 @@ public class SpaceService implements CrudService<Space> {
 
     @Override
     @Transactional
-    public Space update(int id, Space updatedSpace) {
+    public Space update(int id, Space spaceToUpdateWith) {
         Space spaceToUpdate = spaceRepository.findById(id).orElseThrow(SpaceNotFoundException::new);
-        spaceToUpdate.setName(updatedSpace.getName());
-        spaceToUpdate.setPublic(updatedSpace.getPublic());
+        spaceToUpdate.setName(spaceToUpdateWith.getName());
+        spaceToUpdate.setPublic(spaceToUpdateWith.getPublic());
 
         spaceRepository.save(spaceToUpdate);
 
