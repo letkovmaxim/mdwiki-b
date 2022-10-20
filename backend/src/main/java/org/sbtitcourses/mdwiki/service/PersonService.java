@@ -57,6 +57,6 @@ public class PersonService {
     @Transactional
     public void delete(int id) {
         Person personToDelete = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
-        personRepository.deleteById(personToDelete.getId());
+        personRepository.delete(personToDelete);
     }
 }

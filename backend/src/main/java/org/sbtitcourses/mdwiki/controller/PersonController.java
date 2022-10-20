@@ -1,8 +1,8 @@
 package org.sbtitcourses.mdwiki.controller;
 
 import org.modelmapper.ModelMapper;
-import org.sbtitcourses.mdwiki.dto.PersonRequest;
-import org.sbtitcourses.mdwiki.dto.PersonResponse;
+import org.sbtitcourses.mdwiki.dto.Person.PersonRequest;
+import org.sbtitcourses.mdwiki.dto.Person.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.service.PersonService;
 import org.sbtitcourses.mdwiki.util.ErrorResponse;

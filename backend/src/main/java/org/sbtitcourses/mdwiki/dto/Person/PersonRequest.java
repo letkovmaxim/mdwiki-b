@@ -1,4 +1,4 @@
-package org.sbtitcourses.mdwiki.dto;
+package org.sbtitcourses.mdwiki.dto.Person;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

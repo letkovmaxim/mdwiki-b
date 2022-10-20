@@ -1,5 +1,7 @@
 package org.sbtitcourses.mdwiki.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.EAGER;

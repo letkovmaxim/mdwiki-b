@@ -37,10 +37,9 @@ public interface PageRepository extends JpaRepository<Page, Integer> {
     Optional<Page> findByIdAndSpace(int id, Space space);
 
     /**
-     * Поиск корневых записей
+     * Поиск корневых записей данного пространства
+     * @param space пространство, в котором ищутся записи
      * @return возвращает список найденых записней
      */
-    List<Page> findByParentIsNull();
-
     List<Page> findBySpaceAndParentIsNull(Space space);
 }

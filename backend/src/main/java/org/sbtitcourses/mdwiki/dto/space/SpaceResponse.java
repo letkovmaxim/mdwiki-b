@@ -1,4 +1,4 @@
-package org.sbtitcourses.mdwiki.dto;
+package org.sbtitcourses.mdwiki.dto.space;
 
 import java.util.Date;
 

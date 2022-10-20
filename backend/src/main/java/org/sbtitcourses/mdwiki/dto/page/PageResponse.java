@@ -1,7 +1,4 @@
-package org.sbtitcourses.mdwiki.dto;
-
-import org.sbtitcourses.mdwiki.model.Document;
-import org.sbtitcourses.mdwiki.model.Page;
+package org.sbtitcourses.mdwiki.dto.page;
 
 import java.util.Date;
 import java.util.List;
@@ -12,15 +9,13 @@ public class PageResponse {
 
     private String name;
 
-    private List<Page> subpages;
+    private List<PageResponse> subpages;
 
     private Date createdAt;
 
     private Date updatedAt;
 
     private Boolean isPublic;
-
-    private Document document;
 
     public int getId() {
         return id;
@@ -38,11 +33,11 @@ public class PageResponse {
         this.name = name;
     }
 
-    public List<Page> getSubpages() {
+    public List<PageResponse> getSubpages() {
         return subpages;
     }
 
-    public void setSubpages(List<Page> subpages) {
+    public void setSubpages(List<PageResponse> subpages) {
         this.subpages = subpages;
     }
 
@@ -68,13 +63,5 @@ public class PageResponse {
 
     public void setPublic(Boolean aPublic) {
         isPublic = aPublic;
-    }
-
-    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
     }
 }

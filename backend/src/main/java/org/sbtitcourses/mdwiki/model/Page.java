@@ -38,7 +38,7 @@ public class Page {
     /**
      * Список подстраниц данной страницы
      */
-    @OneToMany(mappedBy = "parent", fetch = EAGER)
+    @OneToMany(mappedBy = "parent", fetch = LAZY)
     @Cascade(ALL)
     private List<Page> subpages;
 
@@ -47,7 +47,6 @@ public class Page {
      */
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
-    @JsonIgnore
     private Page parent;
 
     /**
@@ -55,7 +54,6 @@ public class Page {
      */
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "space_id", referencedColumnName = "id")
-    @JsonIgnore
     private Space space;
 
     /**
@@ -81,7 +79,7 @@ public class Page {
     /**
      * Список документов, принадлжащих данной записи
      */
-    @OneToOne(mappedBy = "page", fetch = EAGER)
+    @OneToOne(mappedBy = "page", fetch = LAZY)
     @Cascade(ALL)
     private Document document;
 
