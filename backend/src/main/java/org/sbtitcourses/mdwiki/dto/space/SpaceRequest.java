@@ -1,14 +1,26 @@
 package org.sbtitcourses.mdwiki.dto.space;
 
-import org.sbtitcourses.mdwiki.model.Person;
-
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * DTO сущности Space для запроса
+ */
 public class SpaceRequest {
 
-    @Size(min = 1, max = 128, message = "Название не должен быть короче 4 и длинее 50 символов")
+    /**
+     * Название пространства
+     */
+    @NotEmpty(message = "Название не должно быть пустым")
+    @Size(max = 128, message = "Название не должно быть длиннее 128 символов")
     private String name;
-    private String isPublic;
+
+    /**
+     * Статус публичности пространства
+     */
+    @NotNull(message = "Значение public должно быть true или false")
+    private Boolean isPublic;
 
     public String getName() {
         return name;
@@ -18,11 +30,11 @@ public class SpaceRequest {
         this.name = name;
     }
 
-    public String getIsPublic() {
+    public Boolean getPublic() {
         return isPublic;
     }
 
-    public void setIsPublic(String isPublic) {
-        this.isPublic = isPublic;
+    public void setPublic(Boolean aPublic) {
+        isPublic = aPublic;
     }
 }

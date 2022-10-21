@@ -3,18 +3,39 @@ package org.sbtitcourses.mdwiki.dto.page;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * DTO сущности Page для ответа
+ */
 public class PageResponse {
 
+    /**
+     * ID записи
+     */
     private int id;
 
+    /**
+     * Название записи
+     */
     private String name;
 
+    /**
+     * Список подстраниц данной страницы
+     */
     private List<PageResponse> subpages;
 
+    /**
+     * Точное время создания записи
+     */
     private Date createdAt;
 
+    /**
+     * Точное время обновления записи
+     */
     private Date updatedAt;
 
+    /**
+     * Статус публичности записи
+     */
     private Boolean isPublic;
 
     public int getId() {

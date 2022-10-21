@@ -5,14 +5,13 @@ import org.sbtitcourses.mdwiki.dto.space.SpaceRequest;
 import org.sbtitcourses.mdwiki.dto.space.SpaceResponse;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.service.SpaceService;
-import org.sbtitcourses.mdwiki.util.ErrorResponse;
-import org.sbtitcourses.mdwiki.util.exception.NotFoundException;
-import org.sbtitcourses.mdwiki.util.exception.SpaceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class SpaceController {
      * @return DTO сущности Space для ответа с кодом 201
      */
     @PostMapping
-    public ResponseEntity<SpaceResponse> create(@RequestBody SpaceRequest spaceRequest) {
+    public ResponseEntity<SpaceResponse> create(@RequestBody @Valid SpaceRequest spaceRequest) {
         Space spaceToCreate = modelMapper.map(spaceRequest, Space.class);
 
         Space createdSpace = spaceService.create(spaceToCreate);
@@ -95,7 +94,7 @@ public class SpaceController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<SpaceResponse> update(@PathVariable(name = "id") int id,
-                                     @RequestBody SpaceRequest spaceRequest) {
+                                                @RequestBody @Valid SpaceRequest spaceRequest) {
         Space spaceToUpdateWith = modelMapper.map(spaceRequest, Space.class);
 
         Space updatedSpace = spaceService.update(id, spaceToUpdateWith);
@@ -115,6 +114,4 @@ public class SpaceController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    //TODO: VALIDATION, TESTS
 }

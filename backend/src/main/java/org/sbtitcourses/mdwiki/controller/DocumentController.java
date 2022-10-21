@@ -9,14 +9,12 @@ import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.service.DocumentService;
 import org.sbtitcourses.mdwiki.service.PageService;
 import org.sbtitcourses.mdwiki.service.SpaceService;
-import org.sbtitcourses.mdwiki.util.ErrorResponse;
-import org.sbtitcourses.mdwiki.util.exception.DocumentNotFoundException;
-import org.sbtitcourses.mdwiki.util.exception.NotFoundException;
-import org.sbtitcourses.mdwiki.util.exception.SpaceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * REST контроллер для CRUD операций над сущностью Document
@@ -66,8 +64,8 @@ public class DocumentController {
      */
     @PostMapping
     public ResponseEntity<DocumentResponse> create(@PathVariable(name = "spaceId") int spaceId,
-                                           @PathVariable(name = "pageId") int pageId,
-                                           @RequestBody DocumentRequest documentRequest) {
+                                                   @PathVariable(name = "pageId") int pageId,
+                                                   @RequestBody @Valid DocumentRequest documentRequest) {
         Document documentToCreate = modelMapper.map(documentRequest, Document.class);
         Space space = spaceService.get(spaceId);
         Page page = pageService.get(pageId, space);
@@ -87,7 +85,7 @@ public class DocumentController {
      */
     @GetMapping
     public ResponseEntity<DocumentResponse> get(@PathVariable(name = "spaceId") int spaceId,
-                                        @PathVariable(name = "pageId") int pageId) {
+                                                @PathVariable(name = "pageId") int pageId) {
         Space space = spaceService.get(spaceId);
         Page page = pageService.get(pageId, space);
 
@@ -106,8 +104,8 @@ public class DocumentController {
      */
     @PutMapping
     public ResponseEntity<DocumentResponse> update(@PathVariable(name = "spaceId") int spaceId,
-                                           @PathVariable(name = "pageId") int pageId,
-                                           @RequestBody DocumentRequest documentRequest) {
+                                                   @PathVariable(name = "pageId") int pageId,
+                                                   @RequestBody @Valid DocumentRequest documentRequest) {
         Document documentToUpdateWith = modelMapper.map(documentRequest, Document.class);
         Space space = spaceService.get(spaceId);
         Page page = pageService.get(pageId, space);
@@ -126,7 +124,7 @@ public class DocumentController {
      */
     @DeleteMapping
     public ResponseEntity<HttpStatus> delete(@PathVariable(name = "spaceId") int spaceId,
-                               @PathVariable(name = "pageId") int pageId) {
+                                             @PathVariable(name = "pageId") int pageId) {
         Space space = spaceService.get(spaceId);
         Page page = pageService.get(pageId, space);
 

@@ -2,10 +2,13 @@ package org.sbtitcourses.mdwiki.dto.Person;
 
 import java.util.Date;
 
+/**
+ * DTO сущности Person для ответа
+ */
 public class PersonResponse {
 
     /**
-     * id пользователя в базе данных
+     * ID пользователя в базе данных
      */
     private int id;
 

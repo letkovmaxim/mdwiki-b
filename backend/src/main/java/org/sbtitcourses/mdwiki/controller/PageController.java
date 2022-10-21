@@ -7,14 +7,12 @@ import org.sbtitcourses.mdwiki.model.Page;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.service.PageService;
 import org.sbtitcourses.mdwiki.service.SpaceService;
-import org.sbtitcourses.mdwiki.util.ErrorResponse;
-import org.sbtitcourses.mdwiki.util.exception.NotFoundException;
-import org.sbtitcourses.mdwiki.util.exception.PageNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,7 +57,7 @@ public class PageController {
      */
     @PostMapping("/pages")
     private ResponseEntity<PageResponse> create(@PathVariable(name = "spaceId") int spaceId,
-                                    @RequestBody PageRequest pageRequest) {
+                                                @RequestBody @Valid PageRequest pageRequest) {
         Page pageToCreate = modelMapper.map(pageRequest, Page.class);
         Space space = spaceService.get(spaceId);
         pageToCreate.setSpace(space);
@@ -79,8 +77,8 @@ public class PageController {
      */
     @PostMapping("/pages/{pageId}")
     public ResponseEntity<PageResponse> createSubpage(@PathVariable(name = "spaceId") int spaceId,
-                                      @PathVariable(name = "pageId") int pageId,
-                                      @RequestBody PageRequest pageRequest) {
+                                                      @PathVariable(name = "pageId") int pageId,
+                                                      @RequestBody @Valid PageRequest pageRequest) {
         Page subpageToCreate = modelMapper.map(pageRequest, Page.class);
         Space space = spaceService.get(spaceId);
         Page parent = pageService.get(pageId, space);
@@ -119,7 +117,7 @@ public class PageController {
      */
     @GetMapping("/pages/{pageId}")
     public ResponseEntity<PageResponse> get(@PathVariable(name = "spaceId") int spaceId,
-                                @PathVariable(name = "pageId") int pageId) {
+                                            @PathVariable(name = "pageId") int pageId) {
         Space space = spaceService.get(spaceId);
 
         Page page = pageService.get(pageId, space);
@@ -137,8 +135,8 @@ public class PageController {
      */
     @PutMapping("/pages/{pageId}")
     private ResponseEntity<PageResponse> update(@PathVariable(name = "spaceId") int spaceId,
-                                    @PathVariable(name = "pageId") int pageId,
-                                    @RequestBody PageRequest pageRequest ) {
+                                                @PathVariable(name = "pageId") int pageId,
+                                                @RequestBody @Valid PageRequest pageRequest ) {
         Page pageToUpdateWith = modelMapper.map(pageRequest, Page.class);
         Space space = spaceService.get(spaceId);
 
@@ -156,7 +154,7 @@ public class PageController {
      */
     @DeleteMapping("/pages/{pageId}")
     public ResponseEntity<HttpStatus> delete(@PathVariable(name = "spaceId") int spaceId,
-                           @PathVariable(name = "pageId") int pageId) {
+                                             @PathVariable(name = "pageId") int pageId) {
         Space space = spaceService.get(spaceId);
         Page pageToDelete = pageService.get(pageId, space);
 
