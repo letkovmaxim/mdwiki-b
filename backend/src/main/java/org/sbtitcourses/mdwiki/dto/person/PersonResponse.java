@@ -1,4 +1,4 @@
-package org.sbtitcourses.mdwiki.dto.Person;
+package org.sbtitcourses.mdwiki.dto.person;
 
 import java.util.Date;
 

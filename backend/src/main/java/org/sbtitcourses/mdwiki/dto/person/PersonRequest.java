@@ -1,7 +1,8 @@
-package org.sbtitcourses.mdwiki.dto.Person;
+package org.sbtitcourses.mdwiki.dto.person;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -16,6 +17,8 @@ public class PersonRequest {
     @Size(min = 4, max = 50, message = "Логин не должен быть короче 4 и длинее 50 символов")
     private String username;
 
+    @NotEmpty(message = "Пароль не должен быть пустым")
+    @Size(min = 6, message = "Пароль не должен быть короче 6 символов")
     private String password;
 
     /**
@@ -36,6 +39,7 @@ public class PersonRequest {
      * Тип аккаунта
      * Активный (true) или заблокированный (false)
      */
+    @NotNull(message = "Значение enabled должно быть true или false")
     private Boolean isEnabled;
 
     public String getUsername() {

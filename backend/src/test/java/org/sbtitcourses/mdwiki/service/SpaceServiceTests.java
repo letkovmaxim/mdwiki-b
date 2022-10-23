@@ -16,6 +16,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Тест для сервиса с логикой CRUD операций над сущностью Space
+ */
 @ExtendWith(MockitoExtension.class)
 class SpaceServiceTests {
 
@@ -23,13 +26,13 @@ class SpaceServiceTests {
     private SpaceRepository spaceRepository;
     @InjectMocks
     private SpaceService spaceService;
-
     private final Space spaceToCreate;
     private final Space spaceWithId;
     private final Space spaceToUpdateWith;
 
     {
         spaceToCreate = new Space();
+        spaceToCreate.setPublic(false);
 
         spaceWithId = new Space();
         spaceWithId.setId(1);
@@ -54,12 +57,13 @@ class SpaceServiceTests {
     public void getAllShouldReturnSpaceList() {
         List<Space> spaces = new LinkedList<>();
         spaces.add(spaceWithId);
+
         when(spaceRepository.findAll()).thenReturn(spaces);
 
         List<Space> gottenSpaces = spaceService.getAll();
 
         assertEquals(spaces.size(), gottenSpaces.size());
-        assertEquals(spaceWithId.getId(), gottenSpaces.get(0).getId());
+        assertEquals(1, gottenSpaces.get(0).getId());
         verify(spaceRepository).findAll();
     }
 
@@ -73,6 +77,7 @@ class SpaceServiceTests {
         assertEquals(1, gottenSpace.getId());
         assertThrows(SpaceNotFoundException.class, () -> spaceService.get(2));
         verify(spaceRepository).findById(1);
+        verify(spaceRepository).findById(2);
     }
 
     @Test
@@ -96,8 +101,8 @@ class SpaceServiceTests {
         when(spaceRepository.findById(1)).thenReturn(Optional.of(spaceWithId)).thenReturn(Optional.empty());
 
         assertDoesNotThrow(() -> spaceService.delete(1));
-        assertThrows(SpaceNotFoundException.class, () -> spaceService.get(1));
+        assertThrows(SpaceNotFoundException.class, () -> spaceService.delete(1));
         verify(spaceRepository, times(2)).findById(1);
-        verify(spaceRepository).deleteById(1);
+        verify(spaceRepository).delete(spaceWithId);
     }
 }

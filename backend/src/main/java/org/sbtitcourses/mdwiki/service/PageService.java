@@ -5,6 +5,8 @@ import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.repository.PageRepository;
 import org.sbtitcourses.mdwiki.util.exception.PageNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +19,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-public class PageService {
+public class PageService implements PageCrudService {
 
     /**
      * Репозиторий для взаимодействия с сущностью Page
@@ -38,6 +40,7 @@ public class PageService {
      * @param pageToCreate страница, которую нужно сохранить
      * @return сохраненную страницу
      */
+    @Override
     @Transactional
     public Page create(Page pageToCreate) {
         Date now = new Date();
@@ -54,8 +57,10 @@ public class PageService {
      * @param space пространтсво, для которого нужно получить страницы
      * @return список всех страниц данного пространства
      */
-    public List<Page> getAll(Space space) {
-        return pageRepository.findBySpaceAndParentIsNull(space);
+    @Override
+    public List<Page> getAll(Space space, int bunch, int size) {
+        Pageable pageable = PageRequest.of(bunch, size);
+        return pageRepository.findBySpaceAndParentIsNull(space, pageable);
     }
 
     /**
@@ -65,6 +70,7 @@ public class PageService {
      * @return найденую страницу
      * @throws PageNotFoundException если страницы с таким ID не существует
      */
+    @Override
     public Page get(int id, Space space) throws PageNotFoundException {
         return pageRepository.findByIdAndSpace(id, space).orElseThrow(PageNotFoundException::new);
     }
@@ -77,6 +83,7 @@ public class PageService {
      * @return обновленную страницу
      * @throws PageNotFoundException если страницы с таким ID не существует
      */
+    @Override
     @Transactional
     public Page update(int id, Space space,  Page pageToUpdateWith) throws PageNotFoundException {
         Page pageToUpdate = pageRepository.findByIdAndSpace(id, space).orElseThrow(PageNotFoundException::new);
@@ -93,6 +100,7 @@ public class PageService {
      * @param id ID
      * @throws PageNotFoundException если страницы с таким ID не существует
      */
+    @Override
     @Transactional
     public void delete(int id) throws PageNotFoundException {
         Page pageToDelete = pageRepository.findById(id).orElseThrow(PageNotFoundException::new);

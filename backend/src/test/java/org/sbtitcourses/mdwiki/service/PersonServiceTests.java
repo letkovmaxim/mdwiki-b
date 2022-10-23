@@ -16,6 +16,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Тест для сервиса с логикой CRUD операций над сущностью Person
+ */
 @ExtendWith(MockitoExtension.class)
 class PersonServiceTests {
 
@@ -57,6 +60,7 @@ class PersonServiceTests {
     public void getAllShouldReturnPersonList() {
         List<Person> people = new LinkedList<>();
         people.add(personWithId);
+
         when(personRepository.findAll()).thenReturn(people);
 
         List<Person> gottenPeople = personService.getAll();
@@ -76,6 +80,7 @@ class PersonServiceTests {
         assertEquals(1, gottenPerson.getId());
         assertThrows(PersonNotFoundException.class, () -> personService.get(2));
         verify(personRepository).findById(1);
+        verify(personRepository).findById(2);
     }
 
     @Test
@@ -101,8 +106,8 @@ class PersonServiceTests {
         when(personRepository.findById(1)).thenReturn(Optional.of(personWithId)).thenReturn(Optional.empty());
 
         assertDoesNotThrow(() -> personService.delete(1));
-        assertThrows(PersonNotFoundException.class, () -> personService.get(1));
+        assertThrows(PersonNotFoundException.class, () -> personService.delete(1));
         verify(personRepository, times(2)).findById(1);
-        verify(personRepository).deleteById(1);
+        verify(personRepository).delete(personWithId);
     }
 }

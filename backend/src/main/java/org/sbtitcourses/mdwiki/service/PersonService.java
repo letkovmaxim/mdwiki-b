@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-public class PersonService {
+public class PersonService implements PersonCrudService {
 
     /**
      * Репозиторий для взаимодействия с сущностью Person
@@ -36,6 +36,7 @@ public class PersonService {
      * @param personToSave пользователь, которого нужно сохранить
      * @return сохраненного пользователя
      */
+    @Override
     @Transactional
     public Person create(Person personToSave) {
         Date now = new Date();
@@ -51,6 +52,7 @@ public class PersonService {
      * Метод, отвечающий за получение всех пользователей
      * @return список всех пользователей
      */
+    @Override
     public List<Person> getAll() {
         return personRepository.findAll();
     }
@@ -61,6 +63,7 @@ public class PersonService {
      * @return найденого пользователя
      * @throws PersonNotFoundException если пользователя с таким ID не существует
      */
+    @Override
     public Person get(int id) throws PersonNotFoundException {
         return personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
     }
@@ -72,6 +75,7 @@ public class PersonService {
      * @return обновленного пользователя
      * @throws PersonNotFoundException если пользователя с таким ID не существует
      */
+    @Override
     @Transactional
     public Person update(int id, Person updatedPerson) throws PersonNotFoundException {
         Person personToUpdate = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
@@ -91,6 +95,7 @@ public class PersonService {
      * @param id ID пользователя
      * @throws PersonNotFoundException если пользователя с таким ID не существует
      */
+    @Override
     @Transactional
     public void delete(int id) throws PersonNotFoundException {
         Person personToDelete = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);

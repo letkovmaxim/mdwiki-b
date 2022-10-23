@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class DocumentService {
+public class DocumentService implements DocumentCrudService {
 
     /**
      * Репозиторий для взаимодействия с сущностью Document
@@ -34,6 +34,7 @@ public class DocumentService {
      * @param documentToCreate документ, который нужно сохранить
      * @return сохраненный документ
      */
+    @Override
     @Transactional
     public Document create(Document documentToCreate) {
         documentToCreate.setId(documentRepository.save(documentToCreate).getId());
@@ -47,6 +48,7 @@ public class DocumentService {
      * @return найденый документ
      * @throws DocumentNotFoundException если для данной страница документа не существует
      */
+    @Override
     @Transactional
     public Document get(Page page) throws DocumentNotFoundException {
         return documentRepository.findByPage(page).orElseThrow(DocumentNotFoundException::new);
@@ -59,6 +61,7 @@ public class DocumentService {
      * @return обновленный документ
      * @throws DocumentNotFoundException если для данной страница документа не существует
      */
+    @Override
     @Transactional
     public Document update(Page page, Document documentToUpdateWith) throws DocumentNotFoundException {
         Document documentToUpdate = documentRepository.findByPage(page).orElseThrow(DocumentNotFoundException::new);
@@ -74,6 +77,7 @@ public class DocumentService {
      * @param page страница, для которой нужно удалить документ
      * @throws DocumentNotFoundException если для данной страница документа не существует
      */
+    @Override
     @Transactional
     public void delete(Page page) throws DocumentNotFoundException {
         Document documentToDelete = documentRepository.findByPage(page).orElseThrow(DocumentNotFoundException::new);

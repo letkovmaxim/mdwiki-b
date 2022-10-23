@@ -97,11 +97,13 @@ public class PageController {
      * @return список DTO сущности Page для ответа с кодом 200
      */
     @GetMapping("/pages")
-    public ResponseEntity<List<PageResponse>> getAll(@PathVariable(name = "spaceId") int spaceId) {
+    public ResponseEntity<List<PageResponse>> getAll(@PathVariable(name = "spaceId") int spaceId,
+                                                     @RequestParam(value = "bunch") int bunch,
+                                                     @RequestParam(value = "size") int size) {
         List<PageResponse> pages = new LinkedList<>();
         Space space = spaceService.get(spaceId);
 
-        for (Page page: pageService.getAll(space)) {
+        for (Page page: pageService.getAll(space, bunch, size)) {
             PageResponse pageResponse = modelMapper.map(page, PageResponse.class);
             pages.add(pageResponse);
         }

@@ -1,17 +1,16 @@
 package org.sbtitcourses.mdwiki.controller;
 
 import org.modelmapper.ModelMapper;
-import org.sbtitcourses.mdwiki.dto.Person.PersonRequest;
-import org.sbtitcourses.mdwiki.dto.Person.PersonResponse;
+import org.sbtitcourses.mdwiki.dto.person.PersonRequest;
+import org.sbtitcourses.mdwiki.dto.person.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.service.PersonService;
-import org.sbtitcourses.mdwiki.util.ErrorResponse;
-import org.sbtitcourses.mdwiki.util.exception.PersonNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class PersonController {
      * @return DTO сущности Person для ответа с кодом 201
      */
     @PostMapping
-    public ResponseEntity<PersonResponse> create(@RequestBody PersonRequest personRequest) {
+    public ResponseEntity<PersonResponse> create(@RequestBody @Valid PersonRequest personRequest) {
         Person personToCreate = modelMapper.map(personRequest, Person.class);
 
         Person createdPerson = personService.create(personToCreate);
@@ -94,7 +93,8 @@ public class PersonController {
      * @return DTO сущности Person для ответа с кодом 200
      */
     @PutMapping("/{id}")
-    public ResponseEntity<PersonResponse> update(@PathVariable(name = "id") int id, @RequestBody PersonRequest personRequest) {
+    public ResponseEntity<PersonResponse> update(@PathVariable(name = "id") int id,
+                                                 @RequestBody @Valid PersonRequest personRequest) {
         Person personToUpdateWith = modelMapper.map(personRequest, Person.class);
 
         Person updatedPerson = personService.update(id, personToUpdateWith);

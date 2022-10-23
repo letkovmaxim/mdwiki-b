@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-public class SpaceService {
+public class SpaceService implements SpaceCrudService {
 
     /**
      * Репозиторий для взаимодействия с сущностью Space
@@ -36,6 +36,7 @@ public class SpaceService {
      * @param spaceToSave пространство, которое нужно сохранить
      * @return сохраненное пространство
      */
+    @Override
     @Transactional
     public Space create(Space spaceToSave) {
         Date now = new Date();
@@ -50,6 +51,7 @@ public class SpaceService {
      * Метод, отвечающий за получение всех пространств из репозитория
      * @return список всех пространств
      */
+    @Override
     public List<Space> getAll() {
         return spaceRepository.findAll();
     }
@@ -60,6 +62,7 @@ public class SpaceService {
      * @return найденое пространтво
      * @throws SpaceNotFoundException если пространства с таким ID не существует
      */
+    @Override
     public Space get(int id) throws SpaceNotFoundException {
         return spaceRepository.findById(id).orElseThrow(SpaceNotFoundException::new);
     }
@@ -71,6 +74,7 @@ public class SpaceService {
      * @return обновленное пространство
      * @throws SpaceNotFoundException если пространства с таким ID не существует
      */
+    @Override
     @Transactional
     public Space update(int id, Space spaceToUpdateWith) throws SpaceNotFoundException {
         Space spaceToUpdate = spaceRepository.findById(id).orElseThrow(SpaceNotFoundException::new);
@@ -87,6 +91,7 @@ public class SpaceService {
      * @param id ID пространства
      * @throws SpaceNotFoundException если пространства с таким ID не существует
      */
+    @Override
     @Transactional
     public void delete(int id) throws SpaceNotFoundException {
         Space spaceToDelete = spaceRepository.findById(id).orElseThrow(SpaceNotFoundException::new);

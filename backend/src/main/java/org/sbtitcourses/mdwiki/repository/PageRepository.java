@@ -2,6 +2,7 @@ package org.sbtitcourses.mdwiki.repository;
 
 import org.sbtitcourses.mdwiki.model.Page;
 import org.sbtitcourses.mdwiki.model.Space;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +22,6 @@ public interface PageRepository extends JpaRepository<Page, Integer> {
      */
     Optional<Page> findByName(String name);
 
-
     /**
      * Поиск публичных записей
      * @return возвращает список найденых записнй
@@ -39,7 +39,8 @@ public interface PageRepository extends JpaRepository<Page, Integer> {
     /**
      * Поиск корневых записей данного пространства
      * @param space пространство, в котором ищутся записи
+     * @param pageable объект, определяющий нужное колличество страниц
      * @return возвращает список найденых записней
      */
-    List<Page> findBySpaceAndParentIsNull(Space space);
+    List<Page> findBySpaceAndParentIsNull(Space space, Pageable pageable);
 }

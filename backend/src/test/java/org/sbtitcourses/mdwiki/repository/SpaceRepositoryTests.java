@@ -60,7 +60,7 @@ class SpaceRepositoryTests {
 
     @Test
     public void findByIsPublicTrueShouldReturnSpaceList() {
-        List<Space> found = spaceRepository.findByIsPublicTrue();
+        List<Space> found = spaceRepository.findAllByIsPublicTrue();
 
         assertFalse(found.isEmpty());
         assertEquals(space.getId(), found.get(0).getId());
@@ -68,7 +68,7 @@ class SpaceRepositoryTests {
 
     @Test
     public void findByOwnerShouldReturnSpaceList() {
-        List<Space> found = spaceRepository.findByOwner(owner);
+        List<Space> found = spaceRepository.findAllByOwner(owner);
 
         assertFalse(found.isEmpty());
         assertEquals(space.getId(), found.get(0).getId());

@@ -1,6 +1,6 @@
 package org.sbtitcourses.mdwiki.config;
 
-import org.sbtitcourses.mdwiki.service.PersonDetailsService;
+import org.sbtitcourses.mdwiki.service.security.PersonDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -45,25 +45,21 @@ public class SecurityConfig{
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(personDetailsService).passwordEncoder(passwordEncoder());
 
-//        http
-//                .authorizeRequests()
-//                    .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
-//                    .anyRequest().hasAnyRole("USER", "ADMIN")
-//                .and()
-//                .formLogin()
-//                    .loginPage("/auth/login")
-//                    .loginProcessingUrl("/process_login")
-//                    .defaultSuccessUrl("/main", true)
-//                    .failureUrl("/auth/login?error")
-//                .and()
-//                .logout()
-//                    .logoutUrl("/logout")
-//                    .logoutSuccessUrl("/auth/login");
         http
-                .csrf().disable()
                 .authorizeRequests()
-                .anyRequest()
-                .permitAll();
+                    .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
+                    .anyRequest().hasAnyRole("USER", "ADMIN")
+                .and()
+                .formLogin()
+                    .loginPage("/auth/login")
+                    .loginProcessingUrl("/process_login")
+                    .defaultSuccessUrl("/main", true)
+                    .failureUrl("/auth/login?error")
+                .and()
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/auth/login");
+
         return http.build();
     }
 

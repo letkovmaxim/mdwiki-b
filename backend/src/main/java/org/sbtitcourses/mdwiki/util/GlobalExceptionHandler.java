@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
             PageNotFoundException.class, DocumentNotFoundException.class})
     private ResponseEntity<ErrorResponse> handleNotFoundException(RuntimeException e) {
         ErrorResponse response = new ErrorResponse(
-                List.of("Не найдено"),
+                List.of(e.getMessage()),
                 new Date()
         );
 
