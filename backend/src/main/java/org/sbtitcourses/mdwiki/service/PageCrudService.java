@@ -5,6 +5,9 @@ import org.sbtitcourses.mdwiki.model.Space;
 
 import java.util.List;
 
+/**
+ * Интерфейс сервиса CRUD операций над сущностью Page
+ */
 public interface PageCrudService {
     Page create(Page pageToCreate);
     List<Page> getAll(Space space, int bunch, int size);
