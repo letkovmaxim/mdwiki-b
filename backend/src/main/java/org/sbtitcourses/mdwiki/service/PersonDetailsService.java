@@ -1,4 +1,4 @@
-package org.sbtitcourses.mdwiki.service.security;
+package org.sbtitcourses.mdwiki.service;
 
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;

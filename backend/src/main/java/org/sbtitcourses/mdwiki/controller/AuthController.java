@@ -1,7 +1,7 @@
 package org.sbtitcourses.mdwiki.controller;
 
 import org.sbtitcourses.mdwiki.model.Person;
-import org.sbtitcourses.mdwiki.service.security.RegistrationService;
+import org.sbtitcourses.mdwiki.service.RegistrationService;
 import org.sbtitcourses.mdwiki.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
