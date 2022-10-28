@@ -1,14 +1,13 @@
 package org.sbtitcourses.mdwiki.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
@@ -74,7 +73,7 @@ public class Page {
      * Статус публичности записи
      */
     @Column(name = "is_public")
-    private Boolean isPublic;
+    private boolean isPublic;
 
     /**
      * Список документов, принадлжащих данной записи
@@ -84,6 +83,26 @@ public class Page {
     private Document document;
 
     public Page() {
+    }
+
+    public Page(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public Page(int id, Space space) {
+        this.id = id;
+        this.space = space;
+    }
+
+    public Page(String name, boolean isPublic) {
+        this.name = name;
+        this.isPublic = isPublic;
+    }
+
+    public Page(String name, Space space, boolean isPublic) {
+        this.name = name;
+        this.space = space;
+        this.isPublic = isPublic;
     }
 
     public int getId() {
@@ -142,12 +161,12 @@ public class Page {
         this.updatedAt = updatedAt;
     }
 
-    public Boolean getPublic() {
+    public boolean getPublic() {
         return isPublic;
     }
 
-    public void setPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public Document getDocument() {

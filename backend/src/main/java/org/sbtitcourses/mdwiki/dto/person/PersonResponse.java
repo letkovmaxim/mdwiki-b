@@ -41,7 +41,7 @@ public class PersonResponse {
      * Тип аккаунта
      * Активный (true) или заблокированный (false)
      */
-    private Boolean isEnabled;
+    private boolean isEnabled;
 
     public int getId() {
         return id;
@@ -91,11 +91,11 @@ public class PersonResponse {
         this.updatedAt = updatedAt;
     }
 
-    public Boolean getEnabled() {
+    public boolean getEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(Boolean enabled) {
-        isEnabled = enabled;
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
     }
 }

@@ -2,7 +2,7 @@ package org.sbtitcourses.mdwiki.service;
 
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.repository.SpaceRepository;
-import org.sbtitcourses.mdwiki.util.exception.SpaceNotFoundException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,11 +60,12 @@ public class SpaceService implements SpaceCrudService {
      * Метод, отвечающий за получение пространства по его ID
      * @param id ID пространства
      * @return найденое пространтво
-     * @throws SpaceNotFoundException если пространства с таким ID не существует
+     * @throws ElementNotFoundException если пространства с таким ID не существует
      */
     @Override
-    public Space get(int id) throws SpaceNotFoundException {
-        return spaceRepository.findById(id).orElseThrow(SpaceNotFoundException::new);
+    public Space get(int id) throws ElementNotFoundException {
+        return spaceRepository.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
     }
 
     /**
@@ -72,14 +73,15 @@ public class SpaceService implements SpaceCrudService {
      * @param id ID пространства
      * @param spaceToUpdateWith пространство, значениями полей которого нужно обновить требуемое пространство
      * @return обновленное пространство
-     * @throws SpaceNotFoundException если пространства с таким ID не существует
+     * @throws ElementNotFoundException если пространства с таким ID не существует
      */
     @Override
     @Transactional
-    public Space update(int id, Space spaceToUpdateWith) throws SpaceNotFoundException {
-        Space spaceToUpdate = spaceRepository.findById(id).orElseThrow(SpaceNotFoundException::new);
+    public Space update(int id, Space spaceToUpdateWith) throws ElementNotFoundException {
+        Space spaceToUpdate = spaceRepository.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
         spaceToUpdate.setName(spaceToUpdateWith.getName());
-        spaceToUpdate.setPublic(spaceToUpdateWith.getPublic());
+        spaceToUpdate.setPublic(spaceToUpdateWith.isPublic());
 
         spaceRepository.save(spaceToUpdate);
 
@@ -89,12 +91,13 @@ public class SpaceService implements SpaceCrudService {
     /**
      * Метод, отвечающий за удаление пространства по его ID
      * @param id ID пространства
-     * @throws SpaceNotFoundException если пространства с таким ID не существует
+     * @throws ElementNotFoundException если пространства с таким ID не существует
      */
     @Override
     @Transactional
-    public void delete(int id) throws SpaceNotFoundException {
-        Space spaceToDelete = spaceRepository.findById(id).orElseThrow(SpaceNotFoundException::new);
+    public void delete(int id) throws ElementNotFoundException {
+        Space spaceToDelete = spaceRepository.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
         spaceRepository.delete(spaceToDelete);
     }
 }

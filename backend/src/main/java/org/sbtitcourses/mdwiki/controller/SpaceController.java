@@ -8,10 +8,11 @@ import org.sbtitcourses.mdwiki.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -106,7 +107,7 @@ public class SpaceController {
     /**
      * Метод, отвечающий за удаление пространтсва с заданым ID
      * @param id ID пространства
-     * @return пустой ответ с кодом 205
+     * @return пустой ответ с кодом 204
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable int id) {

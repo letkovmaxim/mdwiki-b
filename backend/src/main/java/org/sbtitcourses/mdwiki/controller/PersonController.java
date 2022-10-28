@@ -106,7 +106,7 @@ public class PersonController {
     /**
      * Метод, отвечающий за удаление пользователя по его ID
      * @param id ID пользователя
-     * @return пустой ответ с кодом 205
+     * @return пустой ответ с кодом 204
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable(name = "id") int id) {

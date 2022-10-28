@@ -3,7 +3,7 @@ package org.sbtitcourses.mdwiki.service;
 import org.sbtitcourses.mdwiki.model.Page;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.repository.PageRepository;
-import org.sbtitcourses.mdwiki.util.exception.PageNotFoundException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -68,11 +68,12 @@ public class PageService implements PageCrudService {
      * @param id ID страницы
      * @param space пространтсво, для которого нужно получить страницу
      * @return найденую страницу
-     * @throws PageNotFoundException если страницы с таким ID не существует
+     * @throws ElementNotFoundException если страницы с таким ID не существует
      */
     @Override
-    public Page get(int id, Space space) throws PageNotFoundException {
-        return pageRepository.findByIdAndSpace(id, space).orElseThrow(PageNotFoundException::new);
+    public Page get(int id, Space space) throws ElementNotFoundException {
+        return pageRepository.findByIdAndSpace(id, space)
+                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
     }
 
     /**
@@ -81,12 +82,13 @@ public class PageService implements PageCrudService {
      * @param space пространтсво, для которого нужно обновить страницу
      * @param pageToUpdateWith страница, значениями полей которой нужно обновить требуемую страницу
      * @return обновленную страницу
-     * @throws PageNotFoundException если страницы с таким ID не существует
+     * @throws ElementNotFoundException если страницы с таким ID не существует
      */
     @Override
     @Transactional
-    public Page update(int id, Space space,  Page pageToUpdateWith) throws PageNotFoundException {
-        Page pageToUpdate = pageRepository.findByIdAndSpace(id, space).orElseThrow(PageNotFoundException::new);
+    public Page update(int id, Space space, Page pageToUpdateWith) throws ElementNotFoundException {
+        Page pageToUpdate = pageRepository.findByIdAndSpace(id, space)
+                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
         pageToUpdate.setName(pageToUpdateWith.getName());
         pageToUpdate.setPublic(pageToUpdateWith.getPublic());
 
@@ -98,12 +100,13 @@ public class PageService implements PageCrudService {
     /**
      * Метод, отвечающий за удаление страницы данного пространства по его ID
      * @param id ID
-     * @throws PageNotFoundException если страницы с таким ID не существует
+     * @throws ElementNotFoundException если страницы с таким ID не существует
      */
     @Override
     @Transactional
-    public void delete(int id) throws PageNotFoundException {
-        Page pageToDelete = pageRepository.findById(id).orElseThrow(PageNotFoundException::new);
+    public void delete(int id) throws ElementNotFoundException {
+        Page pageToDelete = pageRepository.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
         pageRepository.delete(pageToDelete);
     }
 }

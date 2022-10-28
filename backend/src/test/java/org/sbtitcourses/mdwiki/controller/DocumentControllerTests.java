@@ -9,9 +9,7 @@ import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.service.DocumentService;
 import org.sbtitcourses.mdwiki.service.PageService;
 import org.sbtitcourses.mdwiki.service.SpaceService;
-import org.sbtitcourses.mdwiki.util.exception.DocumentNotFoundException;
-import org.sbtitcourses.mdwiki.util.exception.PageNotFoundException;
-import org.sbtitcourses.mdwiki.util.exception.SpaceNotFoundException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -105,9 +103,9 @@ class DocumentControllerTests {
 
         when(spaceService.get(1)).thenReturn(space);
         when(pageService.get(1, space)).thenReturn(page);
-        when(documentService.get(page)).thenThrow(DocumentNotFoundException.class);
-        when(spaceService.get(2)).thenThrow(SpaceNotFoundException.class);
-        when(pageService.get(2, space)).thenThrow(PageNotFoundException.class);
+        when(documentService.get(page)).thenThrow(new ElementNotFoundException("Not Found"));
+        when(spaceService.get(2)).thenThrow(new ElementNotFoundException("Not Found"));
+        when(pageService.get(2, space)).thenThrow(new ElementNotFoundException("Not Found"));
 
         mockMvc.perform(get("/spaces/{spaceId}/pages/{pageId}/document", 1, 1))
                 .andExpect(status().isNotFound());

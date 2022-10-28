@@ -1,5 +1,6 @@
 package org.sbtitcourses.mdwiki.service;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -7,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
-import org.sbtitcourses.mdwiki.util.exception.PersonNotFoundException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,24 +27,13 @@ class PersonServiceTests {
     private PersonRepository personRepository;
     @InjectMocks
     private PersonService personService;
-    private final Person personToCreate;
-    private final Person personWithId;
-    private final Person personToUpdateWith;
-
-    {
-        personToCreate = new Person();
-
-        personWithId = new Person();
-        personWithId.setId(1);
-
-        personToUpdateWith = new Person();
-        personToUpdateWith.setId(1);
-        personToUpdateWith.setUsername("newUsername");
-        personToUpdateWith.setName("newName");
-        personToUpdateWith.setEmail("newEmail@mail.com");
-        personToUpdateWith.setEnabled(false);
-    }
-
+    private final Person personToCreate = new Person();
+    private final Person personWithId = new Person(1);
+    private final Person personToUpdateWith = new Person(1,
+            "newUsername",
+            "newName",
+            "newEmail@mail.com",
+            false);
 
     @Test
     public void createShouldReturnPerson() {
@@ -78,7 +68,7 @@ class PersonServiceTests {
         Person gottenPerson = personService.get(1);
 
         assertEquals(1, gottenPerson.getId());
-        assertThrows(PersonNotFoundException.class, () -> personService.get(2));
+        assertThrows(ElementNotFoundException.class, () -> personService.get(2));
         verify(personRepository).findById(1);
         verify(personRepository).findById(2);
     }
@@ -95,7 +85,7 @@ class PersonServiceTests {
         assertEquals(personToUpdateWith.getName(), updatedPerson.getName());
         assertEquals(personToUpdateWith.getEmail(), updatedPerson.getEmail());
         assertEquals(personToUpdateWith.getEnabled(), updatedPerson.getEnabled());
-        assertThrows(PersonNotFoundException.class, () -> personService.update(2, personToUpdateWith));
+        assertThrows(ElementNotFoundException.class, () -> personService.update(2, personToUpdateWith));
         verify(personRepository).findById(1);
         verify(personRepository).save(personWithId);
         verify(personRepository).findById(2);
@@ -106,7 +96,7 @@ class PersonServiceTests {
         when(personRepository.findById(1)).thenReturn(Optional.of(personWithId)).thenReturn(Optional.empty());
 
         assertDoesNotThrow(() -> personService.delete(1));
-        assertThrows(PersonNotFoundException.class, () -> personService.delete(1));
+        assertThrows(ElementNotFoundException.class, () -> personService.delete(1));
         verify(personRepository, times(2)).findById(1);
         verify(personRepository).delete(personWithId);
     }

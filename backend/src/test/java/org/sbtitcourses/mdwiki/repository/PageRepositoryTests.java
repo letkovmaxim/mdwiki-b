@@ -1,5 +1,6 @@
 package org.sbtitcourses.mdwiki.repository;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sbtitcourses.mdwiki.model.Page;
@@ -23,17 +24,8 @@ class PageRepositoryTests {
 
     private final TestEntityManager entityManager;
     private final PageRepository pageRepository;
-    private final Space space;
-    private final Page page;
-
-    {
-        space = new Space();
-
-        page = new Page();
-        page.setName("testName");
-        page.setSpace(space);
-        page.setPublic(true);
-    }
+    private final Space space = new Space();
+    private final Page page = new Page("testName", space, true);
 
     @Autowired
     PageRepositoryTests(TestEntityManager entityManager, PageRepository pageRepository) {

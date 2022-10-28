@@ -1,7 +1,5 @@
 package org.sbtitcourses.mdwiki.model;
 
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.EAGER;
@@ -38,6 +36,19 @@ public class Document {
     private Page page;
 
     public Document() {
+    }
+
+    public Document(Page page) {
+        this.page = page;
+    }
+
+    public Document(String text) {
+        this.text = text;
+    }
+
+    public Document(int id, Page page) {
+        this.id = id;
+        this.page = page;
     }
 
     public int getId() {

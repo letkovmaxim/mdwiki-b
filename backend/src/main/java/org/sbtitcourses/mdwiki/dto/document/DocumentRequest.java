@@ -1,9 +1,6 @@
 package org.sbtitcourses.mdwiki.dto.document;
 
-import org.springframework.lang.NonNull;
-
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 /**
  * DTO сущности Document для запроса

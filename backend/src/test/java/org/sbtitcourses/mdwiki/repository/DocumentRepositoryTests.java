@@ -1,5 +1,6 @@
 package org.sbtitcourses.mdwiki.repository;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sbtitcourses.mdwiki.model.Document;
@@ -20,15 +21,8 @@ class DocumentRepositoryTests {
 
     private final TestEntityManager entityManager;
     private final DocumentRepository documentRepository;
-    private final Page page;
-    private final Document document;
-
-    {
-        page = new Page();
-
-        document = new Document();
-        document.setPage(page);
-    }
+    private final Page page = new Page();
+    private final Document document = new Document(page);
 
     @Autowired
     DocumentRepositoryTests(TestEntityManager entityManager, DocumentRepository documentRepository) {

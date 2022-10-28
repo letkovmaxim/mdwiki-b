@@ -1,5 +1,6 @@
 package org.sbtitcourses.mdwiki.service;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -8,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.model.Page;
 import org.sbtitcourses.mdwiki.repository.DocumentRepository;
-import org.sbtitcourses.mdwiki.util.exception.DocumentNotFoundException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 
 import java.util.Optional;
 
@@ -25,26 +26,11 @@ class DocumentServiceTests {
     private DocumentRepository documentRepository;
     @InjectMocks
     private DocumentService documentService;
-    private final Page page;
-    private final Page wrongPage;
-    private final Document documentToCreate;
-    private final Document documentWithId;
-    private final Document documentToUpdateWith;
-
-    {
-        page = new Page();
-
-        wrongPage = new Page();
-
-        documentToCreate = new Document();
-
-        documentWithId = new Document();
-        documentWithId.setId(1);
-        documentWithId.setPage(page);
-
-        documentToUpdateWith = new Document();
-        documentToUpdateWith.setText("testText");
-    }
+    private final Page page = new Page();
+    private final Page wrongPage = new Page();
+    private final Document documentToCreate = new Document();
+    private final Document documentWithId = new Document(1, page);
+    private final Document documentToUpdateWith = new Document("testText");
 
     @Test
     public void createShouldReturnDocument() {
@@ -64,7 +50,7 @@ class DocumentServiceTests {
         Document gottenDocument = documentService.get(page);
 
         assertEquals(1, gottenDocument.getId());
-        assertThrows(DocumentNotFoundException.class, () -> documentService.get(wrongPage));
+        assertThrows(ElementNotFoundException.class, () -> documentService.get(wrongPage));
         verify(documentRepository).findByPage(page);
         verify(documentRepository).findByPage(wrongPage);
     }
@@ -78,7 +64,7 @@ class DocumentServiceTests {
 
         assertEquals(1, updatedDocument.getId());
         assertEquals(documentToUpdateWith.getText(), updatedDocument.getText());
-        assertThrows(DocumentNotFoundException.class, () -> documentService.update(wrongPage, documentToUpdateWith));
+        assertThrows(ElementNotFoundException.class, () -> documentService.update(wrongPage, documentToUpdateWith));
         verify(documentRepository).findByPage(page);
         verify(documentRepository).save(documentWithId);
         verify(documentRepository).findByPage(wrongPage);
@@ -89,7 +75,7 @@ class DocumentServiceTests {
         when(documentRepository.findByPage(page)).thenReturn(Optional.of(documentWithId)).thenReturn(Optional.empty());
 
         assertDoesNotThrow(() -> documentService.delete(page));
-        assertThrows(DocumentNotFoundException.class, () -> documentService.delete(page));
+        assertThrows(ElementNotFoundException.class, () -> documentService.delete(page));
         verify(documentRepository, times(2)).findByPage(page);
         verify(documentRepository).delete(documentWithId);
     }

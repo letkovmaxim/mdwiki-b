@@ -7,8 +7,7 @@ import org.sbtitcourses.mdwiki.model.Page;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.service.PageService;
 import org.sbtitcourses.mdwiki.service.SpaceService;
-import org.sbtitcourses.mdwiki.util.exception.PageNotFoundException;
-import org.sbtitcourses.mdwiki.util.exception.SpaceNotFoundException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -101,8 +100,8 @@ class PageControllerTests {
         Space space = new Space();
 
         when(spaceService.get(1)).thenReturn(space);
-        when(pageService.get(1, space)).thenThrow(PageNotFoundException.class);
-        when(spaceService.get(2)).thenThrow(SpaceNotFoundException.class);
+        when(pageService.get(1, space)).thenThrow(new ElementNotFoundException("Not Found"));
+        when(spaceService.get(2)).thenThrow(new ElementNotFoundException("Not Found"));
 
         mockMvc.perform(get("/spaces/{spaceId}/pages/{pageId}", 1, 1))
                 .andExpect(status().isNotFound());

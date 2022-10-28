@@ -2,7 +2,6 @@ package org.sbtitcourses.mdwiki.dto.page;
 
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -20,8 +19,7 @@ public class PageRequest {
     /**
      * Статус публичности записи
      */
-    @NotNull(message = "Значение public должно быть true или false")
-    private Boolean isPublic;
+    private boolean isPublic;
 
     public String getName() {
         return name;
@@ -31,11 +29,11 @@ public class PageRequest {
         this.name = name;
     }
 
-    public Boolean getIsPublic() {
+    public boolean getIsPublic() {
         return isPublic;
     }
 
-    public void setPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 }

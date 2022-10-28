@@ -20,7 +20,7 @@ import java.util.List;
  * REST контроллер для CRUD операций над сущностью Page
  */
 @RestController
-@RequestMapping("/spaces/{spaceId}")
+@RequestMapping("/spaces/{spaceId}/pages")
 public class PageController {
 
     /**
@@ -55,7 +55,7 @@ public class PageController {
      * @param pageRequest DTO сущности Page для запроса
      * @return DTO сущности Page для ответа с кодом 201
      */
-    @PostMapping("/pages")
+    @PostMapping
     private ResponseEntity<PageResponse> create(@PathVariable(name = "spaceId") int spaceId,
                                                 @RequestBody @Valid PageRequest pageRequest) {
         Page pageToCreate = modelMapper.map(pageRequest, Page.class);
@@ -75,7 +75,7 @@ public class PageController {
      * @param pageRequest DTO сущности Page для запроса
      * @return DTO сущности Page для ответа с кодом 201
      */
-    @PostMapping("/pages/{pageId}")
+    @PostMapping("/{pageId}")
     public ResponseEntity<PageResponse> createSubpage(@PathVariable(name = "spaceId") int spaceId,
                                                       @PathVariable(name = "pageId") int pageId,
                                                       @RequestBody @Valid PageRequest pageRequest) {
@@ -96,7 +96,7 @@ public class PageController {
      * @param spaceId ID пространства
      * @return список DTO сущности Page для ответа с кодом 200
      */
-    @GetMapping("/pages")
+    @GetMapping
     public ResponseEntity<List<PageResponse>> getAll(@PathVariable(name = "spaceId") int spaceId,
                                                      @RequestParam(value = "bunch") int bunch,
                                                      @RequestParam(value = "size") int size) {
@@ -117,7 +117,7 @@ public class PageController {
      * @param pageId ID страницы
      * @return DTO сущности Page для ответа с кодом 200
      */
-    @GetMapping("/pages/{pageId}")
+    @GetMapping("/{pageId}")
     public ResponseEntity<PageResponse> get(@PathVariable(name = "spaceId") int spaceId,
                                             @PathVariable(name = "pageId") int pageId) {
         Space space = spaceService.get(spaceId);
@@ -135,7 +135,7 @@ public class PageController {
      * @param pageRequest DTO сущности Page для запроса
      * @return DTO сущности Page для ответа с кодом 200
      */
-    @PutMapping("/pages/{pageId}")
+    @PutMapping("/{pageId}")
     private ResponseEntity<PageResponse> update(@PathVariable(name = "spaceId") int spaceId,
                                                 @PathVariable(name = "pageId") int pageId,
                                                 @RequestBody @Valid PageRequest pageRequest ) {
@@ -152,9 +152,9 @@ public class PageController {
      * Метод, отвечающий за удаление страницы с заданым ID данного пространства
      * @param spaceId ID пространства
      * @param pageId ID страницы
-     * @return пустой ответ с кодом 205
+     * @return пустой ответ с кодом 204
      */
-    @DeleteMapping("/pages/{pageId}")
+    @DeleteMapping("/{pageId}")
     public ResponseEntity<HttpStatus> delete(@PathVariable(name = "spaceId") int spaceId,
                                              @PathVariable(name = "pageId") int pageId) {
         Space space = spaceService.get(spaceId);

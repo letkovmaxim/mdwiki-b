@@ -5,7 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.sbtitcourses.mdwiki.dto.space.SpaceResponse;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.service.SpaceService;
-import org.sbtitcourses.mdwiki.util.exception.SpaceNotFoundException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -88,7 +88,7 @@ class SpaceControllerTests {
 
     @Test
     public void verifyErrorHandling() throws Exception {
-        when(spaceService.get(1)).thenThrow(SpaceNotFoundException.class);
+        when(spaceService.get(1)).thenThrow(new ElementNotFoundException("Not Found"));
 
         mockMvc.perform(get("/spaces/{id}", 1))
                 .andExpect(status().isNotFound());

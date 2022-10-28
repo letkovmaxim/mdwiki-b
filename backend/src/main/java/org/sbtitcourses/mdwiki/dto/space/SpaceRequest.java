@@ -1,7 +1,6 @@
 package org.sbtitcourses.mdwiki.dto.space;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -19,8 +18,7 @@ public class SpaceRequest {
     /**
      * Статус публичности пространства
      */
-    @NotNull(message = "Значение public должно быть true или false")
-    private Boolean isPublic;
+    private boolean isPublic;
 
     public String getName() {
         return name;
@@ -30,11 +28,11 @@ public class SpaceRequest {
         this.name = name;
     }
 
-    public Boolean getPublic() {
+    public boolean getPublic() {
         return isPublic;
     }
 
-    public void setPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 }

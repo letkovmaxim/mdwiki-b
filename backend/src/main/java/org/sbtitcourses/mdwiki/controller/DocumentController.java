@@ -120,7 +120,7 @@ public class DocumentController {
      * Метод, отвечающий за удаление документа с заданым ID данной страницы и пространтсва
      * @param spaceId ID пространтсва
      * @param pageId ID страницы
-     * @return пустой ответ с кодом 205
+     * @return пустой ответ с кодом 204
      */
     @DeleteMapping
     public ResponseEntity<HttpStatus> delete(@PathVariable(name = "spaceId") int spaceId,

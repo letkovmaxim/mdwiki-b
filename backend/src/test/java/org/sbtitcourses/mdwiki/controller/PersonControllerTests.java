@@ -5,7 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.sbtitcourses.mdwiki.dto.person.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.service.PersonService;
-import org.sbtitcourses.mdwiki.util.exception.PersonNotFoundException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -95,7 +95,7 @@ class PersonControllerTests {
 
     @Test
     public void verifyErrorHandling() throws Exception {
-        when(personService.get(1)).thenThrow(PersonNotFoundException.class);
+        when(personService.get(1)).thenThrow(new ElementNotFoundException("Not Found"));
 
         mockMvc.perform(get("/people/{id}", 1))
                 .andExpect(status().isNotFound());

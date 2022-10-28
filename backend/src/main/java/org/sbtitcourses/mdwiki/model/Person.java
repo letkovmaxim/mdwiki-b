@@ -86,7 +86,7 @@ public class Person {
      * Активный (true) или заблокированный (false)
      */
     @Column(name = "is_enabled")
-    private Boolean isEnabled;
+    private boolean isEnabled;
 
     /**
      * Список пространств, принадлежащих пользователю
@@ -99,6 +99,25 @@ public class Person {
      * Создание экземпляра класса
      */
     public Person() {
+    }
+
+    public Person(int id) {
+        this.id = id;
+    }
+
+    public Person(int id, String username, String name, String email, boolean isEnabled) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.email = email;
+        this.isEnabled = isEnabled;
+    }
+
+    public Person(String username, String password, String name, String email) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
     }
 
     public int getId() {
@@ -165,12 +184,12 @@ public class Person {
         this.updatedAt = updatedAt;
     }
 
-    public Boolean getEnabled() {
+    public boolean getEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(Boolean enabled) {
-        isEnabled = enabled;
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
     }
 
     public List<Space> getSpaces() {

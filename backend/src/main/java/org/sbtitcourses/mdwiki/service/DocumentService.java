@@ -3,7 +3,7 @@ package org.sbtitcourses.mdwiki.service;
 import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.model.Page;
 import org.sbtitcourses.mdwiki.repository.DocumentRepository;
-import org.sbtitcourses.mdwiki.util.exception.DocumentNotFoundException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,12 +46,13 @@ public class DocumentService implements DocumentCrudService {
      * Метод, отвечающий за получение документа данной страницы
      * @param page страница, для которой нужно получить документ
      * @return найденый документ
-     * @throws DocumentNotFoundException если для данной страница документа не существует
+     * @throws ElementNotFoundException если для данной страница документа не существует
      */
     @Override
     @Transactional
-    public Document get(Page page) throws DocumentNotFoundException {
-        return documentRepository.findByPage(page).orElseThrow(DocumentNotFoundException::new);
+    public Document get(Page page) throws ElementNotFoundException {
+        return documentRepository.findByPage(page)
+                .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
     }
 
     /**
@@ -59,12 +60,13 @@ public class DocumentService implements DocumentCrudService {
      * @param page страница, для которой нужно обновить документ
      * @param documentToUpdateWith документ, значениями полей которого нужно обновить требуемый документ
      * @return обновленный документ
-     * @throws DocumentNotFoundException если для данной страница документа не существует
+     * @throws ElementNotFoundException если для данной страница документа не существует
      */
     @Override
     @Transactional
-    public Document update(Page page, Document documentToUpdateWith) throws DocumentNotFoundException {
-        Document documentToUpdate = documentRepository.findByPage(page).orElseThrow(DocumentNotFoundException::new);
+    public Document update(Page page, Document documentToUpdateWith) throws ElementNotFoundException {
+        Document documentToUpdate = documentRepository.findByPage(page)
+                .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
         documentToUpdate.setText(documentToUpdateWith.getText());
 
         documentRepository.save(documentToUpdate);
@@ -75,12 +77,13 @@ public class DocumentService implements DocumentCrudService {
     /**
      * Метод, отвечающий за удаление документа данной страницы
      * @param page страница, для которой нужно удалить документ
-     * @throws DocumentNotFoundException если для данной страница документа не существует
+     * @throws ElementNotFoundException если для данной страница документа не существует
      */
     @Override
     @Transactional
-    public void delete(Page page) throws DocumentNotFoundException {
-        Document documentToDelete = documentRepository.findByPage(page).orElseThrow(DocumentNotFoundException::new);
+    public void delete(Page page) throws ElementNotFoundException {
+        Document documentToDelete = documentRepository.findByPage(page)
+                .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
         page.setDocument(null);
         documentRepository.delete(documentToDelete);
     }

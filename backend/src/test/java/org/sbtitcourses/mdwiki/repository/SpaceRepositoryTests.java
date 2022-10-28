@@ -1,5 +1,6 @@
 package org.sbtitcourses.mdwiki.repository;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sbtitcourses.mdwiki.model.Person;
@@ -21,21 +22,12 @@ class SpaceRepositoryTests {
 
     private final TestEntityManager entityManager;
     private final SpaceRepository spaceRepository;
-    private final Space space;
-    private final Person owner;
+    private final Person owner = new Person("testUsername",
+            "testPassword",
+            "testName",
+            "testEmail@test.test");
+    private final Space space = new Space("testName", owner, true);
 
-    {
-        owner = new Person();
-        owner.setUsername("testUsername");
-        owner.setName("testName");
-        owner.setPassword("testPassword");
-        owner.setEmail("testEmail@test.test");
-
-        space = new Space();
-        space.setName("testName");
-        space.setOwner(owner);
-        space.setPublic(true);
-    }
 
     @Autowired
     public SpaceRepositoryTests(TestEntityManager entityManager, SpaceRepository spaceRepository) {
