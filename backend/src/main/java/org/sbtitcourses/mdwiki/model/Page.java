@@ -3,13 +3,11 @@ package org.sbtitcourses.mdwiki.model;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
 import java.util.Date;
 import java.util.List;
 
-import static javax.persistence.FetchType.*;
-import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
@@ -39,7 +37,7 @@ public class Page {
     /**
      * Список подстраниц данной страницы
      */
-    @OneToMany(mappedBy = "parent", fetch = EAGER)
+    @OneToMany(mappedBy = "parent", fetch = LAZY)
     @Cascade(ALL)
     private List<Page> subpages;
 
@@ -75,20 +73,35 @@ public class Page {
      * Статус публичности записи
      */
     @Column(name = "is_public")
-    private Boolean isPublic;
+    private boolean isPublic;
 
     /**
      * Список документов, принадлжащих данной записи
      */
     @OneToOne(mappedBy = "page", fetch = LAZY)
     @Cascade(ALL)
-    private Document documents;
+    private Document document;
 
     public Page() {
     }
 
-    public Page(String name, Boolean isPublic) {
+    public Page(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public Page(int id, Space space) {
+        this.id = id;
+        this.space = space;
+    }
+
+    public Page(String name, boolean isPublic) {
         this.name = name;
+        this.isPublic = isPublic;
+    }
+
+    public Page(String name, Space space, boolean isPublic) {
+        this.name = name;
+        this.space = space;
         this.isPublic = isPublic;
     }
 
@@ -148,19 +161,19 @@ public class Page {
         this.updatedAt = updatedAt;
     }
 
-    public Boolean getPublic() {
+    public boolean getPublic() {
         return isPublic;
     }
 
-    public void setPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
-    public Document getDocuments() {
-        return documents;
+    public Document getDocument() {
+        return document;
     }
 
-    public void setDocuments(Document documents) {
-        this.documents = documents;
+    public void setDocument(Document document) {
+        this.document = document;
     }
 }

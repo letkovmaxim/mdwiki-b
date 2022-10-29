@@ -1,0 +1,45 @@
+package org.sbtitcourses.mdwiki.service;
+
+import org.sbtitcourses.mdwiki.model.Person;
+
+import java.util.List;
+
+/**
+ * Интерфейс сервиса CRUD операций над сущностью Person
+ */
+public interface PersonCrudService {
+
+    /**
+     * Создание нового пользователя
+     * @param personToCreate пользователь, которого нужно сохранить
+     * @return созданного пользователя
+     */
+    Person create(Person personToCreate);
+
+    /**
+     * Получение всех пользователей
+     * @return список всех пользователей
+     */
+    List<Person> getAll();
+
+    /**
+     * Получение пользователя по его ID
+     * @param id ID пользователя
+     * @return найденного пользователя
+     */
+    Person get(int id);
+
+    /**
+     * Обновление пользователя по его ID
+     * @param id ID пользователя
+     * @param personToUpdateWith объект класса Person, значениями полей которого нужно обновить пользователя
+     * @return обновленного пользователя
+     */
+    Person update(int id, Person personToUpdateWith);
+
+    /**
+     * Удаление пользователя по его ID
+     * @param id ID пользователя
+     */
+    void delete(int id);
+}

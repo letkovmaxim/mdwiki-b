@@ -3,13 +3,11 @@ package org.sbtitcourses.mdwiki.model;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.FetchType.*;
-import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.GenerationType.SEQUENCE;
 import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
@@ -61,7 +59,7 @@ public class Space {
      * Статус публичности пространства
      */
     @Column(name = "is_public")
-    private Boolean isPublic;
+    private boolean isPublic;
 
     /**
      * Список записей, принадлежащих данному пространству
@@ -73,7 +71,26 @@ public class Space {
     public Space() {
     }
 
-    public Space(String name, Boolean isPublic) {
+    public Space(String name, Person owner, boolean isPublic) {
+        this.name = name;
+        this.owner = owner;
+        this.isPublic = isPublic;
+    }
+
+    public Space(int id) {
+        this.id = id;
+    }
+
+    public Space(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public Space(int id, boolean isPublic) {
+        this.id = id;
+        this.isPublic = isPublic;
+    }
+
+    public Space(String name, boolean isPublic) {
         this.name = name;
         this.isPublic = isPublic;
     }
@@ -118,12 +135,12 @@ public class Space {
         this.updatedAt = updatedAt;
     }
 
-    public Boolean getPublic() {
+    public boolean isPublic() {
         return isPublic;
     }
 
-    public void setPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public List<Page> getPages() {

@@ -1,7 +1,9 @@
 package org.sbtitcourses.mdwiki.repository;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -20,12 +22,10 @@ class PersonRepositoryTests {
     
     private final TestEntityManager entityManager;
     private final PersonRepository personRepository;
-    private final Person person = new Person(
-            "testUsername",
+    private final Person person = new Person("testUsername",
             "testPassword",
             "testName",
-            "testEmail@test.test"
-    );
+            "testEmail@test.test");
 
     @Autowired
     PersonRepositoryTests(TestEntityManager entityManager, PersonRepository personRepository) {

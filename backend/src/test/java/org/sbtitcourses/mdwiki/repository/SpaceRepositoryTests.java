@@ -1,7 +1,9 @@
 package org.sbtitcourses.mdwiki.repository;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -20,7 +22,12 @@ class SpaceRepositoryTests {
 
     private final TestEntityManager entityManager;
     private final SpaceRepository spaceRepository;
-    private final Space space = new Space("testName", true);
+    private final Person owner = new Person("testUsername",
+            "testPassword",
+            "testName",
+            "testEmail@test.test");
+    private final Space space = new Space("testName", owner, true);
+
 
     @Autowired
     public SpaceRepositoryTests(TestEntityManager entityManager, SpaceRepository spaceRepository) {
@@ -30,6 +37,7 @@ class SpaceRepositoryTests {
 
     @BeforeEach
     public void setUp() {
+        entityManager.persist(owner);
         entityManager.persistAndFlush(space);
         entityManager.clear();
     }
@@ -43,10 +51,19 @@ class SpaceRepositoryTests {
     }
 
     @Test
-    public void findByIsPublicTrueShouldReturnSpace() {
-        List<Space> found = spaceRepository.findByIsPublicTrue();
+    public void findByIsPublicTrueShouldReturnSpaceList() {
+        List<Space> found = spaceRepository.findAllByIsPublicTrue();
 
         assertFalse(found.isEmpty());
         assertEquals(space.getId(), found.get(0).getId());
+    }
+
+    @Test
+    public void findByOwnerShouldReturnSpaceList() {
+        List<Space> found = spaceRepository.findAllByOwner(owner);
+
+        assertFalse(found.isEmpty());
+        assertEquals(space.getId(), found.get(0).getId());
+        assertEquals(owner.getId(), found.get(0).getOwner().getId());
     }
 }

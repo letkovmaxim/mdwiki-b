@@ -1,10 +1,8 @@
 package org.sbtitcourses.mdwiki.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 
@@ -38,6 +36,19 @@ public class Document {
     private Page page;
 
     public Document() {
+    }
+
+    public Document(Page page) {
+        this.page = page;
+    }
+
+    public Document(String text) {
+        this.text = text;
+    }
+
+    public Document(int id, Page page) {
+        this.id = id;
+        this.page = page;
     }
 
     public int getId() {
