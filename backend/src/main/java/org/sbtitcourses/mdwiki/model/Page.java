@@ -82,6 +82,10 @@ public class Page {
     @Cascade(ALL)
     private Document document;
 
+    public Person getOwner() {
+        return space.getOwner();
+    }
+
     public Page() {
     }
 
@@ -161,7 +165,7 @@ public class Page {
         this.updatedAt = updatedAt;
     }
 
-    public boolean getPublic() {
+    public boolean isPublic() {
         return isPublic;
     }
 

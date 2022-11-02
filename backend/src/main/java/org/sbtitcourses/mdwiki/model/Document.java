@@ -35,6 +35,10 @@ public class Document {
     @JoinColumn(name = "page_id", referencedColumnName = "id")
     private Page page;
 
+    public Person getOwner() {
+        return page.getOwner();
+    }
+
     public Document() {
     }
 

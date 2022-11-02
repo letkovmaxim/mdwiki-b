@@ -90,7 +90,7 @@ public class PageService implements PageCrudService {
         Page pageToUpdate = pageRepository.findByIdAndSpace(id, space)
                 .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
         pageToUpdate.setName(pageToUpdateWith.getName());
-        pageToUpdate.setPublic(pageToUpdateWith.getPublic());
+        pageToUpdate.setPublic(pageToUpdateWith.isPublic());
 
         pageRepository.save(pageToUpdate);
 
