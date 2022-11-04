@@ -10,29 +10,34 @@ public interface DocumentCrudService {
 
     /**
      * Создание нового документа
-     * @param documentToCreate документ, который нужно сохранить
+     * @param document документ, который нужно сохранить
+     * @param pageId ID страницы, в которой нужно создать документ
+     * @param spaceId ID пространства, в котором нужно создать документ
      * @return созданный документ
      */
-    Document create(Document documentToCreate);
+    Document create(Document document, int pageId, int spaceId);
 
     /**
      * Получение документа на странице
-     * @param page страницы, на которой нужно получить документ
+     * @param pageId ID страницы, в которой нужно получить документ
+     * @param spaceId ID пространства, в котором нужно получить документ
      * @return найденый документ
      */
-    Document get(Page page);
+    Document get(int pageId, int spaceId);
 
     /**
      * Обновить документ на странице
-     * @param page страница, на которой нужно обновить документ
+     * @param pageId ID страницы, в которой нужно обновить документ
+     * @param spaceId ID пространства, в котором нужно обновить документ
      * @param documentToUpdateWith объект класса Document, значениями полей которого нужно обновить документ
      * @return обновленный документ
      */
-    Document update(Page page, Document documentToUpdateWith);
+    Document update(int pageId, int spaceId, Document documentToUpdateWith);
 
     /**
      * Удаление документ на странице
-     * @param page страница, на которой нужно удалить документ
+     * @param pageId ID страницы, в которой нужно удалить документ
+     * @param spaceId ID пространства, в котором нужно удалить документ
      */
-    void delete(Page page);
+    void delete(int pageId, int spaceId);
 }

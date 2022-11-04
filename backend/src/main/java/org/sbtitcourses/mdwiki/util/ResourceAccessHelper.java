@@ -12,44 +12,74 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+/**
+ * Компонент для проверки доступа к ресурсам
+ */
 @Component
 public class ResourceAccessHelper {
 
+    /**
+     * Репозиторий для взаимодействия с сущностью Person
+     */
     private final PersonRepository personRepository;
 
+    /**
+     * Конструктор для автаматического внедрения зависимостей
+     * @param personRepository репозиторий для взаимодействия с сущностью Person
+     */
     @Autowired
     public ResourceAccessHelper(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
 
-    //////////////SPACE//////////////////
-
+    /**
+     *
+     * @return
+     */
     public boolean isAccessToCreateSpaceDenied() {
         Optional<Person> user = getLoggedInUser();
 
         return user.isEmpty();
     }
 
+    /**
+     *
+     * @param space
+     * @return
+     */
     public boolean isAccessToReadSpaceDenied(Space space) {
         Optional<Person> user = getLoggedInUser();
 
         return user.filter(person -> space.isPublic() || person.getId() == space.getOwner().getId()).isEmpty();
     }
 
+    /**
+     *
+     * @param space
+     * @return
+     */
     public boolean isAccessToUpdateSpaceDenied(Space space) {
         Optional<Person> user = getLoggedInUser();
 
         return user.filter(person -> person.getId() == space.getOwner().getId()).isEmpty();
     }
 
+    /**
+     *
+     * @param space
+     * @return
+     */
     public boolean isAccessToDeleteSpaceDenied(Space space) {
         Optional<Person> user = getLoggedInUser();
 
         return user.filter(person -> person.getId() == space.getOwner().getId()).isEmpty();
     }
 
-    //////////////////PAGE//////////////////////
-
+    /**
+     *
+     * @param space
+     * @return
+     */
     public boolean isAccessToCreatePageDenied(Space space) {
         Optional<Person> user = getLoggedInUser();
 
@@ -57,12 +87,33 @@ public class ResourceAccessHelper {
         //TODO: this == access to update space (???)
     }
 
+    /**
+     *
+     * @param parent
+     * @return
+     */
     public boolean isAccessToCreateSubpageDenied(Page parent) {
         Optional<Person> user = getLoggedInUser();
 
         return user.filter(person -> person.getId() == parent.getOwner().getId()).isEmpty();
     }
 
+    /**
+     *
+     * @param space
+     * @return
+     */
+    public boolean isAccessToReadAllPagesDenied(Space space) {
+        Optional<Person> user = getLoggedInUser();
+
+        return user.filter(person -> space.isPublic() || person.getId() == space.getOwner().getId()).isEmpty();
+    }
+
+    /**
+     *
+     * @param page
+     * @return
+     */
     public boolean isAccessToReadPageDenied(Page page) {
         Optional<Person> user = getLoggedInUser();
 
@@ -78,6 +129,11 @@ public class ResourceAccessHelper {
         return true;
     }
 
+    /**
+     *
+     * @param page
+     * @return
+     */
     private boolean isAccessToReadRootPageDenied(Page page) {
         if (page.getParent() != null) {
             return isAccessToReadRootPageDenied(page.getParent());
@@ -86,38 +142,68 @@ public class ResourceAccessHelper {
         return !page.isPublic();
     }
 
+    /**
+     *
+     * @param page
+     * @return
+     */
     public boolean isAccessToUpdatePageDenied(Page page) {
         Optional<Person> user = getLoggedInUser();
 
         return user.filter(person -> person.getId() == page.getOwner().getId()).isEmpty();
     }
 
+    /**
+     *
+     * @param page
+     * @return
+     */
     public boolean isAccessToDeletePageDenied(Page page) {
         Optional<Person> user = getLoggedInUser();
 
         return user.filter(person -> person.getId() == page.getOwner().getId()).isEmpty();
     }
 
-    ////////////////DOCUMENT///////////////////
-
+    /**
+     *
+     * @param page
+     * @return
+     */
     public boolean isAccessToCreateDocumentDenied(Page page) {
         return isAccessToCreatePageDenied(page.getSpace());
     }
 
+    /**
+     *
+     * @param document
+     * @return
+     */
     public boolean isAccessToReadDocumentDenied(Document document) {
        return isAccessToReadPageDenied(document.getPage());
     }
 
+    /**
+     *
+     * @param document
+     * @return
+     */
     public boolean isAccessToUpdateDocumentDenied(Document document) {
         return isAccessToUpdatePageDenied(document.getPage());
     }
 
+    /**
+     *
+     * @param document
+     * @return
+     */
     public boolean isAccessToDeleteDocumentDenied(Document document) {
         return isAccessToDeletePageDenied(document.getPage());
     }
 
-    /////////////////////////////////////////////
-
+    /**
+     *
+     * @return
+     */
     public Optional<Person> getLoggedInUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

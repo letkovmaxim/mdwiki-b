@@ -4,11 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.sbtitcourses.mdwiki.dto.document.DocumentRequest;
 import org.sbtitcourses.mdwiki.dto.document.DocumentResponse;
 import org.sbtitcourses.mdwiki.model.Document;
-import org.sbtitcourses.mdwiki.model.Page;
-import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.service.DocumentService;
-import org.sbtitcourses.mdwiki.service.PageService;
-import org.sbtitcourses.mdwiki.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +20,6 @@ import javax.validation.Valid;
 public class DocumentController {
 
     /**
-     * Сервис с логикой CRUD операций над сущностью Space
-     */
-    private final SpaceService spaceService;
-    /**
-     * Сервис с логикой CRUD операций над сущностью Page
-     */
-    private final PageService pageService;
-    /**
      * Сервис с логикой CRUD операций над сущностью Document
      */
     private final DocumentService documentService;
@@ -42,15 +30,11 @@ public class DocumentController {
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
-     * @param spaceService сервис с логикой CRUD операций над сущностью Space
-     * @param pageService сервис с логикой CRUD операций над сущностью Page
      * @param documentService сервис с логикой CRUD операций над сущностью Document
      * @param modelMapper маппер для конвертации сущностей
      */
     @Autowired
-    public DocumentController(SpaceService spaceService, PageService pageService, DocumentService documentService, ModelMapper modelMapper) {
-        this.spaceService = spaceService;
-        this.pageService = pageService;
+    public DocumentController(DocumentService documentService, ModelMapper modelMapper) {
         this.documentService = documentService;
         this.modelMapper = modelMapper;
     }
@@ -66,12 +50,9 @@ public class DocumentController {
     public ResponseEntity<DocumentResponse> create(@PathVariable(name = "spaceId") int spaceId,
                                                    @PathVariable(name = "pageId") int pageId,
                                                    @RequestBody @Valid DocumentRequest documentRequest) {
-        Document documentToCreate = modelMapper.map(documentRequest, Document.class);
-        Space space = spaceService.get(spaceId);
-        Page page = pageService.get(pageId, space);
-        documentToCreate.setPage(page);
+        Document document = modelMapper.map(documentRequest, Document.class);
 
-        Document createdDocument = documentService.create(documentToCreate);
+        Document createdDocument = documentService.create(document, pageId, spaceId);
 
         DocumentResponse response = modelMapper.map(createdDocument, DocumentResponse.class);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -86,10 +67,7 @@ public class DocumentController {
     @GetMapping
     public ResponseEntity<DocumentResponse> get(@PathVariable(name = "spaceId") int spaceId,
                                                 @PathVariable(name = "pageId") int pageId) {
-        Space space = spaceService.get(spaceId);
-        Page page = pageService.get(pageId, space);
-
-        Document document = documentService.get(page);
+        Document document = documentService.get(pageId, spaceId);
 
         DocumentResponse response = modelMapper.map(document, DocumentResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -107,10 +85,8 @@ public class DocumentController {
                                                    @PathVariable(name = "pageId") int pageId,
                                                    @RequestBody @Valid DocumentRequest documentRequest) {
         Document documentToUpdateWith = modelMapper.map(documentRequest, Document.class);
-        Space space = spaceService.get(spaceId);
-        Page page = pageService.get(pageId, space);
 
-        Document updatedDocument = documentService.update(page, documentToUpdateWith);
+        Document updatedDocument = documentService.update(pageId, spaceId, documentToUpdateWith);
 
         DocumentResponse response = modelMapper.map(updatedDocument, DocumentResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -125,10 +101,7 @@ public class DocumentController {
     @DeleteMapping
     public ResponseEntity<HttpStatus> delete(@PathVariable(name = "spaceId") int spaceId,
                                              @PathVariable(name = "pageId") int pageId) {
-        Space space = spaceService.get(spaceId);
-        Page page = pageService.get(pageId, space);
-
-        documentService.delete(page);
+        documentService.delete(pageId, spaceId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

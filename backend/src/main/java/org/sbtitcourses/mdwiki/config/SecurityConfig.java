@@ -1,6 +1,6 @@
 package org.sbtitcourses.mdwiki.config;
 
-import org.sbtitcourses.mdwiki.service.PersonDetailsService;
+import org.sbtitcourses.mdwiki.service.security.PersonDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
