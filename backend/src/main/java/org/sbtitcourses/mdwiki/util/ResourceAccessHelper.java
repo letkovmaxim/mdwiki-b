@@ -74,7 +74,6 @@ public class ResourceAccessHelper {
         Optional<Person> user = getLoggedInUser();
 
         return user.filter(person -> person.getId() == space.getOwner().getId()).isEmpty();
-        //TODO: this == access to update space (???)
     }
 
     /**
