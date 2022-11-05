@@ -33,19 +33,9 @@ public class ResourceAccessHelper {
     }
 
     /**
-     *
-     * @return
-     */
-    public boolean isAccessToCreateSpaceDenied() {
-        Optional<Person> user = getLoggedInUser();
-
-        return user.isEmpty();
-    }
-
-    /**
-     *
-     * @param space
-     * @return
+     * Метод, проверяющий доступ к получению пространства
+     * @param space пространство, доступ к которому нужно проверить
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToReadSpaceDenied(Space space) {
         Optional<Person> user = getLoggedInUser();
@@ -54,9 +44,9 @@ public class ResourceAccessHelper {
     }
 
     /**
-     *
-     * @param space
-     * @return
+     * Метод, проверяющий доступ к изменению пространства
+     * @param space пространство, доступ к которому нужно проверить
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToUpdateSpaceDenied(Space space) {
         Optional<Person> user = getLoggedInUser();
@@ -65,9 +55,9 @@ public class ResourceAccessHelper {
     }
 
     /**
-     *
-     * @param space
-     * @return
+     * Метод, проверяющий доступ к удалению пространства
+     * @param space пространство, доступ к которому нужно проверить
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToDeleteSpaceDenied(Space space) {
         Optional<Person> user = getLoggedInUser();
@@ -76,9 +66,9 @@ public class ResourceAccessHelper {
     }
 
     /**
-     *
-     * @param space
-     * @return
+     * Метод, проверяющий доступ к созданию страницы
+     * @param space пространство, в котором нужно создать страницу
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToCreatePageDenied(Space space) {
         Optional<Person> user = getLoggedInUser();
@@ -88,9 +78,9 @@ public class ResourceAccessHelper {
     }
 
     /**
-     *
-     * @param parent
-     * @return
+     * Метод, проверяющий доступ к созданию подстраницы
+     * @param parent страница-родитель
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToCreateSubpageDenied(Page parent) {
         Optional<Person> user = getLoggedInUser();
@@ -99,9 +89,9 @@ public class ResourceAccessHelper {
     }
 
     /**
-     *
-     * @param space
-     * @return
+     * Метод, проверяющий доступ к получению всех страниц
+     * @param space пространство, из которого нужно получить все страницы
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToReadAllPagesDenied(Space space) {
         Optional<Person> user = getLoggedInUser();
@@ -110,9 +100,9 @@ public class ResourceAccessHelper {
     }
 
     /**
-     *
-     * @param page
-     * @return
+     * Метод, проверяющий доступ к получению страницы
+     * @param page страница, доступ к которой нужно проверить
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToReadPageDenied(Page page) {
         Optional<Person> user = getLoggedInUser();
@@ -130,9 +120,9 @@ public class ResourceAccessHelper {
     }
 
     /**
-     *
-     * @param page
-     * @return
+     * Метод, проверяющий доступ к получению корневой страницы
+     * @param page страница, доступ к которой нужно проверить
+     * @return true - если доспут запрещен, false - если разрешен
      */
     private boolean isAccessToReadRootPageDenied(Page page) {
         if (page.getParent() != null) {
@@ -143,9 +133,9 @@ public class ResourceAccessHelper {
     }
 
     /**
-     *
-     * @param page
-     * @return
+     * Метод, проверяющий доступ к изменению страницы
+     * @param page страница, доступ к которой нужно проверить
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToUpdatePageDenied(Page page) {
         Optional<Person> user = getLoggedInUser();
@@ -154,9 +144,9 @@ public class ResourceAccessHelper {
     }
 
     /**
-     *
-     * @param page
-     * @return
+     * Метод, проверяющий доступ к удалению страницы
+     * @param page страница, доступ к которой нужно проверить
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToDeletePageDenied(Page page) {
         Optional<Person> user = getLoggedInUser();
@@ -165,54 +155,49 @@ public class ResourceAccessHelper {
     }
 
     /**
-     *
-     * @param page
-     * @return
+     * Метод, проверяющий доступ к созданию документа
+     * @param page страница, в которой нужно создать документ
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToCreateDocumentDenied(Page page) {
         return isAccessToCreatePageDenied(page.getSpace());
     }
 
     /**
-     *
-     * @param document
-     * @return
+     * Метод, проверяющий доступ к получению документа
+     * @param document документ, доступ к которому нужно проверить
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToReadDocumentDenied(Document document) {
        return isAccessToReadPageDenied(document.getPage());
     }
 
     /**
-     *
-     * @param document
-     * @return
+     * Метод, проверяющий доступ к изменению документа
+     * @param document документ, доступ к которому нужно проверить
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToUpdateDocumentDenied(Document document) {
         return isAccessToUpdatePageDenied(document.getPage());
     }
 
     /**
-     *
-     * @param document
-     * @return
+     * Метод, проверяющий доступ к удалению документа
+     * @param document документ, доступ к которому нужно проверить
+     * @return true - если доспут запрещен, false - если разрешен
      */
     public boolean isAccessToDeleteDocumentDenied(Document document) {
         return isAccessToDeletePageDenied(document.getPage());
     }
 
     /**
-     *
-     * @return
+     * Метод, отвечающий за получение объекта пользователя
+     * @return Optional с объектом пользователя, если он прошел аутентифицию, пустой optional в противном случае
      */
     public Optional<Person> getLoggedInUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        PersonDetails principal = (PersonDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.getUsername();
 
-        if (principal instanceof PersonDetails) {
-            String username = ((PersonDetails) principal).getUsername();
-
-            return personRepository.findByUsername(username);
-        }
-
-        return Optional.empty();
+        return personRepository.findByUsername(username);
     }
 }

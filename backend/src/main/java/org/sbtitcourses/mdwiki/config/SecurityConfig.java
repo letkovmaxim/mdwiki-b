@@ -1,7 +1,9 @@
 package org.sbtitcourses.mdwiki.config;
 
+import org.sbtitcourses.mdwiki.security.AuthFilter;
 import org.sbtitcourses.mdwiki.service.security.PersonDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -16,13 +18,12 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig{
+public class SecurityConfig {
 
     /**
      * Сервис загрузки пользователя
      */
     private final PersonDetailsService personDetailsService;
-
 
     /**
      * Инициализация поля
@@ -61,6 +62,19 @@ public class SecurityConfig{
                     .logoutSuccessUrl("/auth/login");
 
         return http.build();
+    }
+
+    /**
+     * Фильтр, отвечающий за проверку аутентифицированного пользователя
+     */
+    @Bean
+    public FilterRegistrationBean<AuthFilter> authFilter() {
+        FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
+
+        registrationBean.setFilter(new AuthFilter());
+        registrationBean.addUrlPatterns("/spaces/*", "/people/*");
+
+        return registrationBean;
     }
 
     /**

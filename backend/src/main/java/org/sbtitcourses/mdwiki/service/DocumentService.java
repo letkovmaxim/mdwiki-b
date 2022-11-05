@@ -104,8 +104,14 @@ public class DocumentService implements DocumentCrudService {
         Page page = pageRepository.findByIdAndSpace(pageId, space)
                 .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
 
-        return documentRepository.findByPage(page)
+        Document document = documentRepository.findByPage(page)
                 .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
+
+        if (resourceAccessHelper.isAccessToReadDocumentDenied(document)) {
+            throw new AccessDeniedException("Отказано в доступе");
+        }
+
+        return document;
     }
 
     /**
@@ -129,6 +135,10 @@ public class DocumentService implements DocumentCrudService {
 
         Document document = documentRepository.findByPage(page)
                 .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
+
+        if (resourceAccessHelper.isAccessToUpdateDocumentDenied(document)) {
+            throw new AccessDeniedException("Отказано в доступе");
+        }
 
         document.setText(documentToUpdateWith.getText());
 
@@ -156,6 +166,10 @@ public class DocumentService implements DocumentCrudService {
 
         Document document = documentRepository.findByPage(page)
                 .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
+
+        if (resourceAccessHelper.isAccessToDeleteDocumentDenied(document)) {
+            throw new AccessDeniedException("Отказано в доступе");
+        }
 
         page.setDocument(null);
 
