@@ -11,16 +11,16 @@ public interface SpaceCrudService {
 
     /**
      * Создание нового пространства
-     * @param spaceToCreate пространство, которое нужно сохранить
+     * @param space пространство, которое нужно сохранить
      * @return созданное пространство
      */
-    Space create(Space spaceToCreate);
+    Space create(Space space);
 
     /**
      * Получение всех пространств
      * @return список всех пространств
      */
-    List<Space> getAll();
+    List<Space> get(int bunch, int size);
 
     /**
      * Получение пространства по его ID

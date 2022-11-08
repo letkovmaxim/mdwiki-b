@@ -8,7 +8,6 @@ import org.sbtitcourses.mdwiki.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -50,9 +49,9 @@ public class SpaceController {
      */
     @PostMapping
     public ResponseEntity<SpaceResponse> create(@RequestBody @Valid SpaceRequest spaceRequest) {
-        Space spaceToCreate = modelMapper.map(spaceRequest, Space.class);
+        Space space = modelMapper.map(spaceRequest, Space.class);
 
-        Space createdSpace = spaceService.create(spaceToCreate);
+        Space createdSpace = spaceService.create(space);
 
         SpaceResponse response = modelMapper.map(createdSpace, SpaceResponse.class);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -60,13 +59,16 @@ public class SpaceController {
 
     /**
      * Метод, отвечающий за получение всех пространств
+     * @param bunch номер страницы при пагинации
+     * @param size количество элементов в странице при пагинации
      * @return список DTO сущности Space для ответа с кодом 200
      */
     @GetMapping
-    public ResponseEntity<List<SpaceResponse>> getAll() {
+    public ResponseEntity<List<SpaceResponse>> get(@RequestParam(name = "bunch") @Min(value = 0, message = "Номер запрашиваемой страницы не может быть меньше 0") int bunch,
+                                                   @RequestParam(name = "size")  @Min(value = 1, message = "Количество элементов на странице не должно быть меньше 1") int size) {
         List<SpaceResponse> spaces = new LinkedList<>();
 
-        for (Space space: spaceService.getAll()) {
+        for (Space space: spaceService.get(bunch, size)) {
             SpaceResponse spaceResponse = modelMapper.map(space, SpaceResponse.class);
             spaces.add(spaceResponse);
         }

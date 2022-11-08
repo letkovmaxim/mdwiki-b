@@ -4,15 +4,14 @@ import org.modelmapper.ModelMapper;
 import org.sbtitcourses.mdwiki.dto.page.PageRequest;
 import org.sbtitcourses.mdwiki.dto.page.PageResponse;
 import org.sbtitcourses.mdwiki.model.Page;
-import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.service.PageService;
-import org.sbtitcourses.mdwiki.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,10 +23,6 @@ import java.util.List;
 public class PageController {
 
     /**
-     * Сервис с логикой CRUD операций над сущностью Space
-     */
-    private final SpaceService spaceService;
-    /**
      * Сервис с логикой CRUD операций над сущностью Page
      */
     private final PageService pageService;
@@ -38,13 +33,11 @@ public class PageController {
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
-     * @param spaceService сервис с логикой CRUD операций над сущностью Space
      * @param pageService сервис с логикой CRUD операций над сущностью Page
      * @param modelMapper маппер для конвертации сущностей
      */
     @Autowired
-    public PageController(SpaceService spaceService, PageService pageService, ModelMapper modelMapper) {
-        this.spaceService = spaceService;
+    public PageController(PageService pageService, ModelMapper modelMapper) {
         this.pageService = pageService;
         this.modelMapper = modelMapper;
     }
@@ -58,11 +51,9 @@ public class PageController {
     @PostMapping
     private ResponseEntity<PageResponse> create(@PathVariable(name = "spaceId") int spaceId,
                                                 @RequestBody @Valid PageRequest pageRequest) {
-        Page pageToCreate = modelMapper.map(pageRequest, Page.class);
-        Space space = spaceService.get(spaceId);
-        pageToCreate.setSpace(space);
+        Page page = modelMapper.map(pageRequest, Page.class);
 
-        Page createdPage = pageService.create(pageToCreate);
+        Page createdPage = pageService.create(page, spaceId);
 
         PageResponse response = modelMapper.map(createdPage, PageResponse.class);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -71,39 +62,36 @@ public class PageController {
     /**
      * Метод, отвечающий за создание новой подстраницы
      * @param spaceId ID пространства, в котором нужно создать подстраницу
-     * @param pageId ID страницы-родителя
+     * @param parentId ID страницы-родителя
      * @param pageRequest DTO сущности Page для запроса
      * @return DTO сущности Page для ответа с кодом 201
      */
-    @PostMapping("/{pageId}")
+    @PostMapping("/{parentId}")
     public ResponseEntity<PageResponse> createSubpage(@PathVariable(name = "spaceId") int spaceId,
-                                                      @PathVariable(name = "pageId") int pageId,
+                                                      @PathVariable(name = "parentId") int parentId,
                                                       @RequestBody @Valid PageRequest pageRequest) {
-        Page subpageToCreate = modelMapper.map(pageRequest, Page.class);
-        Space space = spaceService.get(spaceId);
-        Page parent = pageService.get(pageId, space);
-        subpageToCreate.setSpace(space);
-        subpageToCreate.setParent(parent);
+        Page subpage = modelMapper.map(pageRequest, Page.class);
 
-        Page createdPage = pageService.create(subpageToCreate);
+        Page createdSubpage = pageService.createSubpage(subpage, parentId, spaceId);
 
-        PageResponse response = modelMapper.map(createdPage, PageResponse.class);
+        PageResponse response = modelMapper.map(createdSubpage, PageResponse.class);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
      * Метод, отвечающий за получение всех страниц данного пространства
      * @param spaceId ID пространства
+     * @param bunch номер страницы при пагинации
+     * @param size количество элементов в странице при пагинации
      * @return список DTO сущности Page для ответа с кодом 200
      */
     @GetMapping
-    public ResponseEntity<List<PageResponse>> getAll(@PathVariable(name = "spaceId") int spaceId,
-                                                     @RequestParam(value = "bunch") int bunch,
-                                                     @RequestParam(value = "size") int size) {
+    public ResponseEntity<List<PageResponse>> get(@PathVariable(name = "spaceId") int spaceId,
+                                                  @RequestParam(name = "bunch") @Min(value = 0, message = "Номер запрашиваемой страницы не может быть меньше 0") int bunch,
+                                                  @RequestParam(name = "size")  @Min(value = 1, message = "Количество элементов на странице не должно быть меньше 1") int size) {
         List<PageResponse> pages = new LinkedList<>();
-        Space space = spaceService.get(spaceId);
 
-        for (Page page: pageService.getAll(space, bunch, size)) {
+        for (Page page: pageService.get(spaceId, bunch, size)) {
             PageResponse pageResponse = modelMapper.map(page, PageResponse.class);
             pages.add(pageResponse);
         }
@@ -120,9 +108,7 @@ public class PageController {
     @GetMapping("/{pageId}")
     public ResponseEntity<PageResponse> get(@PathVariable(name = "spaceId") int spaceId,
                                             @PathVariable(name = "pageId") int pageId) {
-        Space space = spaceService.get(spaceId);
-
-        Page page = pageService.get(pageId, space);
+        Page page = pageService.get(pageId, spaceId);
 
         PageResponse response = modelMapper.map(page, PageResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -140,9 +126,8 @@ public class PageController {
                                                 @PathVariable(name = "pageId") int pageId,
                                                 @RequestBody @Valid PageRequest pageRequest ) {
         Page pageToUpdateWith = modelMapper.map(pageRequest, Page.class);
-        Space space = spaceService.get(spaceId);
 
-        Page updatedPage = pageService.update(pageId, space, pageToUpdateWith);
+        Page updatedPage = pageService.update(pageId, spaceId, pageToUpdateWith);
 
         PageResponse response = modelMapper.map(updatedPage, PageResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -157,10 +142,7 @@ public class PageController {
     @DeleteMapping("/{pageId}")
     public ResponseEntity<HttpStatus> delete(@PathVariable(name = "spaceId") int spaceId,
                                              @PathVariable(name = "pageId") int pageId) {
-        Space space = spaceService.get(spaceId);
-        Page pageToDelete = pageService.get(pageId, space);
-
-        pageService.delete(pageToDelete.getId());
+        pageService.delete(pageId, spaceId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
