@@ -8,6 +8,8 @@ import org.sbtitcourses.mdwiki.model.Space;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,8 +53,8 @@ class SpaceRepositoryTests {
     }
 
     @Test
-    public void findByIsPublicTrueShouldReturnSpaceList() {
-        List<Space> found = spaceRepository.findAllByIsPublicTrue();
+    public void findBySharedTrueShouldReturnSpaceList() {
+        List<Space> found = spaceRepository.findBySharedTrue();
 
         assertFalse(found.isEmpty());
         assertEquals(space.getId(), found.get(0).getId());
@@ -60,7 +62,8 @@ class SpaceRepositoryTests {
 
     @Test
     public void findByOwnerShouldReturnSpaceList() {
-        List<Space> found = spaceRepository.findAllByOwner(owner);
+        Pageable pageable = PageRequest.of(0, 1);
+        List<Space> found = spaceRepository.findByOwnerOrSharedTrue(owner, pageable);
 
         assertFalse(found.isEmpty());
         assertEquals(space.getId(), found.get(0).getId());

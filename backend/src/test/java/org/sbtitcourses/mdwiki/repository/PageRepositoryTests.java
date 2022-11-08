@@ -49,8 +49,8 @@ class PageRepositoryTests {
     }
 
     @Test
-    public void findByIsPublicTrueShouldReturnPageList() {
-        List<Page> found = pageRepository.findByIsPublicTrue();
+    public void findBySharedTrueShouldReturnPageList() {
+        List<Page> found = pageRepository.findBySharedTrue();
 
         assertFalse(found.isEmpty());
         assertEquals(page.getId(), found.get(0).getId());

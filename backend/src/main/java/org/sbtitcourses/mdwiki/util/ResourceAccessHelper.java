@@ -40,7 +40,7 @@ public class ResourceAccessHelper {
     public boolean isAccessToReadSpaceDenied(Space space) {
         Optional<Person> user = getLoggedInUser();
 
-        return user.filter(person -> space.isPublic() || person.getId() == space.getOwner().getId()).isEmpty();
+        return user.filter(person -> space.isShared() || person.getId() == space.getOwner().getId()).isEmpty();
     }
 
     /**
@@ -95,7 +95,7 @@ public class ResourceAccessHelper {
     public boolean isAccessToReadAllPagesDenied(Space space) {
         Optional<Person> user = getLoggedInUser();
 
-        return user.filter(person -> space.isPublic() || person.getId() == space.getOwner().getId()).isEmpty();
+        return user.filter(person -> space.isShared() || person.getId() == space.getOwner().getId()).isEmpty();
     }
 
     /**
@@ -108,7 +108,7 @@ public class ResourceAccessHelper {
 
         if (user.isPresent()) {
             if (user.get().getId() == page.getOwner().getId() ||
-                    page.getSpace().isPublic()) {
+                    page.getSpace().isShared()) {
                 return false;
             }
 
@@ -128,7 +128,7 @@ public class ResourceAccessHelper {
             return isAccessToReadRootPageDenied(page.getParent());
         }
 
-        return !page.isPublic();
+        return !page.isShared();
     }
 
     /**

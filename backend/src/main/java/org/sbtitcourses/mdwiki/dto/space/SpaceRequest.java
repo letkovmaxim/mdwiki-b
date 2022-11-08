@@ -18,7 +18,7 @@ public class SpaceRequest {
     /**
      * Статус публичности пространства
      */
-    private boolean isPublic;
+    private boolean shared;
 
     public String getName() {
         return name;
@@ -28,11 +28,11 @@ public class SpaceRequest {
         this.name = name;
     }
 
-    public boolean getPublic() {
-        return isPublic;
+    public boolean getShared() {
+        return shared;
     }
 
-    public void setPublic(boolean isPublic) {
-        this.isPublic = isPublic;
+    public void setShared(boolean shared) {
+        this.shared = shared;
     }
 }

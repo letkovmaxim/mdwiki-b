@@ -26,7 +26,7 @@ public interface PageRepository extends JpaRepository<Page, Integer> {
      * Поиск публичных записей
      * @return возвращает список найденых записнй
      */
-    List<Page> findByIsPublicTrue();
+    List<Page> findBySharedTrue();
 
     /**
      * Поиск записи данного пространства

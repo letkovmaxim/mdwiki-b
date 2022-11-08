@@ -58,8 +58,8 @@ public class Space {
     /**
      * Статус публичности пространства
      */
-    @Column(name = "is_public")
-    private boolean isPublic;
+    @Column(name = "shared")
+    private boolean shared;
 
     /**
      * Список записей, принадлежащих данному пространству
@@ -71,28 +71,28 @@ public class Space {
     public Space() {
     }
 
-    public Space(String name, Person owner, boolean isPublic) {
+    public Space(String name, Person owner, boolean shared) {
         this.name = name;
         this.owner = owner;
-        this.isPublic = isPublic;
+        this.shared = shared;
     }
 
     public Space(int id) {
         this.id = id;
     }
 
-    public Space(boolean isPublic) {
-        this.isPublic = isPublic;
+    public Space(boolean shared) {
+        this.shared = shared;
     }
 
-    public Space(int id, boolean isPublic) {
+    public Space(int id, boolean shared) {
         this.id = id;
-        this.isPublic = isPublic;
+        this.shared = shared;
     }
 
-    public Space(String name, boolean isPublic) {
+    public Space(String name, boolean shared) {
         this.name = name;
-        this.isPublic = isPublic;
+        this.shared = shared;
     }
 
     public int getId() {
@@ -135,12 +135,12 @@ public class Space {
         this.updatedAt = updatedAt;
     }
 
-    public boolean isPublic() {
-        return isPublic;
+    public boolean isShared() {
+        return shared;
     }
 
-    public void setPublic(boolean isPublic) {
-        this.isPublic = isPublic;
+    public void setShared(boolean shared) {
+        this.shared = shared;
     }
 
     public List<Page> getPages() {

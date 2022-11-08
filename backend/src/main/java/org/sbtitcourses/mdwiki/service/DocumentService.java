@@ -2,11 +2,11 @@ package org.sbtitcourses.mdwiki.service;
 
 import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.model.Page;
-import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.repository.DocumentRepository;
 import org.sbtitcourses.mdwiki.repository.PageRepository;
 import org.sbtitcourses.mdwiki.repository.SpaceRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
+import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class DocumentService implements DocumentCrudService {
 
-    /**
-     * Репозиторий для взаимодействия с сущностью Space
-     */
-    private final SpaceRepository spaceRepository;
-
-    /**
-     * Репозиторий для взаимодействия с сущностью Page
-     */
-    private final PageRepository pageRepository;
 
     /**
      * Репозиторий для взаимодействия с сущностью Document
      */
     private final DocumentRepository documentRepository;
+
+    /**
+     *
+     */
+    private final ResourceFetcher resourceFetcher;
 
     /**
      * Компонент для проверки доступа к ресурсам
@@ -42,19 +38,16 @@ public class DocumentService implements DocumentCrudService {
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
-     * @param spaceRepository репозиторий для взаимодействия с сущностью Space
-     * @param pageRepository репозиторий для взаимодействия с сущностью Page
      * @param documentRepository репозиторий для взаимодействия с сущностью Document
+     * @param resourceFetcher
      * @param resourceAccessHelper компонент для проверки доступа к ресурсам
      */
     @Autowired
-    public DocumentService(SpaceRepository spaceRepository,
-                           PageRepository pageRepository,
-                           DocumentRepository documentRepository,
+    public DocumentService(DocumentRepository documentRepository,
+                           ResourceFetcher resourceFetcher,
                            ResourceAccessHelper resourceAccessHelper) {
-        this.spaceRepository = spaceRepository;
-        this.pageRepository = pageRepository;
         this.documentRepository = documentRepository;
+        this.resourceFetcher = resourceFetcher;
         this.resourceAccessHelper = resourceAccessHelper;
     }
 
@@ -71,11 +64,7 @@ public class DocumentService implements DocumentCrudService {
     @Transactional
     public Document create(Document document, int pageId, int spaceId)
             throws ElementNotFoundException, AccessDeniedException{
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
-
-        Page page = pageRepository.findByIdAndSpace(pageId, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
+        Page page = resourceFetcher.fetchPage(pageId, spaceId);
 
         if (resourceAccessHelper.isAccessToCreateDocumentDenied(page)) {
             throw new AccessDeniedException("Отказано в доступе");
@@ -98,14 +87,7 @@ public class DocumentService implements DocumentCrudService {
     @Override
     @Transactional
     public Document get(int pageId, int spaceId) throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
-
-        Page page = pageRepository.findByIdAndSpace(pageId, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
-
-        Document document = documentRepository.findByPage(page)
-                .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
+        Document document = resourceFetcher.fetchDocument(pageId, spaceId);
 
         if (resourceAccessHelper.isAccessToReadDocumentDenied(document)) {
             throw new AccessDeniedException("Отказано в доступе");
@@ -127,14 +109,7 @@ public class DocumentService implements DocumentCrudService {
     @Transactional
     public Document update(int pageId, int spaceId, Document documentToUpdateWith)
             throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
-
-        Page page = pageRepository.findByIdAndSpace(pageId, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
-
-        Document document = documentRepository.findByPage(page)
-                .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
+        Document document = resourceFetcher.fetchDocument(pageId, spaceId);
 
         if (resourceAccessHelper.isAccessToUpdateDocumentDenied(document)) {
             throw new AccessDeniedException("Отказано в доступе");
@@ -158,20 +133,13 @@ public class DocumentService implements DocumentCrudService {
     @Transactional
     public void delete(int pageId, int spaceId)
             throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
-
-        Page page = pageRepository.findByIdAndSpace(pageId, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
-
-        Document document = documentRepository.findByPage(page)
-                .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
+        Document document = resourceFetcher.fetchDocument(pageId, spaceId);
 
         if (resourceAccessHelper.isAccessToDeleteDocumentDenied(document)) {
             throw new AccessDeniedException("Отказано в доступе");
         }
 
-        page.setDocument(null);
+        document.getPage().setDocument(null);
 
         documentRepository.delete(document);
     }

@@ -184,7 +184,7 @@ public class PageService implements PageCrudService {
         }
 
         page.setName(pageToUpdateWith.getName());
-        page.setPublic(pageToUpdateWith.isPublic());
+        page.setShared(pageToUpdateWith.isShared());
 
         pageRepository.save(page);
 

@@ -78,7 +78,7 @@ public class SpaceService implements SpaceCrudService {
 
         Pageable pageable = PageRequest.of(bunch, size);
 
-        return spaceRepository.findByOwnerOrPublicIsTrue(owner, pageable);
+        return spaceRepository.findByOwnerOrSharedTrue(owner, pageable);
     }
 
     /**
@@ -119,7 +119,7 @@ public class SpaceService implements SpaceCrudService {
         }
 
         space.setName(spaceToUpdateWith.getName());
-        space.setPublic(spaceToUpdateWith.isPublic());
+        space.setShared(spaceToUpdateWith.isShared());
 
         spaceRepository.save(space);
 

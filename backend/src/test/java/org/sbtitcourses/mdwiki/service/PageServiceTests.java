@@ -1,6 +1,5 @@
 package org.sbtitcourses.mdwiki.service;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,10 +39,10 @@ class PageServiceTests {
     public void createShouldReturnPage() {
         when(pageRepository.save(pageToCreate)).thenReturn(pageWithId);
 
-        Page createdPage = pageService.create(pageToCreate);
+        Page createdPage = pageService.create(pageToCreate, 1);
 
         assertEquals(1, createdPage.getId());
-        assertFalse(createdPage.getPublic());
+        assertFalse(createdPage.isShared());
         verify(pageRepository).save(pageToCreate);
     }
 
@@ -56,7 +55,7 @@ class PageServiceTests {
 
         when(pageRepository.findBySpaceAndParentIsNull(space, pageable)).thenReturn(pages);
 
-        List<Page> gottenPages = pageService.getAll(space, 0, 1);
+        List<Page> gottenPages = pageService.get(1, 0, 1);
 
         assertEquals(pages.size(), gottenPages.size());
         assertEquals(1, gottenPages.get(0).getId());
@@ -69,11 +68,11 @@ class PageServiceTests {
         when(pageRepository.findByIdAndSpace(2, space)).thenReturn(Optional.empty());
         when(pageRepository.findByIdAndSpace(1, wrongSpace)).thenReturn(Optional.empty());
 
-        Page gottenPage = pageService.get(1, space);
+        Page gottenPage = pageService.get(1, 1);
 
         assertEquals(1, gottenPage.getId());
-        assertThrows(ElementNotFoundException.class, () -> pageService.get(2, space));
-        assertThrows(ElementNotFoundException.class, () -> pageService.get(1, wrongSpace));
+        assertThrows(ElementNotFoundException.class, () -> pageService.get(2, 1));
+        assertThrows(ElementNotFoundException.class, () -> pageService.get(1, 2));
         verify(pageRepository).findByIdAndSpace(1, space);
         verify(pageRepository).findByIdAndSpace(2, space);
         verify(pageRepository).findByIdAndSpace(1, wrongSpace);
@@ -85,13 +84,13 @@ class PageServiceTests {
         when(pageRepository.findByIdAndSpace(2, space)).thenReturn(Optional.empty());
         when(pageRepository.findByIdAndSpace(1, wrongSpace)).thenReturn(Optional.empty());
 
-        Page updatedPage = pageService.update(1, space, pageToUpdateWith);
+        Page updatedPage = pageService.update(1, 1, pageToUpdateWith);
 
         assertEquals(1, updatedPage.getId());
         assertEquals(pageToUpdateWith.getName(), updatedPage.getName());
-        assertEquals(pageToUpdateWith.getPublic(), updatedPage.getPublic());
-        assertThrows(ElementNotFoundException.class, () -> pageService.update(2, space, pageToUpdateWith));
-        assertThrows(ElementNotFoundException.class, () -> pageService.update(1, wrongSpace, pageToUpdateWith));
+        assertEquals(pageToUpdateWith.isShared(), updatedPage.isShared());
+        assertThrows(ElementNotFoundException.class, () -> pageService.update(2, 1, pageToUpdateWith));
+        assertThrows(ElementNotFoundException.class, () -> pageService.update(1, 2, pageToUpdateWith));
         verify(pageRepository).findByIdAndSpace(1, space);
         verify(pageRepository).save(pageWithId);
         verify(pageRepository).findByIdAndSpace(2, space);
@@ -102,8 +101,8 @@ class PageServiceTests {
     public void deleteShouldRemovePage() {
         when(pageRepository.findById(1)).thenReturn(Optional.of(pageWithId)).thenReturn(Optional.empty());
 
-        assertDoesNotThrow(() -> pageService.delete(1));
-        assertThrows(ElementNotFoundException.class, () -> pageService.delete(1));
+        assertDoesNotThrow(() -> pageService.delete(1, 1));
+        assertThrows(ElementNotFoundException.class, () -> pageService.delete(1, 1));
         verify(pageRepository, times(2)).findById(1);
         verify(pageRepository).delete(pageWithId);
     }

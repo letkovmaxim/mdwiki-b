@@ -9,6 +9,7 @@ import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.service.DocumentService;
 import org.sbtitcourses.mdwiki.service.PageService;
 import org.sbtitcourses.mdwiki.service.SpaceService;
+import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,10 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DocumentControllerTests {
 
     @MockBean
-    private SpaceService spaceService;
-    @MockBean
-    private PageService pageService;
-    @MockBean
     private DocumentService documentService;
     @MockBean
     private ModelMapper modelMapper;
@@ -45,15 +42,11 @@ class DocumentControllerTests {
 
     @Test
     public void verifyHttpRequestMappingAndDeserialization() throws Exception {
-        Space space = new Space();
-        Page page = new Page();
         Document documentToCreate = new Document();
         Document createdDocument = new Document();
 
         when(modelMapper.map(any(), eq(Document.class))).thenReturn(documentToCreate);
-        when(spaceService.get(1)).thenReturn(space);
-        when(pageService.get(1, space)).thenReturn(page);
-        when(documentService.create(documentToCreate)).thenReturn(createdDocument);
+        when(documentService.create(documentToCreate, 1, 1)).thenReturn(createdDocument);
 
         mockMvc.perform(post("/spaces/{spaceId}/pages/{pageId}/document", 1, 1)
                 .contentType(APPLICATION_JSON)
@@ -61,14 +54,12 @@ class DocumentControllerTests {
                 .andExpect(status().isCreated());
 
         verify(modelMapper).map(any(), eq(Document.class));
-        verify(spaceService).get(1);
-        verify(pageService).get(1, space);
-        verify(documentService).create(documentToCreate);
+        verify(documentService).create(documentToCreate, 1, 1);
     }
 
     @Test
     public void verifyFieldValidation() throws Exception {
-        mockMvc.perform(post("/spaces/{id}/pages/{1}/document", 1, 1)
+        mockMvc.perform(post("/spaces/{spaceId}/pages/{pageId}/document", 1, 1)
                 .contentType(APPLICATION_JSON)
                 .content("{}"))
                 .andExpect(status().isBadRequest());
@@ -76,36 +67,26 @@ class DocumentControllerTests {
 
     @Test
     public void verifyResultSerialization() throws Exception {
-        Space space = new Space();
-        Page page = new Page();
         Document document = new Document();
         DocumentResponse documentResponse = new DocumentResponse();
         documentResponse.setText("testText");
 
-        when(spaceService.get(1)).thenReturn(space);
-        when(pageService.get(1, space)).thenReturn(page);
-        when(documentService.get(page)).thenReturn(document);
+        when(documentService.get(1, 1)).thenReturn(document);
         when(modelMapper.map(document, DocumentResponse.class)).thenReturn(documentResponse);
 
         mockMvc.perform(get("/spaces/{spaceId}/pages/{pageId}/document", 1, 1))
                 .andExpect(jsonPath("$.text").value("testText"));
 
-        verify(spaceService).get(1);
-        verify(pageService).get(1, space);
-        verify(documentService).get(page);
+        verify(documentService).get(1, 1);
         verify(modelMapper).map(document, DocumentResponse.class);
     }
 
     @Test
     public void verifyErrorHandling() throws Exception {
-        Space space = new Space();
-        Page page = new Page();
-
-        when(spaceService.get(1)).thenReturn(space);
-        when(pageService.get(1, space)).thenReturn(page);
-        when(documentService.get(page)).thenThrow(new ElementNotFoundException("Not Found"));
-        when(spaceService.get(2)).thenThrow(new ElementNotFoundException("Not Found"));
-        when(pageService.get(2, space)).thenThrow(new ElementNotFoundException("Not Found"));
+        when(documentService.get(1, 1)).thenThrow(new ElementNotFoundException("Страница не найдена"));
+        when(documentService.get(1, 2)).thenThrow(new ElementNotFoundException("Пространство не найдено"));
+        when(documentService.get(2, 1)).thenThrow(new ElementNotFoundException("Документ не найден"));
+        when(documentService.get(2, 2)).thenThrow(new AccessDeniedException("Доступ запрещен"));
 
         mockMvc.perform(get("/spaces/{spaceId}/pages/{pageId}/document", 1, 1))
                 .andExpect(status().isNotFound());
@@ -113,12 +94,12 @@ class DocumentControllerTests {
                 .andExpect(status().isNotFound());
         mockMvc.perform(get("/spaces/{spaceId}/pages/{pageId}/document", 2, 1))
                 .andExpect(status().isNotFound());
+        mockMvc.perform(get("/spaces/{spaceId}/pages/{pageId}/document", 2, 2))
+                .andExpect(status().isForbidden());
 
-
-        verify(spaceService, times(2)).get(1);
-        verify(pageService).get(1, space);
-        verify(documentService).get(page);
-        verify(spaceService).get(2);
-        verify(pageService).get(2, space);
+        verify(documentService).get(1, 1);
+        verify(documentService).get(1, 2);
+        verify(documentService).get(2, 2);
+        verify(documentService).get(2, 2);
     }
 }

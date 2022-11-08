@@ -38,7 +38,7 @@ class SpaceServiceTests {
         Space createdSpace = spaceService.create(spaceToCreate);
 
         assertEquals(1, createdSpace.getId());
-        assertFalse(createdSpace.isPublic());
+        assertFalse(createdSpace.isShared());
         verify(spaceRepository).save(spaceToCreate);
     }
 
@@ -49,7 +49,7 @@ class SpaceServiceTests {
 
         when(spaceRepository.findAll()).thenReturn(spaces);
 
-        List<Space> gottenSpaces = spaceService.getAll();
+        List<Space> gottenSpaces = spaceService.get(0, 1);
 
         assertEquals(spaces.size(), gottenSpaces.size());
         assertEquals(1, gottenSpaces.get(0).getId());
@@ -78,7 +78,7 @@ class SpaceServiceTests {
 
         assertEquals(1, updatedSpace.getId());
         assertEquals(spaceToUpdateWith.getName(), updatedSpace.getName());
-        assertEquals(spaceToUpdateWith.isPublic(), updatedSpace.isPublic());
+        assertEquals(spaceToUpdateWith.isShared(), updatedSpace.isShared());
         assertThrows(ElementNotFoundException.class, () -> spaceService.update(2, spaceToUpdateWith));
         verify(spaceRepository).findById(1);
         verify(spaceRepository).save(spaceWithId);
