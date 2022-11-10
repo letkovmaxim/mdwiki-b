@@ -1,28 +1,32 @@
 package org.sbtitcourses.mdwiki.controller;
 
+import org.modelmapper.ModelMapper;
+import org.sbtitcourses.mdwiki.dto.person.PersonLogin;
+import org.sbtitcourses.mdwiki.dto.person.PersonRequest;
+import org.sbtitcourses.mdwiki.dto.person.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
-import org.sbtitcourses.mdwiki.service.security.RegistrationService;
+import org.sbtitcourses.mdwiki.service.PersonService;
+import org.sbtitcourses.mdwiki.service.security.PersonDetailsService;
+import org.sbtitcourses.mdwiki.util.ErrorResponse;
 import org.sbtitcourses.mdwiki.util.PersonValidator;
+import org.sbtitcourses.mdwiki.util.exception.PersonNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 
 /**
  * Контроллер для страниц login и registration
  */
-@Controller
+@RestController
 @RequestMapping("/auth")
 public class AuthController {
-
-    /**
-     * Сервис для завершения регистрации пользователя
-     */
-    private final RegistrationService registrationService;
 
     /**
      * Валидатор, который проверяет введенные поля пользоватлем
@@ -30,53 +34,94 @@ public class AuthController {
     private final PersonValidator personValidator;
 
     /**
+     * Маппер для конвертации сущностей
+     */
+    private final ModelMapper modelMapper;
+
+    /**
+     * Сервис с логикой CRUD операций над сущностью Person
+     */
+    private final PersonService personService;
+
+    /**
+     * Сервис для Spring Security, загружает пользователя
+     */
+    private final PersonDetailsService personDetailsService;
+
+
+
+    /**
      * Инициализация полей класса
      */
     @Autowired
-    public AuthController(RegistrationService registrationService, PersonValidator personValidator) {
-        this.registrationService = registrationService;
+    public AuthController(PersonValidator personValidator, ModelMapper modelMapper, PersonService personService, PersonDetailsService personDetailsService) {
         this.personValidator = personValidator;
+        this.modelMapper = modelMapper;
+        this.personService = personService;
+        this.personDetailsService = personDetailsService;
     }
 
     /**
-     * @return возвращает страницу для входа пользователя
+     * Метод для авторизации пользователя
+     * @param personLogin, логин или mail и пароль пользователя
+     * @return если пользователь успешно авторизирован статус 200, в противном случае 403
      */
-    @GetMapping("/login")
-    public String loginPage() {
-        return "auth/login";
-    }
+    @PostMapping("/login")
+    public ResponseEntity<?> loginPage(@RequestBody PersonLogin personLogin){
 
-    /**
-     * @param person в нем будут хранить все данные введенные пользователем
-     * @return возвращает страницу для регистрации пользователя
-     */
-    @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("person") Person person) {
-        return "auth/registration";
-    }
+        UserDetails userDetails;
 
-
-    /**
-     * Оболочка для проверки полей ввода при регистрации
-     * При помощи validate проверяются все поля класса Person
-     * Т.к. repeatPassword не является полем класса Person, поэтому был создан отдельный метод checkPassword для проаерки password(из Person) и repeatPassword
-     * @param person содержит данные введенные пользователем при регистрации
-     * @param bindingResult содержит ошибки допущенные пользоватлем при регистрации
-     * @param repeatPassword поле для подтверждения пароля при регистрации
-     * @return страницу для входа, елси нет ошибок, в противном случае страницу регистрации
-     */
-    @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("person") @Valid Person person,
-                                      BindingResult bindingResult, String repeatPassword) {
-        personValidator.validate(person, bindingResult);
-        personValidator.checkPassword(person.getPassword(), repeatPassword, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            return "/auth/registration";
+        try{
+            personValidator.checkPassword(personLogin.getUsernameOrLogin(), personLogin.getPassword());
+            userDetails = personDetailsService.loadUserByUsername(personLogin.getUsernameOrLogin());
+        }catch (PersonNotFoundException ex){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        registrationService.register(person);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()) ;
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return "redirect:/auth/login";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * Метод для получения авторизированного пользователя
+     * @return авторизированного пользователя
+     */
+    @GetMapping("/whoami")
+    public ResponseEntity<PersonResponse> whoAmI() {
+        String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = personService.get(currentUserName);
+
+        PersonResponse response = modelMapper.map(person, PersonResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Метод, отвечающий за регистрацию нового пользователя
+     * @param personRequest DTO сущности Person для запроса
+     * @return DTO сущности Person для ответа с кодом 201
+     */
+    @PostMapping("/registration")
+    public ResponseEntity<Object> performRegistration(@RequestBody @Valid PersonRequest personRequest) {
+        Person personToCreate = modelMapper.map(personRequest, Person.class);
+
+        ErrorResponse errors = personValidator.validate(personToCreate.getUsername(), personToCreate.getEmail());
+
+        if(!errors.getErrors().isEmpty()){
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+
+        Person createdPerson = personService.create(personToCreate);
+
+        PersonResponse response = modelMapper.map(createdPerson, PersonResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    /**
+     * Метод, отвечающий за выход пользователя
+     */
+    @PostMapping("/logout")
+    public void logout(){SecurityContextHolder.getContext().setAuthentication(null);}
+
 }

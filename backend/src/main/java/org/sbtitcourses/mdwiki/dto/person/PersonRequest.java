@@ -2,6 +2,7 @@ package org.sbtitcourses.mdwiki.dto.person;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -38,6 +39,7 @@ public class PersonRequest {
      * Тип аккаунта
      * Активный (true) или заблокированный (false)
      */
+    @NotNull(message = "Значение enabled должно быть true или false")
     private boolean isEnabled;
 
     public String getUsername() {
@@ -64,12 +66,12 @@ public class PersonRequest {
         this.email = email;
     }
 
-    public boolean getEnabled() {
+    public Boolean getEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
     public String getPassword() {

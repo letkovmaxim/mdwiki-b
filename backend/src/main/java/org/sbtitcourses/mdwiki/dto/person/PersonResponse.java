@@ -43,6 +43,11 @@ public class PersonResponse {
      */
     private boolean isEnabled;
 
+    /**
+     * Роль пользователя
+     */
+    private String role;
+
     public int getId() {
         return id;
     }
@@ -91,11 +96,19 @@ public class PersonResponse {
         this.updatedAt = updatedAt;
     }
 
-    public boolean getEnabled() {
+    public Boolean getEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -30,6 +30,13 @@ public interface PersonCrudService {
     Person get(int id);
 
     /**
+     * Получение пользователя по его username
+     * @param username username пользователя
+     * @return найденного пользователя
+     */
+    Person get(String username);
+
+    /**
      * Обновление пользователя по его ID
      * @param id ID пользователя
      * @param personToUpdateWith объект класса Person, значениями полей которого нужно обновить пользователя

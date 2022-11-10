@@ -2,10 +2,17 @@ package org.sbtitcourses.mdwiki.util;
 
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
+import org.sbtitcourses.mdwiki.util.exception.PersonNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Класс валидатор, который реализует все необходимые проверки полей ввода при регистрации класса Person
@@ -19,11 +26,17 @@ public class PersonValidator implements Validator {
     private final PersonRepository peopleRepository;
 
     /**
+     * Класс для шифрования пароля
+     */
+    private final PasswordEncoder passwordEncoder;
+
+    /**
      * Инициализая поля
      */
     @Autowired
-    public PersonValidator(PersonRepository peopleRepository) {
+    public PersonValidator(PersonRepository peopleRepository, PasswordEncoder passwordEncoder) {
         this.peopleRepository = peopleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -55,14 +68,39 @@ public class PersonValidator implements Validator {
     }
 
     /**
-     * Проверка на совпадение password и repeatPassword
-     * @param password ввод пароля пользователем
-     * @param repeatPassword подтверждение пароля
-     * @param errors если они не совпадают, то добавляется ошибка
+     * Проверка на уникальность userName и email
+     * @param username Логин пользователя
+     * @param email Email пользователя
+     * @return возвращает список ошибок, если они есть
      */
-    public void checkPassword(String password, String repeatPassword, Errors errors){
-        if(!password.equals(repeatPassword)){
-            errors.rejectValue("password", "", "Пароли не совпадают");
+    public  ErrorResponse validate(String username, String email){
+        List<String> error = new ArrayList<>();
+
+        if(peopleRepository.findByUsername(username).isPresent()){
+            error.add( "Такой логин уже существует");
         }
+
+        if(peopleRepository.findByEmail(email).isPresent()){
+            error.add("Такой email уже существует");
+        }
+
+        ErrorResponse errors = new ErrorResponse(error, new Date());
+
+        return errors;
+    }
+
+    /**
+     * Проверка пароля при входе
+     * @param usernameOrEmail логин или email пользователя
+     * @param password пароль пользователя
+     */
+    public void checkPassword(String usernameOrEmail, String password){
+
+        Optional<Person> person = Optional.ofNullable(peopleRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(PersonNotFoundException::new));
+
+        if(!passwordEncoder.matches(password, person.get().getPassword())){
+            throw new PersonNotFoundException();
+        }
+
     }
 }
