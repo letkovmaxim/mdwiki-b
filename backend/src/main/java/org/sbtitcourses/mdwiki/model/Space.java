@@ -95,6 +95,15 @@ public class Space {
         this.shared = shared;
     }
 
+    public Space(Person owner) {
+        this.owner = owner;
+    }
+
+    public Space(int id, Person owner) {
+        this.id = id;
+        this.owner = owner;
+    }
+
     public int getId() {
         return id;
     }

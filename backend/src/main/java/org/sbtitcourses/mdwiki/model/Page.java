@@ -93,6 +93,10 @@ public class Page {
         this.shared = shared;
     }
 
+    public Page(Space space) {
+        this.space = space;
+    }
+
     public Page(int id, Space space) {
         this.id = id;
         this.space = space;

@@ -80,7 +80,7 @@ class PageControllerTests {
                 .andExpect(jsonPath("$.name").value("testName"))
                 .andExpect(jsonPath("$.createdAt").isNotEmpty())
                 .andExpect(jsonPath("$.updatedAt").isNotEmpty())
-                .andExpect(jsonPath("$.public").value(false));
+                .andExpect(jsonPath("$.shared").value(false));
 
         verify(pageService).get(1, 1);
         verify(modelMapper).map(page, PageResponse.class);

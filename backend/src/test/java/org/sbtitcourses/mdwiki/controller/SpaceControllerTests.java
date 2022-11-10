@@ -81,7 +81,7 @@ class SpaceControllerTests {
                 .andExpect(jsonPath("$.name").value("testName"))
                 .andExpect(jsonPath("$.createdAt").isNotEmpty())
                 .andExpect(jsonPath("$.updatedAt").isNotEmpty())
-                .andExpect(jsonPath("$.public").value(false));
+                .andExpect(jsonPath("$.shared").value(false));
 
         verify(spaceService).get(1);
         verify(modelMapper).map(space, SpaceResponse.class);

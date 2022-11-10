@@ -1,10 +1,12 @@
 package org.sbtitcourses.mdwiki.service;
 
 import org.sbtitcourses.mdwiki.model.Page;
+import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.repository.PageRepository;
 import org.sbtitcourses.mdwiki.repository.SpaceRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
+import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,33 +27,24 @@ import java.util.List;
 public class PageService implements PageCrudService {
 
     /**
-     * Репозиторий для взаимодействия с сущностью Space
-     */
-    private final SpaceRepository spaceRepository;
-
-    /**
      * Репозиторий для взаимодействия с сущностью Page
      */
     private final PageRepository pageRepository;
 
     /**
-     * Компонент для проверки доступа к ресурсам
+     * Компонент для получения ресурсов
      */
-    private final ResourceAccessHelper resourceAccessHelper;
+    private final ResourceFetcher resourceFetcher;
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
-     * @param spaceRepository репозиторий для взаимодействия с сущностью Space
-     * @param pageRepository репозиторий для взаимодействия с сущностью Page
-     * @param resourceAccessHelper компонент для проверки доступа к ресурсам
+     * @param pageRepository  репозиторий для взаимодействия с сущностью Page
+     * @param resourceFetcher компонент для получения ресурсов
      */
     @Autowired
-    public PageService(SpaceRepository spaceRepository,
-                       PageRepository pageRepository,
-                       ResourceAccessHelper resourceAccessHelper) {
-        this.spaceRepository = spaceRepository;
+    public PageService(PageRepository pageRepository, ResourceFetcher resourceFetcher) {
         this.pageRepository = pageRepository;
-        this.resourceAccessHelper = resourceAccessHelper;
+        this.resourceFetcher = resourceFetcher;
     }
 
     /**
@@ -59,16 +52,15 @@ public class PageService implements PageCrudService {
      * @param page страница, которую нужно сохранить
      * @param spaceId ID пространства, в котором нужно создать страницу
      * @return сохраненную страницу
-     * @throws ElementNotFoundException если пространства с таким ID не существует
      * @throws AccessDeniedException если не удалось определить пользователя
      */
     @Override
     @Transactional
-    public Page create(Page page, int spaceId) throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
+    public Page create(Page page, int spaceId) throws AccessDeniedException {
+        Space space = resourceFetcher.fetchSpace(spaceId);
+        Person user = resourceFetcher.getLoggedInUser();
 
-        if (resourceAccessHelper.isAccessToCreatePageDenied(space)) {
+        if (ResourceAccessHelper.isAccessToCreatePageDenied(space, user)) {
             throw new AccessDeniedException("Отказано в доступе");
         }
 
@@ -88,20 +80,15 @@ public class PageService implements PageCrudService {
      * @param parentId ID страницы-родителя, для которого нужно создать подстраницу
      * @param spaceId ID пространства, в котором нужно создать подстраницу
      * @return сохраненную подстраницу
-     * @throws ElementNotFoundException если пространства с таким ID не существует
      * @throws AccessDeniedException если не удалось определить пользователя
      */
     @Override
     @Transactional
-    public Page createSubpage(Page subpage, int parentId, int spaceId)
-            throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
+    public Page createSubpage(Page subpage, int parentId, int spaceId) throws AccessDeniedException {
+        Page parent = resourceFetcher.fetchPage(parentId, spaceId);
+        Person user = resourceFetcher.getLoggedInUser();
 
-        Page parent = pageRepository.findByIdAndSpace(parentId, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
-
-        if (resourceAccessHelper.isAccessToCreateSubpageDenied(parent)) {
+        if (ResourceAccessHelper.isAccessToCreateSubpageDenied(parent, user)) {
             throw new AccessDeniedException("Отказано в доступе");
         }
 
@@ -121,15 +108,14 @@ public class PageService implements PageCrudService {
      * @param bunch номер страницы при пагинации
      * @param size количество элементов в странице при пагинации
      * @return список всех страниц данного пространства
-     * @throws ElementNotFoundException если пространства с таким ID не существует
      * @throws AccessDeniedException если не удалось определить пользователя
      */
     @Override
-    public List<Page> get(int spaceId, int bunch, int size) throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
+    public List<Page> get(int spaceId, int bunch, int size) throws AccessDeniedException {
+        Space space = resourceFetcher.fetchSpace(spaceId);
+        Person user = resourceFetcher.getLoggedInUser();
 
-        if (resourceAccessHelper.isAccessToReadAllPagesDenied(space)) {
+        if (ResourceAccessHelper.isAccessToReadAllPagesDenied(space, user)) {
             throw new AccessDeniedException("Отказано в доступе");
         }
 
@@ -140,21 +126,17 @@ public class PageService implements PageCrudService {
 
     /**
      * Метод, отвечающий за получение страницы
-     * @param id ID страницы
+     * @param pageId ID страницы
      * @param spaceId ID пространтсва, в котором нужно получить страницу
      * @return найденую страницу
-     * @throws ElementNotFoundException если страницы с таким ID не существует
      * @throws AccessDeniedException если не удалось определить пользователя
      */
     @Override
-    public Page get(int id, int spaceId) throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
+    public Page get(int pageId, int spaceId) throws AccessDeniedException {
+        Page page = resourceFetcher.fetchPage(pageId, spaceId);
+        Person user = resourceFetcher.getLoggedInUser();
 
-        Page page = pageRepository.findByIdAndSpace(id, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
-
-        if (resourceAccessHelper.isAccessToReadPageDenied(page)) {
+        if (ResourceAccessHelper.isAccessToReadPageDenied(page, user)) {
             throw new AccessDeniedException("Отказано в доступе");
         }
 
@@ -163,23 +145,18 @@ public class PageService implements PageCrudService {
 
     /**
      * Метод, отвечающий за обновление страницы
-     * @param id ID страницы
+     * @param pageId ID страницы
      * @param spaceId ID пространтсва, в котором нужно обновить страницу
      * @param pageToUpdateWith страница, значениями полей которой нужно обновить требуемую страницу
      * @return обновленную страницу
-     * @throws ElementNotFoundException если страницы с таким ID не существует
      * @throws AccessDeniedException если не удалось определить пользователя
      */
     @Transactional
-    public Page update(int id, int spaceId, Page pageToUpdateWith)
-            throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
+    public Page update(int pageId, int spaceId, Page pageToUpdateWith) throws AccessDeniedException {
+        Page page = resourceFetcher.fetchPage(pageId, spaceId);
+        Person user = resourceFetcher.getLoggedInUser();
 
-        Page page = pageRepository.findByIdAndSpace(id, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
-
-        if (resourceAccessHelper.isAccessToUpdatePageDenied(page)) {
+        if (ResourceAccessHelper.isAccessToUpdatePageDenied(page, user)) {
             throw new AccessDeniedException("Отказано в доступе");
         }
 
@@ -193,19 +170,16 @@ public class PageService implements PageCrudService {
 
     /**
      * Метод, отвечающий за удаление страницы
-     * @param id ID страницы
+     * @param pageId ID страницы
      * @param spaceId ID пространтсва, в котором нужно удалить страницу
-     * @throws ElementNotFoundException если страницы с таким ID не существует
+     * @throws AccessDeniedException если не удалось определить пользователя
      */
     @Transactional
-    public void delete(int id, int spaceId) throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
+    public void delete(int pageId, int spaceId) throws AccessDeniedException {
+        Page page = resourceFetcher.fetchPage(pageId, spaceId);
+        Person user = resourceFetcher.getLoggedInUser();
 
-        Page page = pageRepository.findByIdAndSpace(id, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
-
-        if (resourceAccessHelper.isAccessToDeletePageDenied(page)) {
+        if (ResourceAccessHelper.isAccessToDeletePageDenied(page, user)) {
             throw new AccessDeniedException("Отказано в доступе");
         }
 
