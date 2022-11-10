@@ -9,7 +9,7 @@ import org.sbtitcourses.mdwiki.service.PersonService;
 import org.sbtitcourses.mdwiki.service.security.PersonDetailsService;
 import org.sbtitcourses.mdwiki.util.ErrorResponse;
 import org.sbtitcourses.mdwiki.util.PersonValidator;
-import org.sbtitcourses.mdwiki.util.exception.PersonNotFoundException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +74,7 @@ public class AuthController {
         try{
             personValidator.checkPassword(personLogin.getUsernameOrLogin(), personLogin.getPassword());
             userDetails = personDetailsService.loadUserByUsername(personLogin.getUsernameOrLogin());
-        }catch (PersonNotFoundException ex){
+        }catch (ElementNotFoundException ex){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 

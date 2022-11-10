@@ -2,7 +2,7 @@ package org.sbtitcourses.mdwiki.util;
 
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
-import org.sbtitcourses.mdwiki.util.exception.PersonNotFoundException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -96,10 +96,10 @@ public class PersonValidator implements Validator {
      */
     public void checkPassword(String usernameOrEmail, String password){
 
-        Optional<Person> person = Optional.ofNullable(peopleRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(PersonNotFoundException::new));
+        Optional<Person> person = Optional.ofNullable(peopleRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(() -> new ElementNotFoundException("Пользователь не найден")));
 
         if(!passwordEncoder.matches(password, person.get().getPassword())){
-            throw new PersonNotFoundException();
+            throw new ElementNotFoundException("Пароль не найден");
         }
 
     }
