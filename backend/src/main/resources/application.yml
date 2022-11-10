@@ -1,23 +1,15 @@
-#spring:
-#  datasource:
-#    driver-class-name: org.postgresql.Driver
-#    url: 'jdbc:postgresql://localhost:5432/mdwiki_db'
-#    username: 'postgres'
-#    password: 'postgres'
-#  jpa:
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
-#        show_sql: true
-#server:
-#  error:
-#    include-message: always
-#    include-binding-errors: always
-
 spring:
   datasource:
-    url: 'jdbc:h2:mem:test'
+    driver-class-name: org.postgresql.Driver
+    url: 'jdbc:postgresql://localhost:5432/mdwiki_db'
+    username: 'postgres'
+    password: 'postgres'
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
