@@ -7,7 +7,6 @@ import org.sbtitcourses.mdwiki.repository.DocumentRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
 import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
-import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

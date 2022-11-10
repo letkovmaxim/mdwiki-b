@@ -3,14 +3,16 @@ package org.sbtitcourses.mdwiki.model;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 import static javax.persistence.TemporalType.TIMESTAMP;
-import static org.hibernate.annotations.CascadeType.*;
+import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
  * Данный класс описывает какие данные необходимо ввести юзеру при регистрации
@@ -86,7 +88,7 @@ public class Person {
      * Активный (true) или заблокированный (false)
      */
     @Column(name = "is_enabled")
-    private boolean isEnabled;
+    private boolean enabled;
 
     /**
      * Список пространств, принадлежащих пользователю
@@ -105,12 +107,12 @@ public class Person {
         this.id = id;
     }
 
-    public Person(int id, String username, String name, String email, boolean isEnabled) {
+    public Person(int id, String username, String name, String email, boolean enabled) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.email = email;
-        this.isEnabled = isEnabled;
+        this.enabled = enabled;
     }
 
     public Person(String username, String password, String name, String email) {
@@ -184,12 +186,12 @@ public class Person {
         this.updatedAt = updatedAt;
     }
 
-    public boolean getEnabled() {
-        return isEnabled;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public List<Space> getSpaces() {

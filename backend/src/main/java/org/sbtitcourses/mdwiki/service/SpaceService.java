@@ -6,7 +6,6 @@ import org.sbtitcourses.mdwiki.repository.SpaceRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
 import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
-import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

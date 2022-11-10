@@ -38,7 +38,7 @@ public class PersonRequest {
      * Тип аккаунта
      * Активный (true) или заблокированный (false)
      */
-    private boolean isEnabled;
+    private boolean enabled;
 
     public String getUsername() {
         return username;
@@ -64,12 +64,12 @@ public class PersonRequest {
         this.email = email;
     }
 
-    public boolean getEnabled() {
-        return isEnabled;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getPassword() {
