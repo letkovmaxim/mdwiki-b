@@ -96,9 +96,10 @@ public class PersonValidator implements Validator {
      */
     public void checkPassword(String usernameOrEmail, String password){
 
-        Optional<Person> person = Optional.ofNullable(peopleRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(() -> new ElementNotFoundException("Пользователь не найден")));
+        Person person = peopleRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+                .orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
 
-        if(!passwordEncoder.matches(password, person.get().getPassword())){
+        if(!passwordEncoder.matches(password, person.getPassword())){
             throw new ElementNotFoundException("Пароль не найден");
         }
 

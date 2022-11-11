@@ -32,7 +32,7 @@ public class PersonService implements PersonCrudService {
      * Конструктор для автоматичекого внедрения зависимостей
      *
      * @param personRepository репозиторий для взаимодействия с сущностью Person
-     * @param passwordEncoder
+     * @param passwordEncoder класс для шифрования пароля
      */
     @Autowired
     public PersonService(PersonRepository personRepository, PasswordEncoder passwordEncoder) {

@@ -37,8 +37,8 @@ public class PersonDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail){
-        Optional<Person> person = Optional.ofNullable(personRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(() -> new ElementNotFoundException("Пользователь не найден")));
+        Person person = personRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
 
-        return new PersonDetails(person.get());
+        return new PersonDetails(person);
     }
 }

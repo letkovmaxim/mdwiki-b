@@ -39,7 +39,6 @@ public class PersonRequest {
      * Тип аккаунта
      * Активный (true) или заблокированный (false)
      */
-    @NotNull(message = "Значение enabled должно быть true или false")
     private boolean isEnabled;
 
     public String getUsername() {
