@@ -14,18 +14,11 @@ public class ErrorResponse {
     private List<String> errors;
 
     /**
-     * Точное время получения ошибки
-     */
-    private Date timestamp;
-
-    /**
      * Конструктор для инициализации полей ошибки
      * @param errors текст ошибок
-     * @param timestamp точное время получения ошибки
      */
-    public ErrorResponse(List<String> errors, Date timestamp) {
+    public ErrorResponse(List<String> errors) {
         this.errors = errors;
-        this.timestamp = timestamp;
     }
 
     public List<String> getErrors() {
@@ -34,13 +27,5 @@ public class ErrorResponse {
 
     public void setErrors(List<String> errors) {
         this.errors = errors;
-    }
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
     }
 }

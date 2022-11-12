@@ -2,6 +2,7 @@ package org.sbtitcourses.mdwiki.util;
 
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
+import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -84,7 +85,7 @@ public class PersonValidator implements Validator {
             error.add("Такой email уже существует");
         }
 
-        ErrorResponse errors = new ErrorResponse(error, new Date());
+        ErrorResponse errors = new ErrorResponse(error);
 
         return errors;
     }
@@ -100,7 +101,7 @@ public class PersonValidator implements Validator {
                 .orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
 
         if(!passwordEncoder.matches(password, person.getPassword())){
-            throw new ElementNotFoundException("Пароль не найден");
+            throw new AccessDeniedException("Неверный пароль");
         }
 
     }

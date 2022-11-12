@@ -7,9 +7,9 @@ import org.sbtitcourses.mdwiki.dto.person.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.service.PersonService;
 import org.sbtitcourses.mdwiki.service.security.PersonDetailsService;
+import org.sbtitcourses.mdwiki.service.security.RegistrationService;
 import org.sbtitcourses.mdwiki.util.ErrorResponse;
 import org.sbtitcourses.mdwiki.util.PersonValidator;
-import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.spi.RegisterableService;
 import javax.validation.Valid;
 
 /**
@@ -44,6 +45,11 @@ public class AuthController {
     private final PersonService personService;
 
     /**
+     * Сервис для регистрации пользователя
+     */
+    private  final RegistrationService registrationService;
+
+    /**
      * Сервис для Spring Security, загружает пользователя
      */
     private final PersonDetailsService personDetailsService;
@@ -54,10 +60,11 @@ public class AuthController {
      * Инициализация полей класса
      */
     @Autowired
-    public AuthController(PersonValidator personValidator, ModelMapper modelMapper, PersonService personService, PersonDetailsService personDetailsService) {
+    public AuthController(PersonValidator personValidator, ModelMapper modelMapper, PersonService personService, RegistrationService registrationService, PersonDetailsService personDetailsService) {
         this.personValidator = personValidator;
         this.modelMapper = modelMapper;
         this.personService = personService;
+        this.registrationService = registrationService;
         this.personDetailsService = personDetailsService;
     }
 
@@ -68,15 +75,8 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> loginPage(@RequestBody PersonLogin personLogin){
-
-        UserDetails userDetails;
-
-        try{
-            personValidator.checkPassword(personLogin.getUsernameOrLogin(), personLogin.getPassword());
-            userDetails = personDetailsService.loadUserByUsername(personLogin.getUsernameOrLogin());
-        }catch (ElementNotFoundException ex){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        personValidator.checkPassword(personLogin.getUsernameOrLogin(), personLogin.getPassword());
+        UserDetails userDetails = personDetailsService.loadUserByUsername(personLogin.getUsernameOrLogin());
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()) ;
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -112,7 +112,7 @@ public class AuthController {
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
 
-        Person createdPerson = personService.create(personToCreate);
+        Person createdPerson = registrationService.register(personToCreate);
 
         PersonResponse response = modelMapper.map(createdPerson, PersonResponse.class);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

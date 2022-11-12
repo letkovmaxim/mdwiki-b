@@ -42,14 +42,15 @@ public class RegistrationService {
      * @param person пользователь проходящий регистрацию
      */
     @Transactional
-    public void register(Person person) {
-        person.setPassword(passwordEncoder.encode(person.getPassword()));
-        person.setRole("ROLE_USER");
+    public Person register(Person person) {
         Date now = new Date();
+        person.setPassword(passwordEncoder.encode(person.getPassword()));
         person.setCreatedAt(now);
         person.setUpdatedAt(now);
         person.setEnabled(true);
+        person.setId(peopleRepository.save(person).getId());
+        person.setRole("ROLE_USER");
 
-        peopleRepository.save(person);
+        return person;
     }
 }
