@@ -84,7 +84,7 @@ public class PersonService implements PersonCrudService {
         personToUpdate.setUsername(updatedPerson.getUsername());
         personToUpdate.setName(updatedPerson.getName());
         personToUpdate.setEmail(updatedPerson.getEmail());
-        personToUpdate.setEnabled(updatedPerson.getEnabled());
+        personToUpdate.setEnabled(updatedPerson.isEnabled());
         personToUpdate.setUpdatedAt(new Date());
 
         personRepository.save(personToUpdate);

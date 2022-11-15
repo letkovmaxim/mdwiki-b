@@ -1,7 +1,6 @@
 package org.sbtitcourses.mdwiki.service;
 
 import org.sbtitcourses.mdwiki.model.Page;
-import org.sbtitcourses.mdwiki.model.Space;
 
 import java.util.List;
 

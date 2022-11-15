@@ -25,7 +25,7 @@ public class Document {
     /**
      * Текст markdown-документа
      */
-    @Column(name = "document_text")
+    @Column(name = "text")
     private String text;
 
     /**
@@ -34,10 +34,6 @@ public class Document {
     @OneToOne(fetch = EAGER)
     @JoinColumn(name = "page_id", referencedColumnName = "id")
     private Page page;
-
-    public Person getOwner() {
-        return page.getOwner();
-    }
 
     public Document() {
     }

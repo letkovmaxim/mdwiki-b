@@ -1,6 +1,5 @@
 package org.sbtitcourses.mdwiki.service;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,7 +41,7 @@ class PersonServiceTests {
         Person createdPerson = personService.create(personToCreate);
 
         assertEquals(1, createdPerson.getId());
-        assertTrue(createdPerson.getEnabled());
+        assertTrue(createdPerson.isEnabled());
         verify(personRepository).save(personToCreate);
     }
 
@@ -84,7 +83,7 @@ class PersonServiceTests {
         assertEquals(personToUpdateWith.getUsername(), updatedPerson.getUsername());
         assertEquals(personToUpdateWith.getName(), updatedPerson.getName());
         assertEquals(personToUpdateWith.getEmail(), updatedPerson.getEmail());
-        assertEquals(personToUpdateWith.getEnabled(), updatedPerson.getEnabled());
+        assertEquals(personToUpdateWith.isEnabled(), updatedPerson.isEnabled());
         assertThrows(ElementNotFoundException.class, () -> personService.update(2, personToUpdateWith));
         verify(personRepository).findById(1);
         verify(personRepository).save(personWithId);

@@ -21,8 +21,8 @@ public class AuthFilter implements Filter {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof PersonDetails) {
             filterChain.doFilter(servletRequest, servletResponse);
+        } else {
+            ((HttpServletResponse) servletResponse).sendError(SC_FORBIDDEN, "Доступ запрещен");
         }
-
-        ((HttpServletResponse) servletResponse).sendError(SC_FORBIDDEN, "Доступ запрещен");
     }
 }

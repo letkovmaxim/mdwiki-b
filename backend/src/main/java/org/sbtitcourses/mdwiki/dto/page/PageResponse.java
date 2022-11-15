@@ -36,7 +36,7 @@ public class PageResponse {
     /**
      * Статус публичности записи
      */
-    private boolean isPublic;
+    private boolean shared;
 
     public int getId() {
         return id;
@@ -78,11 +78,11 @@ public class PageResponse {
         this.updatedAt = updatedAt;
     }
 
-    public boolean getPublic() {
-        return isPublic;
+    public boolean getShared() {
+        return shared;
     }
 
-    public void setPublic(boolean isPublic) {
-        this.isPublic = isPublic;
+    public void setShared(boolean shared) {
+        this.shared = shared;
     }
 }
