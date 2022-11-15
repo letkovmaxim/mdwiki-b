@@ -19,7 +19,7 @@ public class PageRequest {
     /**
      * Статус публичности записи
      */
-    private boolean isPublic;
+    private boolean shared;
 
     public String getName() {
         return name;
@@ -29,11 +29,11 @@ public class PageRequest {
         this.name = name;
     }
 
-    public boolean getIsPublic() {
-        return isPublic;
+    public boolean isShared() {
+        return shared;
     }
 
-    public void setPublic(boolean isPublic) {
-        this.isPublic = isPublic;
+    public void setShared(boolean shared) {
+        this.shared = shared;
     }
 }

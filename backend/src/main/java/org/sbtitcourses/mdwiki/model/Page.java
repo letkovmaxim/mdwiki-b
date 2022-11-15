@@ -72,8 +72,8 @@ public class Page {
     /**
      * Статус публичности записи
      */
-    @Column(name = "is_public")
-    private boolean isPublic;
+    @Column(name = "shared")
+    private boolean shared;
 
     /**
      * Список документов, принадлжащих данной записи
@@ -89,8 +89,12 @@ public class Page {
     public Page() {
     }
 
-    public Page(boolean isPublic) {
-        this.isPublic = isPublic;
+    public Page(boolean shared) {
+        this.shared = shared;
+    }
+
+    public Page(Space space) {
+        this.space = space;
     }
 
     public Page(int id, Space space) {
@@ -98,15 +102,15 @@ public class Page {
         this.space = space;
     }
 
-    public Page(String name, boolean isPublic) {
+    public Page(String name, boolean shared) {
         this.name = name;
-        this.isPublic = isPublic;
+        this.shared = shared;
     }
 
-    public Page(String name, Space space, boolean isPublic) {
+    public Page(String name, Space space, boolean shared) {
         this.name = name;
         this.space = space;
-        this.isPublic = isPublic;
+        this.shared = shared;
     }
 
     public int getId() {
@@ -165,12 +169,12 @@ public class Page {
         this.updatedAt = updatedAt;
     }
 
-    public boolean isPublic() {
-        return isPublic;
+    public boolean isShared() {
+        return shared;
     }
 
-    public void setPublic(boolean isPublic) {
-        this.isPublic = isPublic;
+    public void setShared(boolean shared) {
+        this.shared = shared;
     }
 
     public Document getDocument() {

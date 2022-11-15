@@ -1,6 +1,5 @@
 package org.sbtitcourses.mdwiki.repository;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sbtitcourses.mdwiki.model.Page;
@@ -49,8 +48,8 @@ class PageRepositoryTests {
     }
 
     @Test
-    public void findByIsPublicTrueShouldReturnPageList() {
-        List<Page> found = pageRepository.findByIsPublicTrue();
+    public void findBySharedTrueShouldReturnPageList() {
+        List<Page> found = pageRepository.findBySharedTrue();
 
         assertFalse(found.isEmpty());
         assertEquals(page.getId(), found.get(0).getId());

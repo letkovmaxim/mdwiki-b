@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.sbtitcourses.mdwiki.dto.space.SpaceResponse;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.service.SpaceService;
+import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -71,7 +72,7 @@ class SpaceControllerTests {
         spaceResponse.setName("testName");
         spaceResponse.setCreatedAt(new Date());
         spaceResponse.setUpdatedAt(new Date());
-        spaceResponse.setPublic(false);
+        spaceResponse.setShared(false);
 
         when(spaceService.get(1)).thenReturn(space);
         when(modelMapper.map(space, SpaceResponse.class)).thenReturn(spaceResponse);
@@ -80,7 +81,7 @@ class SpaceControllerTests {
                 .andExpect(jsonPath("$.name").value("testName"))
                 .andExpect(jsonPath("$.createdAt").isNotEmpty())
                 .andExpect(jsonPath("$.updatedAt").isNotEmpty())
-                .andExpect(jsonPath("$.public").value(false));
+                .andExpect(jsonPath("$.shared").value(false));
 
         verify(spaceService).get(1);
         verify(modelMapper).map(space, SpaceResponse.class);
@@ -88,11 +89,15 @@ class SpaceControllerTests {
 
     @Test
     public void verifyErrorHandling() throws Exception {
-        when(spaceService.get(1)).thenThrow(new ElementNotFoundException("Not Found"));
+        when(spaceService.get(1)).thenThrow(new ElementNotFoundException("Пространство не найдено"));
+        when(spaceService.get(2)).thenThrow(new AccessDeniedException("Доступ запрещен"));
 
         mockMvc.perform(get("/spaces/{id}", 1))
                 .andExpect(status().isNotFound());
+        mockMvc.perform(get("/spaces/{id}", 2))
+                .andExpect(status().isForbidden());
 
         verify(spaceService).get(1);
+        verify(spaceService).get(2);
     }
 }

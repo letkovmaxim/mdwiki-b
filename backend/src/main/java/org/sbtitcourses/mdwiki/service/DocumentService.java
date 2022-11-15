@@ -2,13 +2,11 @@ package org.sbtitcourses.mdwiki.service;
 
 import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.model.Page;
-import org.sbtitcourses.mdwiki.model.Space;
+import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.DocumentRepository;
-import org.sbtitcourses.mdwiki.repository.PageRepository;
-import org.sbtitcourses.mdwiki.repository.SpaceRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
+import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
-import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,15 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class DocumentService implements DocumentCrudService {
 
-    /**
-     * Репозиторий для взаимодействия с сущностью Space
-     */
-    private final SpaceRepository spaceRepository;
-
-    /**
-     * Репозиторий для взаимодействия с сущностью Page
-     */
-    private final PageRepository pageRepository;
 
     /**
      * Репозиторий для взаимодействия с сущностью Document
@@ -36,26 +25,20 @@ public class DocumentService implements DocumentCrudService {
     private final DocumentRepository documentRepository;
 
     /**
-     * Компонент для проверки доступа к ресурсам
+     * Компонент для получения ресурсов
      */
-    private final ResourceAccessHelper resourceAccessHelper;
+    private final ResourceFetcher resourceFetcher;
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
-     * @param spaceRepository репозиторий для взаимодействия с сущностью Space
-     * @param pageRepository репозиторий для взаимодействия с сущностью Page
      * @param documentRepository репозиторий для взаимодействия с сущностью Document
-     * @param resourceAccessHelper компонент для проверки доступа к ресурсам
+     * @param resourceFetcher компонент для получения ресурсов
      */
     @Autowired
-    public DocumentService(SpaceRepository spaceRepository,
-                           PageRepository pageRepository,
-                           DocumentRepository documentRepository,
-                           ResourceAccessHelper resourceAccessHelper) {
-        this.spaceRepository = spaceRepository;
-        this.pageRepository = pageRepository;
+    public DocumentService(DocumentRepository documentRepository,
+                           ResourceFetcher resourceFetcher) {
         this.documentRepository = documentRepository;
-        this.resourceAccessHelper = resourceAccessHelper;
+        this.resourceFetcher = resourceFetcher;
     }
 
     /**
@@ -64,21 +47,16 @@ public class DocumentService implements DocumentCrudService {
      * @param pageId ID страницы, в которой нужно создать документ
      * @param spaceId ID пространства, в котором нужно создать документ
      * @return сохраненный документ
-     * @throws ElementNotFoundException если пространства с таким ID не существует
      * @throws AccessDeniedException если не удалось определить пользователя
      */
     @Override
     @Transactional
-    public Document create(Document document, int pageId, int spaceId)
-            throws ElementNotFoundException, AccessDeniedException{
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
+    public Document create(Document document, int pageId, int spaceId) throws AccessDeniedException{
+        Page page = resourceFetcher.fetchPage(pageId, spaceId);
+        Person user = resourceFetcher.getLoggedInUser();
 
-        Page page = pageRepository.findByIdAndSpace(pageId, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
-
-        if (resourceAccessHelper.isAccessToCreateDocumentDenied(page)) {
-            throw new AccessDeniedException("Отказано в доступе");
+        if (ResourceAccessHelper.isAccessToCreateDocumentDenied(page, user)) {
+            throw new AccessDeniedException("Доступ запрещен");
         }
 
         document.setPage(page);
@@ -92,23 +70,16 @@ public class DocumentService implements DocumentCrudService {
      * @param pageId ID страницы, в которой нужно найти документ
      * @param spaceId ID пространства, в котором нужно найти документ
      * @return найденый документ
-     * @throws ElementNotFoundException если пространства с таким ID не существует
      * @throws AccessDeniedException если не удалось определить пользователя
      */
     @Override
     @Transactional
-    public Document get(int pageId, int spaceId) throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
+    public Document get(int pageId, int spaceId) throws AccessDeniedException {
+        Document document = resourceFetcher.fetchDocument(pageId, spaceId);
+        Person user = resourceFetcher.getLoggedInUser();
 
-        Page page = pageRepository.findByIdAndSpace(pageId, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
-
-        Document document = documentRepository.findByPage(page)
-                .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
-
-        if (resourceAccessHelper.isAccessToReadDocumentDenied(document)) {
-            throw new AccessDeniedException("Отказано в доступе");
+        if (ResourceAccessHelper.isAccessToReadDocumentDenied(document, user)) {
+            throw new AccessDeniedException("Доступ запрещен");
         }
 
         return document;
@@ -120,24 +91,16 @@ public class DocumentService implements DocumentCrudService {
      * @param spaceId ID пространства, в котором нужно обновить документ
      * @param documentToUpdateWith документ, значениями полей которого нужно обновить требуемый документ
      * @return обновленный документ
-     * @throws ElementNotFoundException если пространства с таким ID не существует
      * @throws AccessDeniedException если не удалось определить пользователя
      */
     @Override
     @Transactional
-    public Document update(int pageId, int spaceId, Document documentToUpdateWith)
-            throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
+    public Document update(int pageId, int spaceId, Document documentToUpdateWith) throws AccessDeniedException {
+        Document document = resourceFetcher.fetchDocument(pageId, spaceId);
+        Person user = resourceFetcher.getLoggedInUser();
 
-        Page page = pageRepository.findByIdAndSpace(pageId, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
-
-        Document document = documentRepository.findByPage(page)
-                .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
-
-        if (resourceAccessHelper.isAccessToUpdateDocumentDenied(document)) {
-            throw new AccessDeniedException("Отказано в доступе");
+        if (ResourceAccessHelper.isAccessToUpdateDocumentDenied(document, user)) {
+            throw new AccessDeniedException("Доступ запрещен");
         }
 
         document.setText(documentToUpdateWith.getText());
@@ -151,27 +114,19 @@ public class DocumentService implements DocumentCrudService {
      * Метод, отвечающий за удаление документа
      * @param pageId ID страницы, в которой нужно удалить документ
      * @param spaceId ID пространства, в котором нужно удалить документ
-     * @throws ElementNotFoundException если пространства с таким ID не существует
      * @throws AccessDeniedException если не удалось определить пользователя
      */
     @Override
     @Transactional
-    public void delete(int pageId, int spaceId)
-            throws ElementNotFoundException, AccessDeniedException {
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new ElementNotFoundException("Пространство не найдено"));
+    public void delete(int pageId, int spaceId) throws AccessDeniedException {
+        Document document = resourceFetcher.fetchDocument(pageId, spaceId);
+        Person user = resourceFetcher.getLoggedInUser();
 
-        Page page = pageRepository.findByIdAndSpace(pageId, space)
-                .orElseThrow(() -> new ElementNotFoundException("Страница не найдена"));
-
-        Document document = documentRepository.findByPage(page)
-                .orElseThrow(() -> new ElementNotFoundException("Документ не найден"));
-
-        if (resourceAccessHelper.isAccessToDeleteDocumentDenied(document)) {
-            throw new AccessDeniedException("Отказано в доступе");
+        if (ResourceAccessHelper.isAccessToDeleteDocumentDenied(document, user)) {
+            throw new AccessDeniedException("Доступ запрещен");
         }
 
-        page.setDocument(null);
+        document.getPage().setDocument(null);
 
         documentRepository.delete(document);
     }
