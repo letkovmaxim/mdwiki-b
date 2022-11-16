@@ -25,7 +25,6 @@ public class SecurityConfig {
      */
     private final PersonDetailsService personDetailsService;
 
-
     /**
      * Инициализация поля
      */
@@ -74,7 +73,7 @@ public class SecurityConfig {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new AuthFilter());
-        registrationBean.addUrlPatterns("/spaces/*", "/people/*");
+        registrationBean.addUrlPatterns("/spaces/*", "/people/*", "auth/whoami");
 
         return registrationBean;
     }

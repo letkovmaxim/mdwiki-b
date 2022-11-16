@@ -26,6 +26,7 @@ public class SpaceController {
      * Сервис с логикой CRUD операций над сущностью Space
      */
     private final SpaceService spaceService;
+
     /**
      * Маппер для конвертации сущностей
      */

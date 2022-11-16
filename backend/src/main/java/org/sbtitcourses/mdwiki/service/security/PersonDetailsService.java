@@ -9,36 +9,36 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 /**
- * Сервис для Spring Security, загружает пользователя
+ * Сервис с логикой загрузки данных пользователя
  */
 @Service
 public class PersonDetailsService implements UserDetailsService {
 
     /**
-     * Поиск в базе данных
+     * Репозиторий для взаимодействия с сущностью Person
      */
     private final PersonRepository personRepository;
 
     /**
-     * Инициализация поля
+     * Конструктор для автоматичекого внедрения зависимостей
+     * @param personRepository репозиторий для взаимодействия с сущностью Person
      */
     @Autowired
-    public PersonDetailsService(PersonRepository peopleRepository) {
-        this.personRepository = peopleRepository;
+    public PersonDetailsService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
     /**
-     * Загрузка пользователя
-     * @param usernameOrEmail Email или логин пользователя
-     * @return объект PersonDetails, который содержит некоторые методы для описания информации о пользователе
-     * @throws ElementNotFoundException если пользователь не найден с таким email или логин
+     * Метод, отвечающий за загрузку данных пользователя
+     * @param usernameOrEmail логин или эл. почта пользователя
+     * @return объект PersonDetails с данными о пользователе
+     * @throws ElementNotFoundException если пользователь не найден
      */
     @Override
-    public UserDetails loadUserByUsername(String usernameOrEmail){
-        Person person = personRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws ElementNotFoundException {
+        Person person = personRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+                .orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
 
         return new PersonDetails(person);
     }

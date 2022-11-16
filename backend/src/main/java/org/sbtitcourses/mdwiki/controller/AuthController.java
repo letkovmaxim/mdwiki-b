@@ -1,27 +1,18 @@
 package org.sbtitcourses.mdwiki.controller;
 
-
 import org.modelmapper.ModelMapper;
 import org.sbtitcourses.mdwiki.dto.person.PersonLogin;
-import org.sbtitcourses.mdwiki.dto.person.PersonRequest;
+import org.sbtitcourses.mdwiki.dto.person.PersonRegistration;
 import org.sbtitcourses.mdwiki.dto.person.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
-import org.sbtitcourses.mdwiki.service.PersonService;
-import org.sbtitcourses.mdwiki.service.security.PersonDetailsService;
-import org.sbtitcourses.mdwiki.service.security.RegistrationService;
-import org.sbtitcourses.mdwiki.util.ErrorResponse;
-import org.sbtitcourses.mdwiki.util.PersonValidator;
+import org.sbtitcourses.mdwiki.service.security.EntryService;
+import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 
 /**
  * Контроллер для страниц login и registration
@@ -31,9 +22,14 @@ import javax.validation.Valid;
 public class AuthController {
 
     /**
-     * Валидатор, который проверяет введенные поля пользоватлем
+     * Сервис для регистрации пользователя
      */
-    private final PersonValidator personValidator;
+    private  final EntryService entryService;
+
+    /**
+     * Компонент для получения ресурсов
+     */
+    private final ResourceFetcher resourceFetcher;
 
     /**
      * Маппер для конвертации сущностей
@@ -41,46 +37,25 @@ public class AuthController {
     private final ModelMapper modelMapper;
 
     /**
-     * Сервис с логикой CRUD операций над сущностью Person
-     */
-    private final PersonService personService;
-
-    /**
-     * Сервис для регистрации пользователя
-     */
-    private  final RegistrationService registrationService;
-
-    /**
-     * Сервис для Spring Security, загружает пользователя
-     */
-    private final PersonDetailsService personDetailsService;
-
-
-
-    /**
      * Инициализация полей класса
      */
     @Autowired
-    public AuthController(PersonValidator personValidator, ModelMapper modelMapper, PersonService personService, RegistrationService registrationService, PersonDetailsService personDetailsService) {
-        this.personValidator = personValidator;
+    public AuthController(EntryService entryService,
+                          ResourceFetcher resourceFetcher,
+                          ModelMapper modelMapper) {
+        this.entryService = entryService;
+        this.resourceFetcher = resourceFetcher;
         this.modelMapper = modelMapper;
-        this.personService = personService;
-        this.registrationService = registrationService;
-        this.personDetailsService = personDetailsService;
     }
 
     /**
      * Метод для авторизации пользователя
-     * @param personLogin, логин или mail и пароль пользователя
+     * @param personLogin DTO сущности Person для логина
      * @return если пользователь успешно авторизирован статус 200, в противном случае 403
      */
     @PostMapping("/login")
-    public ResponseEntity<?> loginPage(@RequestBody PersonLogin personLogin){
-        personValidator.checkPassword(personLogin.getUsernameOrLogin(), personLogin.getPassword());
-        UserDetails userDetails = personDetailsService.loadUserByUsername(personLogin.getUsernameOrLogin());
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()) ;
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+    public ResponseEntity<HttpStatus> performLogin(@RequestBody @Valid PersonLogin personLogin) {
+        entryService.login(personLogin);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -91,8 +66,7 @@ public class AuthController {
      */
     @GetMapping("/whoami")
     public ResponseEntity<PersonResponse> whoAmI() {
-        String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-        Person person = personService.get(currentUserName);
+        Person person = resourceFetcher.getLoggedInUser();
 
         PersonResponse response = modelMapper.map(person, PersonResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -100,22 +74,16 @@ public class AuthController {
 
     /**
      * Метод, отвечающий за регистрацию нового пользователя
-     * @param personRequest DTO сущности Person для запроса
+     * @param personRegistration DTO сущности Person для регистрации
      * @return DTO сущности Person для ответа с кодом 201
      */
     @PostMapping("/registration")
-    public ResponseEntity<Object> performRegistration(@RequestBody @Valid PersonRequest personRequest) {
-        Person personToCreate = modelMapper.map(personRequest, Person.class);
+    public ResponseEntity<Object> performRegistration(@RequestBody @Valid PersonRegistration personRegistration) {
+        Person person = modelMapper.map(personRegistration, Person.class);
 
-        ErrorResponse errors = personValidator.validate(personToCreate.getUsername(), personToCreate.getEmail());
+        Person registeredPerson = entryService.register(person);
 
-        if(!errors.getErrors().isEmpty()){
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        }
-
-        Person createdPerson = registrationService.register(personToCreate);
-
-        PersonResponse response = modelMapper.map(createdPerson, PersonResponse.class);
+        PersonResponse response = modelMapper.map(registeredPerson, PersonResponse.class);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -123,6 +91,7 @@ public class AuthController {
      * Метод, отвечающий за выход пользователя
      */
     @PostMapping("/logout")
-    public void logout(){SecurityContextHolder.getContext().setAuthentication(null);}
-
+    public void logout() {
+        entryService.logout();
+    }
 }

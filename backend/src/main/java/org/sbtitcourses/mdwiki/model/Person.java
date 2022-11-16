@@ -87,7 +87,7 @@ public class Person {
      * Тип аккаунта
      * Активный (true) или заблокированный (false)
      */
-    @Column(name = "is_enabled")
+    @Column(name = "enabled")
     private boolean enabled;
 
     /**
@@ -105,6 +105,10 @@ public class Person {
 
     public Person(int id) {
         this.id = id;
+    }
+
+    public Person(String password) {
+        this.password = password;
     }
 
     public Person(int id, String username, String name, String email, boolean enabled) {

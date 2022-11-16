@@ -24,15 +24,14 @@ public class PersonService implements PersonCrudService {
     private final PersonRepository personRepository;
 
     /**
-     * Класс для шифрования пароля
+     * Компонент для шифрования пароля
      */
     private final PasswordEncoder passwordEncoder;
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
-     *
      * @param personRepository репозиторий для взаимодействия с сущностью Person
-     * @param passwordEncoder класс для шифрования пароля
+     * @param passwordEncoder компонент для шифрования пароля
      */
     @Autowired
     public PersonService(PersonRepository personRepository, PasswordEncoder passwordEncoder) {
@@ -42,21 +41,21 @@ public class PersonService implements PersonCrudService {
 
     /**
      * Метод, отвечающий за создание нового пользователя
-     * @param personToSave пользователь, которого нужно сохранить
+     * @param person пользователь, которого нужно сохранить
      * @return сохраненного пользователя
      */
     @Override
     @Transactional
-    public Person create(Person personToSave) {
+    public Person create(Person person) {
         Date now = new Date();
-        personToSave.setPassword(passwordEncoder.encode(personToSave.getPassword()));
-        personToSave.setCreatedAt(now);
-        personToSave.setUpdatedAt(now);
-        personToSave.setEnabled(true);
-        personToSave.setId(personRepository.save(personToSave).getId());
-        personToSave.setRole("ROLE_USER");
+        person.setPassword(passwordEncoder.encode(person.getPassword()));
+        person.setCreatedAt(now);
+        person.setUpdatedAt(now);
+        person.setEnabled(true);
+        person.setRole(person.getRole());
+        person.setId(personRepository.save(person).getId());
 
-        return personToSave;
+        return person;
     }
 
     /**
@@ -81,18 +80,6 @@ public class PersonService implements PersonCrudService {
     }
 
     /**
-     * Метод, отвечающий за получение пользователя по его username
-     * @param username Логин пользователя
-     * @return найденого пользователя
-     * @throws ElementNotFoundException если пользователя с таким username не существует
-     */
-    @Override
-    public Person get(String username) throws ElementNotFoundException {
-        return personRepository.findByUsername(username)
-                .orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
-    }
-
-    /**
      * Метод, отвечающий за обновление пользователя по его ID
      * @param id ID пользователя
      * @param updatedPerson объект класса Person, значениями полей которого нужно обновить пользователя
@@ -102,17 +89,17 @@ public class PersonService implements PersonCrudService {
     @Override
     @Transactional
     public Person update(int id, Person updatedPerson) throws ElementNotFoundException {
-        Person personToUpdate = personRepository.findById(id)
+        Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
-        personToUpdate.setUsername(updatedPerson.getUsername());
-        personToUpdate.setName(updatedPerson.getName());
-        personToUpdate.setEmail(updatedPerson.getEmail());
-        personToUpdate.setEnabled(updatedPerson.isEnabled());
-        personToUpdate.setUpdatedAt(new Date());
+        person.setUsername(updatedPerson.getUsername());
+        person.setName(updatedPerson.getName());
+        person.setEmail(updatedPerson.getEmail());
+        person.setEnabled(updatedPerson.isEnabled());
+        person.setUpdatedAt(new Date());
 
-        personRepository.save(personToUpdate);
+        personRepository.save(person);
 
-        return personToUpdate;
+        return person;
     }
 
     /**
@@ -125,6 +112,7 @@ public class PersonService implements PersonCrudService {
     public void delete(int id) throws ElementNotFoundException {
         Person personToDelete = personRepository.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
+
         personRepository.delete(personToDelete);
     }
 }
