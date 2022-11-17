@@ -9,6 +9,14 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         show_sql: true
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215KB
+file:
+  upload-dir: '/users/uploads'
 server:
   error:
     include-message: always
