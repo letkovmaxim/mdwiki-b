@@ -17,7 +17,7 @@ export class Main extends React.Component<any, any> {
         email: '',
         createdAt: '',
         updateAt: '',
-        isEnabled: '',
+        enabled: '',
         role: ''
     };
 
@@ -42,7 +42,7 @@ export class Main extends React.Component<any, any> {
             email: json.email,
             createdAt: json.createdAt,
             updateAt: json.updateAt,
-            isEnabled: json.isEnabled,
+            enabled: json.enabled,
             role: json.role})
     }
 

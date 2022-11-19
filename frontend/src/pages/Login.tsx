@@ -15,7 +15,7 @@ const styleButton = {
 export class Login extends React.Component<any, any>{
 
     newPerson = {
-        usernameOrLogin: '',
+        usernameOrEmail: '',
         password: ''
     };
 
@@ -92,8 +92,8 @@ export class Login extends React.Component<any, any>{
 
                     <Form onSubmit={this.handleSubmit}>
                         <FormGroup>
-                            <Input className="login" type="text" name="usernameOrLogin" placeholder="ЛОГИН ИЛИ EMAIL" id="usernameOrLogin" value={person.usernameOrLogin}
-                                   onChange={this.handleChange} autoComplete="usernameOrLogin"/>
+                            <Input className="login" type="text" name="usernameOrEmail" placeholder="ЛОГИН ИЛИ EMAIL" id="usernameOrEmail" value={person.usernameOrEmail}
+                                   onChange={this.handleChange} autoComplete="usernameOrEmail"/>
                         </FormGroup>
 
                         <FormGroup>
