@@ -18,8 +18,7 @@ export class Registration extends React.Component<any, any>{
         username: '',
         password: '',
         name: '',
-        email: '',
-        enabled: true
+        email: ''
     };
 
     constructor(props: any) {
