@@ -22,9 +22,9 @@ import javax.validation.Valid;
 public class AuthController {
 
     /**
-     * Сервис для регистрации пользователя
+     * Сервис с логикой входа и регистрации пользователя
      */
-    private  final EntryService entryService;
+    private final EntryService entryService;
 
     /**
      * Компонент для получения ресурсов
@@ -37,7 +37,10 @@ public class AuthController {
     private final ModelMapper modelMapper;
 
     /**
-     * Инициализация полей класса
+     * Конструктор для автоматичекого внедрения зависимостей
+     * @param entryService сервис с логикой входа и регистрации пользователя
+     * @param resourceFetcher компонент для получения ресурсов
+     * @param modelMapper маппер для конвертации сущностей
      */
     @Autowired
     public AuthController(EntryService entryService,

@@ -73,7 +73,7 @@ public class SecurityConfig {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new AuthFilter());
-        registrationBean.addUrlPatterns("/spaces/*", "/people/*", "auth/whoami");
+        registrationBean.addUrlPatterns("/spaces/*", "/people/*", "/auth/whoami");
 
         return registrationBean;
     }
