@@ -1,7 +1,13 @@
 package org.sbtitcourses.mdwiki.controller;
 
 import org.sbtitcourses.mdwiki.dto.file.FileUploadResponse;
+import org.sbtitcourses.mdwiki.model.Page;
+import org.sbtitcourses.mdwiki.model.Person;
+import org.sbtitcourses.mdwiki.model.StoredFile;
 import org.sbtitcourses.mdwiki.service.FileStorageService;
+import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
+import org.sbtitcourses.mdwiki.util.ResourceFetcher;
+import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,23 +31,28 @@ public class FileController {
         this.fileStorageService = fileStorageService;
     }
 
-    @PostMapping("/uploadFile")
-    public ResponseEntity<FileUploadResponse> uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+    @PostMapping("/spaces/{spaceId}/pages/{pageId}/uploadFile")
+    public ResponseEntity<FileUploadResponse> uploadFileOnPage(@PathVariable("spaceId") int spaceId,
+                                                               @PathVariable("pageId") int pageId,
+                                                               @RequestParam("file") MultipartFile file) {
+        StoredFile storedFile = fileStorageService.storeFileOnPage(file, pageId, spaceId);
 
         String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile")
-                .path(fileName)
+                .path(storedFile.getGUID())
                 .toUriString();
 
-        FileUploadResponse response = new FileUploadResponse(fileName, downloadUri,
+        FileUploadResponse response = new FileUploadResponse(storedFile.getName(), downloadUri,
                 file.getContentType(), file.getSize());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/downloadFile/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
-        Resource resource = fileStorageService.loadFileAsResource(fileName);
+    @GetMapping("/spaces/{spaceId}/pages/{pageId}/downloadFile/{GUID}")
+    public ResponseEntity<Resource> downloadFileFromPage(@PathVariable("spaceId") int spaceId,
+                                                         @PathVariable("pageId") int pageId,
+                                                         @PathVariable("GUID") String GUID,
+                                                         HttpServletRequest request) {
+        Resource resource = fileStorageService.loadFileAsResourceFromPage(GUID, pageId, spaceId);
 
         String contentType;
         try {
