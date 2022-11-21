@@ -26,25 +26,19 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.UUID;
 
+import static java.nio.file.StandardCopyOption.*;
+
 @Service
 public class FileStorageService {
 
-    private final Path fileStorageLocation;
     private final StoredFileRepository storedFileRepository;
     private final ResourceFetcher resourceFetcher;
 
     @Autowired
-    public FileStorageService(FileStorageProperties fileStorageProperties, StoredFileRepository storedFileRepository, ResourceFetcher resourceFetcher) {
-        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
-                .toAbsolutePath().normalize();
+    public FileStorageService(StoredFileRepository storedFileRepository,
+                              ResourceFetcher resourceFetcher) {
         this.storedFileRepository = storedFileRepository;
         this.resourceFetcher = resourceFetcher;
-
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (IOException e) {
-            throw new FileStorageException("Ошибка создания директории для хранения файлов");
-        }
     }
 
     public StoredFile storeFileOnPage(MultipartFile file, int pageId, int spaceId) {
@@ -62,8 +56,17 @@ public class FileStorageService {
                 throw new FileStorageException("Название файла содержит недопустимую последовательнось символов");
             }
 
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            Path fileStorageLocation = Path.of("uploads/" + user.getId())
+                    .toAbsolutePath().normalize();
+
+            try {
+                Files.createDirectories(fileStorageLocation);
+            } catch (IOException e) {
+                throw new FileStorageException("Ошибка создания директории для хранения файлов");
+            }
+
+            Path targetLocation = fileStorageLocation.resolve(fileName);
+            Files.copy(file.getInputStream(), targetLocation, REPLACE_EXISTING);
 
             String GUID = UUID.randomUUID().toString();
             StoredFile storedFile = new StoredFile(fileName, GUID, user, Collections.singletonList(page));
@@ -87,8 +90,11 @@ public class FileStorageService {
         StoredFile storedFile = storedFileRepository.findByGUID(GUID)
                 .orElseThrow(() -> new ElementNotFoundException("Файл не найден"));
 
+        Path fileStorageLocation = Paths.get("uploads/" + user.getId())
+                .toAbsolutePath().normalize();
+
         try {
-            Path filePath = this.fileStorageLocation.resolve(storedFile.getName()).normalize();
+            Path filePath = fileStorageLocation.resolve(storedFile.getName()).normalize();
             Resource resource = new UrlResource(filePath.toUri());
 
             if (resource.exists()) {

@@ -38,7 +38,7 @@ public class FileController {
         StoredFile storedFile = fileStorageService.storeFileOnPage(file, pageId, spaceId);
 
         String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile")
+                .path(String.format("/spaces/%d/pages/%d/downloadFile/", spaceId, pageId))
                 .path(storedFile.getGUID())
                 .toUriString();
 
