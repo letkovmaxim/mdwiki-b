@@ -1,18 +1,22 @@
 package org.sbtitcourses.mdwiki.controller;
 
 import org.modelmapper.ModelMapper;
+import org.sbtitcourses.mdwiki.dto.error.ErrorResponse;
 import org.sbtitcourses.mdwiki.dto.person.PersonLogin;
 import org.sbtitcourses.mdwiki.dto.person.PersonRegistration;
 import org.sbtitcourses.mdwiki.dto.person.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.service.security.EntryService;
 import org.sbtitcourses.mdwiki.util.ResourceFetcher;
+import org.sbtitcourses.mdwiki.util.exception.RegistrationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Контроллер для страниц login и registration
@@ -96,5 +100,12 @@ public class AuthController {
     @PostMapping("/logout")
     public void logout() {
         entryService.logout();
+    }
+
+    @ExceptionHandler(RegistrationFailedException.class)
+    private ResponseEntity<ErrorResponse> handleRegistrationFailedException(RegistrationFailedException e) {
+        ErrorResponse response = new ErrorResponse("Ошибка при регистрации", new Date(), e.getErrors());
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 }
