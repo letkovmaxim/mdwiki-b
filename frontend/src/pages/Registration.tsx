@@ -62,12 +62,15 @@ export class Registration extends React.Component<any, any>{
             })
                 .then(async response => {
                     let json = await response.json()
-                    if (!response.ok) {
+                    if (response.status === 409) {
+                        console.log(response.status)
                         this.setState({
                             message: json.errors
                         })
                         this.error(json.errors)
-                    }else {
+                    }else if(response.status === 400){
+                        this.error(["Email введен неккоректно"])
+                    }else if(response.status === 201){
                         window.location.replace('/login');
                     }});
         }
@@ -137,7 +140,7 @@ export class Registration extends React.Component<any, any>{
                 this.setState({
                     checkUsername: entry
                 })
-            }else if(entry.includes("Email") || entry.includes("email")){
+            }else if(entry.includes("Email") || entry.includes("адресом")){
                 this.setState({
                     checkEmail: entry
                 })
