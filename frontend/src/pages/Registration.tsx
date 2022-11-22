@@ -63,7 +63,6 @@ export class Registration extends React.Component<any, any>{
                 .then(async response => {
                     let json = await response.json()
                     if (response.status === 409) {
-                        console.log(response.status)
                         this.setState({
                             message: json.errors
                         })
