@@ -1,62 +1,75 @@
 package org.sbtitcourses.mdwiki.model;
 
 import javax.persistence.*;
-import java.util.List;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
+/**
+ * Сущность записанных в системе файлов
+ * для хранения информации о них в базе данных
+ */
 @Entity
 @Table(name = "file")
 public class StoredFile {
 
+    /**
+     * ID файла в базе данных
+     */
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "fileSequence")
     @SequenceGenerator(name = "fileSequence", initialValue = 1, allocationSize = 1, sequenceName = "file_sequence")
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "name")
-    private String name;
-
+    /**
+     * Уникальный идентификатор файла
+     */
     @Column(name = "guid")
     private String GUID;
 
+    /**
+     * Оригинальное название файла
+     */
+    @Column(name = "name")
+    private String originalName;
+
+    /**
+     * MIME-тип файла
+     */
+    @Column(name = "type")
+    private String MimeType;
+
+    /**
+     * Размер файла в битах
+     */
+    @Column(name = "size")
+    private long size;
+
+    /**
+     * Пользователь-владелец файла
+     */
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private Person owner;
 
-    @ManyToMany
-    @JoinTable(
-            name = "file_page",
-            joinColumns = @JoinColumn(name = "file_id"),
-            inverseJoinColumns = @JoinColumn(name = "page_id")
-    )
-    private List<Page> pages;
+    /**
+     * Пространство, с которым связан файл
+     */
+    @ManyToOne
+    @JoinColumn(name = "space_id", referencedColumnName = "id")
+    private Space space;
 
     public StoredFile() {
     }
 
-    public StoredFile(String name, String GUID, Person owner, List<Page> pages) {
-        this.name = name;
+    public StoredFile(String GUID, String originalName, String MimeType,
+                      long size, Person owner, Space space) {
         this.GUID = GUID;
+        this.originalName = originalName;
+        this.MimeType = MimeType;
+        this.size = size;
         this.owner = owner;
-        this.pages = pages;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        this.space = space;
     }
 
     public String getGUID() {
@@ -67,6 +80,30 @@ public class StoredFile {
         this.GUID = GUID;
     }
 
+    public String getOriginalName() {
+        return originalName;
+    }
+
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
+    }
+
+    public String getMimeType() {
+        return MimeType;
+    }
+
+    public void setMimeType(String MimeType) {
+        this.MimeType = MimeType;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
     public Person getOwner() {
         return owner;
     }
@@ -75,11 +112,11 @@ public class StoredFile {
         this.owner = owner;
     }
 
-    public List<Page> getPages() {
-        return pages;
+    public Space getSpace() {
+        return space;
     }
 
-    public void setPages(List<Page> pages) {
-        this.pages = pages;
+    public void setSpace(Space space) {
+        this.space = space;
     }
 }

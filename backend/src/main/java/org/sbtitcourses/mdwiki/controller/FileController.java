@@ -1,13 +1,9 @@
 package org.sbtitcourses.mdwiki.controller;
 
 import org.sbtitcourses.mdwiki.dto.file.FileUploadResponse;
-import org.sbtitcourses.mdwiki.model.Page;
-import org.sbtitcourses.mdwiki.model.Person;
+import org.sbtitcourses.mdwiki.model.LoadedFile;
 import org.sbtitcourses.mdwiki.model.StoredFile;
-import org.sbtitcourses.mdwiki.service.FileStorageService;
-import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
-import org.sbtitcourses.mdwiki.util.ResourceFetcher;
-import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
+import org.sbtitcourses.mdwiki.service.ImageStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -16,54 +12,120 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import javax.validation.constraints.Min;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * REST контроллер для загрузки и скачивания файлов
+ */
 @RestController
 public class FileController {
 
-    private final FileStorageService fileStorageService;
+    /**
+     * Сервис с логикой записи и получения файлов
+     */
+    private final ImageStorageService imageStorageService;
 
+    /**
+     * Конструктор для автоматического внедрения зависимостей
+     * @param imageStorageService сервис с логикой записи и получения файлов
+     */
     @Autowired
-    public FileController(FileStorageService fileStorageService) {
-        this.fileStorageService = fileStorageService;
+    public FileController(ImageStorageService imageStorageService) {
+        this.imageStorageService = imageStorageService;
     }
 
-    @PostMapping("/spaces/{spaceId}/pages/{pageId}/uploadFile")
-    public ResponseEntity<FileUploadResponse> uploadFileOnPage(@PathVariable("spaceId") int spaceId,
-                                                               @PathVariable("pageId") int pageId,
-                                                               @RequestParam("file") MultipartFile file) {
-        StoredFile storedFile = fileStorageService.storeFileOnPage(file, pageId, spaceId);
+    /**
+     * Метод, обрабатывающий запрос на загрузку изображения
+     * @param spaceId ID пространства, с которым связано изображение
+     * @param file файл изображения
+     * @return HTTP ответ с информацией о загруженном изображении и статусом 200
+     */
+    @PostMapping("/spaces/{spaceId}/upload/image")
+    public ResponseEntity<FileUploadResponse> uploadImage(@PathVariable("spaceId") int spaceId,
+                                                          @RequestParam("file") MultipartFile file) {
+        StoredFile storedFile = imageStorageService.storeImage(file, spaceId);
 
-        String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(String.format("/spaces/%d/pages/%d/downloadFile/", spaceId, pageId))
-                .path(storedFile.getGUID())
-                .toUriString();
+        FileUploadResponse response = new FileUploadResponse(storedFile.getOriginalName(), storedFile.getGUID(),
+                storedFile.getMimeType(), file.getSize());
 
-        FileUploadResponse response = new FileUploadResponse(storedFile.getName(), downloadUri,
-                file.getContentType(), file.getSize());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/spaces/{spaceId}/pages/{pageId}/downloadFile/{GUID}")
-    public ResponseEntity<Resource> downloadFileFromPage(@PathVariable("spaceId") int spaceId,
-                                                         @PathVariable("pageId") int pageId,
-                                                         @PathVariable("GUID") String GUID,
-                                                         HttpServletRequest request) {
-        Resource resource = fileStorageService.loadFileAsResourceFromPage(GUID, pageId, spaceId);
+    /**
+     * Метод, обрабатывающий запрос на скачку изображения
+     * @param GUID уникальный идентификатор изображения
+     * @return HTTP ответ с изображением и статусом 200
+     */
+    @GetMapping("/download/image/{GUID}")
+    public ResponseEntity<Resource> downloadImage(@PathVariable("GUID") String GUID) {
+        LoadedFile loadedFile = imageStorageService.loadImage(GUID);
 
-        String contentType;
-        try {
-            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        } catch (IOException e) {
-            contentType = "application/octet-stream";
-        }
+        String fileName = loadedFile.getStoredFile().getOriginalName();
+        String contentType = loadedFile.getStoredFile().getMimeType();
+        Resource resource = loadedFile.getResource();
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"".concat(fileName).concat("\""))
                 .body(resource);
+    }
+
+    /**
+     * Метод, обрабатывающий запрос на скачку превью изображения
+     * @param GUID уникальный идентификатор изображения
+     * @return HTTP ответ с превью изображения и статусом 200
+     */
+    @GetMapping("/download/thumbnail/{GUID}")
+    public ResponseEntity<Resource> downloadThumbnail(@PathVariable("GUID") String GUID) {
+        LoadedFile loadedFile = imageStorageService.loadThumbnail(GUID);
+
+        String fileName = loadedFile.getStoredFile().getOriginalName();
+        String contentType = loadedFile.getStoredFile().getMimeType();
+        Resource resource = loadedFile.getResource();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"".concat(fileName).concat("\""))
+                .body(resource);
+    }
+
+    /**
+     * Метод, обрабатывающий запрос на получение информации обо всех загруженных пользователем файлов
+     * @param bunch номер страницы при пагинации
+     * @param size количество элементов в странице при пагинации
+     * @return HTTP ответ со списком файлов и статусом 200
+     */
+    @GetMapping("/user/uploads")
+    public ResponseEntity<List<FileUploadResponse>>
+    getUserStoredFiles(@RequestParam(name = "bunch")
+                       @Min(value = 0, message = "Номер запрашиваемой страницы не может быть меньше 0") int bunch,
+                       @RequestParam(name = "size")
+                       @Min(value = 1, message = "Количество элементов на странице не должно быть меньше 1") int size) {
+        List<StoredFile> storedFiles = imageStorageService.getUserStoredFiles(bunch, size);
+        List<FileUploadResponse> response = new ArrayList<>();
+
+        for (StoredFile storedFile : storedFiles) {
+            response.add(new FileUploadResponse(storedFile.getOriginalName(), storedFile.getGUID(),
+                    storedFile.getMimeType(), storedFile.getSize()));
+        }
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    /**
+     * Метод, обрабатывающий запрос на удаления изображения
+     * @param GUID уникальный идентификатор изображения
+     * @return HTTP ответ со статусом 200
+     */
+    @DeleteMapping("/delete/image/{GUID}")
+    public ResponseEntity<HttpStatus> deleteFile(@PathVariable("GUID") String GUID) {
+        imageStorageService.deleteImage(GUID);
+
+        return ResponseEntity.ok().build();
     }
 }

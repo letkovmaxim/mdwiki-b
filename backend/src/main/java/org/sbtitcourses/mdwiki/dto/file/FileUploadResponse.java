@@ -1,15 +1,33 @@
 package org.sbtitcourses.mdwiki.dto.file;
 
+/**
+ * DTO с информацией о загруженном файле для ответа
+ */
 public class FileUploadResponse {
 
+    /**
+     * Оригинальное название файла
+     */
     private String fileName;
-    private String fileDownloadUri;
+
+    /**
+     * Уникальный идентификатор файла
+     */
+    private String fileGUID;
+
+    /**
+     * MIME-тип файла
+     */
     private String fileType;
+
+    /**
+     * Размер файла в битах
+     */
     private long size;
 
-    public FileUploadResponse(String fileName, String fileDownloadUri, String fileType, long size) {
+    public FileUploadResponse(String fileName, String fileGUID, String fileType, long size) {
         this.fileName = fileName;
-        this.fileDownloadUri = fileDownloadUri;
+        this.fileGUID = fileGUID;
         this.fileType = fileType;
         this.size = size;
     }
@@ -22,12 +40,12 @@ public class FileUploadResponse {
         this.fileName = fileName;
     }
 
-    public String getFileDownloadUri() {
-        return fileDownloadUri;
+    public String getFileGUID() {
+        return fileGUID;
     }
 
-    public void setFileDownloadUri(String fileDownloadUri) {
-        this.fileDownloadUri = fileDownloadUri;
+    public void setFileGUID(String fileGUID) {
+        this.fileGUID = fileGUID;
     }
 
     public String getFileType() {

@@ -67,6 +67,10 @@ public class Space {
     @Cascade(ALL)
     private List<Page> pages;
 
+    @OneToMany(mappedBy = "space", fetch = LAZY)
+    @Cascade(ALL)
+    private List<StoredFile> storedFiles;
+
     public Space() {
     }
 
@@ -157,5 +161,13 @@ public class Space {
 
     public void setPages(List<Page> pages) {
         this.pages = pages;
+    }
+
+    public List<StoredFile> getStoredFiles() {
+        return storedFiles;
+    }
+
+    public void setStoredFiles(List<StoredFile> storedFiles) {
+        this.storedFiles = storedFiles;
     }
 }

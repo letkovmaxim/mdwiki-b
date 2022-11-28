@@ -82,10 +82,6 @@ public class Page {
     @Cascade(ALL)
     private Document document;
 
-    @ManyToMany(mappedBy = "pages", fetch = LAZY)
-    @Cascade(ALL)
-    private List<StoredFile> storedFiles;
-
     public Person getOwner() {
         return space.getOwner();
     }
