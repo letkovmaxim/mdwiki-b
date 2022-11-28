@@ -79,11 +79,11 @@ public final class ResourceAccessHelper {
      * @return true - если доспут запрещен, false - если разрешен
      */
     public static boolean isAccessToReadPageDenied(Page page, Person user) {
-        if (user.getId() == page.getOwner().getId() || page.getSpace().isShared()) {
+        if (user.getId() == page.getOwner().getId()) {
             return false;
         }
 
-        return isAccessToReadRootPageDenied(page);
+        return isAccessToReadRootPageDenied(page) || !page.isShared();
 }
 
     /**
@@ -96,7 +96,7 @@ public final class ResourceAccessHelper {
             return isAccessToReadRootPageDenied(page.getParent());
         }
 
-        return !page.isShared();
+        return !page.isShared() || !page.getSpace().isShared();
     }
 
     /**
