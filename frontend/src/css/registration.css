@@ -191,14 +191,66 @@
     font-weight: bold;
 }
 
-*::placeholder {
+.name::placeholder {
     color: rgba(255, 255, 255, 0.8);
     font-size: 1vw;
     font-weight: bold;
     vertical-align: middle;
 }
 
-input:valid {
+.name:valid{
+    color: #FFFFFF;
+    font-size: 1vw;
+    font-weight: bold;
+    vertical-align: middle;
+}
+.userName::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1vw;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.userName:valid{
+    color: #FFFFFF;
+    font-size: 1vw;
+    font-weight: bold;
+    vertical-align: middle;
+}
+.email::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1vw;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.email:valid{
+    color: #FFFFFF;
+    font-size: 1vw;
+    font-weight: bold;
+    vertical-align: middle;
+}
+.passw::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1vw;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.passw:valid{
+    color: #FFFFFF;
+    font-size: 1vw;
+    font-weight: bold;
+    vertical-align: middle;
+}
+.repeatPassword::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1vw;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.repeatPassword:valid{
     color: #FFFFFF;
     font-size: 1vw;
     font-weight: bold;

@@ -86,16 +86,30 @@ body{
     font-weight: bold;
 }
 
-*::placeholder {
+.login::placeholder {
     color: rgba(255, 255, 255, 0.8);
-    font-size: 1vw;
+    font-size: 1.1vmax;
     font-weight: bold;
     vertical-align: middle;
 }
 
-input:valid {
+.login:valid {
     color: #FFFFFF;
-    font-size: 1vw;
+    font-size: 1.1vmax;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.password::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1vmax;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.password:valid {
+    color: #FFFFFF;
+    font-size: 1.1vmax;
     font-weight: bold;
     vertical-align: middle;
 }

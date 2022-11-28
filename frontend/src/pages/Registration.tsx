@@ -1,6 +1,6 @@
 import React from "react";
 import {Container, Form, FormGroup, Input} from "reactstrap";
-import {Hello} from './Hello'
+import {Hello} from '../component/Hello'
 import '../css/registration.css'
 import Button from '@mui/material/Button';
 

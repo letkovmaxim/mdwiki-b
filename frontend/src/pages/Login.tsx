@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Form, FormGroup, Input} from "reactstrap";
 import "../css/login.css"
-import {Hello} from './Hello'
+import {Hello} from '../component/Hello'
 import Button from '@mui/material/Button';
 
 const styleButton = {
@@ -53,7 +53,7 @@ export class Login extends React.Component<any, any>{
         }).then(response => {
             if (response.status === 200) {
                 window.localStorage.setItem('login', 'yes')
-                window.location.replace('/main');
+                window.location.replace('/wiki/' + person.usernameOrEmail);
             }else {
                 this.setState({
                     message: "Неправильный логин или пароль"
