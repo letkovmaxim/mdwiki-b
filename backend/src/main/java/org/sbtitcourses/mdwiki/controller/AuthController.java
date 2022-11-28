@@ -1,83 +1,111 @@
 package org.sbtitcourses.mdwiki.controller;
 
+import org.modelmapper.ModelMapper;
+import org.sbtitcourses.mdwiki.dto.error.ErrorResponse;
+import org.sbtitcourses.mdwiki.dto.person.PersonLogin;
+import org.sbtitcourses.mdwiki.dto.person.PersonRegistration;
+import org.sbtitcourses.mdwiki.dto.person.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
-import org.sbtitcourses.mdwiki.service.security.RegistrationService;
-import org.sbtitcourses.mdwiki.util.PersonValidator;
+import org.sbtitcourses.mdwiki.service.security.EntryService;
+import org.sbtitcourses.mdwiki.util.ResourceFetcher;
+import org.sbtitcourses.mdwiki.util.exception.RegistrationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Контроллер для страниц login и registration
  */
-@Controller
+@RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     /**
-     * Сервис для завершения регистрации пользователя
+     * Сервис с логикой входа и регистрации пользователя
      */
-    private final RegistrationService registrationService;
+    private final EntryService entryService;
 
     /**
-     * Валидатор, который проверяет введенные поля пользоватлем
+     * Компонент для получения ресурсов
      */
-    private final PersonValidator personValidator;
+    private final ResourceFetcher resourceFetcher;
 
     /**
-     * Инициализация полей класса
+     * Маппер для конвертации сущностей
+     */
+    private final ModelMapper modelMapper;
+
+    /**
+     * Конструктор для автоматичекого внедрения зависимостей
+     * @param entryService сервис с логикой входа и регистрации пользователя
+     * @param resourceFetcher компонент для получения ресурсов
+     * @param modelMapper маппер для конвертации сущностей
      */
     @Autowired
-    public AuthController(RegistrationService registrationService, PersonValidator personValidator) {
-        this.registrationService = registrationService;
-        this.personValidator = personValidator;
+    public AuthController(EntryService entryService,
+                          ResourceFetcher resourceFetcher,
+                          ModelMapper modelMapper) {
+        this.entryService = entryService;
+        this.resourceFetcher = resourceFetcher;
+        this.modelMapper = modelMapper;
     }
 
     /**
-     * @return возвращает страницу для входа пользователя
+     * Метод для авторизации пользователя
+     * @param personLogin DTO сущности Person для логина
+     * @return если пользователь успешно авторизирован статус 200, в противном случае 403
      */
-    @GetMapping("/login")
-    public String loginPage() {
-        return "auth/login";
+    @PostMapping("/login")
+    public ResponseEntity<HttpStatus> performLogin(@RequestBody @Valid PersonLogin personLogin) {
+        entryService.login(personLogin);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
-     * @param person в нем будут хранить все данные введенные пользователем
-     * @return возвращает страницу для регистрации пользователя
+     * Метод для получения авторизированного пользователя
+     * @return авторизированного пользователя
      */
-    @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("person") Person person) {
-        return "auth/registration";
+    @GetMapping("/whoami")
+    public ResponseEntity<PersonResponse> whoAmI() {
+        Person person = resourceFetcher.getLoggedInUser();
+
+        PersonResponse response = modelMapper.map(person, PersonResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
     /**
-     * Оболочка для проверки полей ввода при регистрации
-     * При помощи validate проверяются все поля класса Person
-     * Т.к. repeatPassword не является полем класса Person, поэтому был создан отдельный метод checkPassword для проаерки password(из Person) и repeatPassword
-     * @param person содержит данные введенные пользователем при регистрации
-     * @param bindingResult содержит ошибки допущенные пользоватлем при регистрации
-     * @param repeatPassword поле для подтверждения пароля при регистрации
-     * @return страницу для входа, елси нет ошибок, в противном случае страницу регистрации
+     * Метод, отвечающий за регистрацию нового пользователя
+     * @param personRegistration DTO сущности Person для регистрации
+     * @return DTO сущности Person для ответа с кодом 201
      */
     @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("person") @Valid Person person,
-                                      BindingResult bindingResult, String repeatPassword) {
-        personValidator.validate(person, bindingResult);
-        personValidator.checkPassword(person.getPassword(), repeatPassword, bindingResult);
+    public ResponseEntity<Object> performRegistration(@RequestBody @Valid PersonRegistration personRegistration) {
+        Person person = modelMapper.map(personRegistration, Person.class);
 
-        if (bindingResult.hasErrors()) {
-            return "/auth/registration";
-        }
+        Person registeredPerson = entryService.register(person);
 
-        registrationService.register(person);
+        PersonResponse response = modelMapper.map(registeredPerson, PersonResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
-        return "redirect:/auth/login";
+    /**
+     * Метод, отвечающий за выход пользователя
+     */
+    @PostMapping("/logout")
+    public void logout() {
+        entryService.logout();
+    }
+
+    @ExceptionHandler(RegistrationFailedException.class)
+    private ResponseEntity<ErrorResponse> handleRegistrationFailedException(RegistrationFailedException e) {
+        ErrorResponse response = new ErrorResponse("Ошибка при регистрации", new Date(), e.getErrors());
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 }

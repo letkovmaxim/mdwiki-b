@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,9 +25,11 @@ class PersonServiceTests {
 
     @Mock
     private PersonRepository personRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @InjectMocks
     private PersonService personService;
-    private final Person personToCreate = new Person();
+    private final Person personToCreate = new Person("rawPassword");
     private final Person personWithId = new Person(1);
     private final Person personToUpdateWith = new Person(1,
             "newUsername",
@@ -37,12 +40,15 @@ class PersonServiceTests {
     @Test
     public void createShouldReturnPerson() {
         when(personRepository.save(personToCreate)).thenReturn(personWithId);
+        when(passwordEncoder.encode("rawPassword")).thenReturn("encodedPassword");
 
         Person createdPerson = personService.create(personToCreate);
 
         assertEquals(1, createdPerson.getId());
+        assertEquals("encodedPassword", createdPerson.getPassword());
         assertTrue(createdPerson.isEnabled());
         verify(personRepository).save(personToCreate);
+        verify(passwordEncoder).encode("rawPassword");
     }
 
     @Test

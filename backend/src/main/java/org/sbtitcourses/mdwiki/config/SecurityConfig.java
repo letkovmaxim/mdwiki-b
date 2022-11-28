@@ -47,8 +47,9 @@ public class SecurityConfig {
         authenticationManagerBuilder.userDetailsService(personDetailsService).passwordEncoder(passwordEncoder());
 
         http
+                .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
+                    .antMatchers("/auth/login", "/auth/registration", "/error", "/auth/whoami").permitAll()
                     .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and()
                 .formLogin()
@@ -72,7 +73,7 @@ public class SecurityConfig {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new AuthFilter());
-        registrationBean.addUrlPatterns("/spaces/*", "/people/*");
+        registrationBean.addUrlPatterns("/spaces/*", "/people/*", "/auth/whoami");
 
         return registrationBean;
     }

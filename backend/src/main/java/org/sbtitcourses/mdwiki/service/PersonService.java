@@ -4,6 +4,7 @@ import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,29 +24,38 @@ public class PersonService implements PersonCrudService {
     private final PersonRepository personRepository;
 
     /**
+     * Компонент для шифрования пароля
+     */
+    private final PasswordEncoder passwordEncoder;
+
+    /**
      * Конструктор для автоматичекого внедрения зависимостей
      * @param personRepository репозиторий для взаимодействия с сущностью Person
+     * @param passwordEncoder компонент для шифрования пароля
      */
     @Autowired
-    public PersonService(PersonRepository personRepository) {
+    public PersonService(PersonRepository personRepository, PasswordEncoder passwordEncoder) {
         this.personRepository = personRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
      * Метод, отвечающий за создание нового пользователя
-     * @param personToSave пользователь, которого нужно сохранить
+     * @param person пользователь, которого нужно сохранить
      * @return сохраненного пользователя
      */
     @Override
     @Transactional
-    public Person create(Person personToSave) {
+    public Person create(Person person) {
         Date now = new Date();
-        personToSave.setCreatedAt(now);
-        personToSave.setUpdatedAt(now);
-        personToSave.setEnabled(true);
-        personToSave.setId(personRepository.save(personToSave).getId());
+        person.setPassword(passwordEncoder.encode(person.getPassword()));
+        person.setCreatedAt(now);
+        person.setUpdatedAt(now);
+        person.setEnabled(true);
+        person.setRole(person.getRole());
+        person.setId(personRepository.save(person).getId());
 
-        return personToSave;
+        return person;
     }
 
     /**
@@ -79,17 +89,17 @@ public class PersonService implements PersonCrudService {
     @Override
     @Transactional
     public Person update(int id, Person updatedPerson) throws ElementNotFoundException {
-        Person personToUpdate = personRepository.findById(id)
+        Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
-        personToUpdate.setUsername(updatedPerson.getUsername());
-        personToUpdate.setName(updatedPerson.getName());
-        personToUpdate.setEmail(updatedPerson.getEmail());
-        personToUpdate.setEnabled(updatedPerson.isEnabled());
-        personToUpdate.setUpdatedAt(new Date());
+        person.setUsername(updatedPerson.getUsername());
+        person.setName(updatedPerson.getName());
+        person.setEmail(updatedPerson.getEmail());
+        person.setEnabled(updatedPerson.isEnabled());
+        person.setUpdatedAt(new Date());
 
-        personRepository.save(personToUpdate);
+        personRepository.save(person);
 
-        return personToUpdate;
+        return person;
     }
 
     /**
@@ -102,6 +112,7 @@ public class PersonService implements PersonCrudService {
     public void delete(int id) throws ElementNotFoundException {
         Person personToDelete = personRepository.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
+
         personRepository.delete(personToDelete);
     }
 }

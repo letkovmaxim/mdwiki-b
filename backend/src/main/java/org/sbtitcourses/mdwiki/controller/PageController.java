@@ -3,6 +3,7 @@ package org.sbtitcourses.mdwiki.controller;
 import org.modelmapper.ModelMapper;
 import org.sbtitcourses.mdwiki.dto.page.PageRequest;
 import org.sbtitcourses.mdwiki.dto.page.PageResponse;
+import org.sbtitcourses.mdwiki.dto.page.PlainPageResponse;
 import org.sbtitcourses.mdwiki.model.Page;
 import org.sbtitcourses.mdwiki.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +101,27 @@ public class PageController {
     }
 
     /**
+     * Метод, отвечающий за получение всех страниц данного пространства без списка подстраниц
+     * @param spaceId ID пространства
+     * @param bunch номер страницы при пагинации
+     * @param size количество элементов в странице при пагинации
+     * @return список DTO сущности Page для ответа с кодом 200
+     */
+    @GetMapping("/plain")
+    public ResponseEntity<List<PlainPageResponse>> getPlain(@PathVariable(name = "spaceId") int spaceId,
+                                                       @RequestParam(name = "bunch") @Min(value = 0, message = "Номер запрашиваемой страницы не может быть меньше 0") int bunch,
+                                                       @RequestParam(name = "size")  @Min(value = 1, message = "Количество элементов на странице не должно быть меньше 1") int size) {
+        List<PlainPageResponse> pages = new LinkedList<>();
+
+        for (Page page: pageService.get(spaceId, bunch, size)) {
+            PlainPageResponse plainPageResponse = modelMapper.map(page, PlainPageResponse.class);
+            pages.add(plainPageResponse);
+        }
+
+        return new ResponseEntity<>(pages, HttpStatus.OK);
+    }
+
+    /**
      * Метод, отвечающий за получение страницы по его ID для данного пространства
      * @param spaceId ID пространства
      * @param pageId ID страницы
@@ -112,6 +134,26 @@ public class PageController {
 
         PageResponse response = modelMapper.map(page, PageResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Метод, отвечающий за получение подстраниц по ID страницы-родителя
+     * @param spaceId ID пространства
+     * @param pageId ID страницы-родителя
+     * @return список DTO сущности Page для ответа с кодом 200
+     */
+    @GetMapping("/{pageId}/subpages")
+    public ResponseEntity<List<PlainPageResponse>> getSubpages(@PathVariable(name = "spaceId") int spaceId,
+                                                          @PathVariable(name = "pageId") int pageId) {
+        Page page = pageService.get(pageId, spaceId);
+        List<PlainPageResponse> subpages = new LinkedList<>();
+
+        for (Page subpage: page.getSubpages()) {
+            PlainPageResponse plainPageResponse = modelMapper.map(subpage, PlainPageResponse.class);
+            subpages.add(plainPageResponse);
+        }
+
+        return new ResponseEntity<>(subpages, HttpStatus.OK);
     }
 
     /**
