@@ -18,7 +18,7 @@ type Props = {
 
 interface IComp {
     createdAt: any,
-    id: number,
+    id: string,
     name: string,
     shared: boolean,
     subpages?: readonly IComp[],
@@ -31,6 +31,7 @@ export const Page = ({idSpace}:Props) =>{
     const { pageId } = useParams();
 
     const[idTree, setIdTree] = useState<string[]>([])
+    const [lastId, setLastId] = useState(0)
 
     const[list, setList] = useState<IComp[]>([])
 
@@ -100,8 +101,21 @@ export const Page = ({idSpace}:Props) =>{
     }
 
     useEffect(() => {
+        treeOpen()
         getList()
     }, [setList])
+
+
+
+    const treeOpen = () => {
+        if(localStorage.getItem('space') !== String(idSpace)){
+            localStorage.setItem("tree", JSON.stringify([]))
+            localStorage.setItem('space', String(idSpace))
+        }else {
+            setIdTree(JSON.parse(localStorage.getItem('tree')!))
+        }
+
+    }
 
     async function getList() {
         let response = await fetch('/spaces/' + idSpace + '/pages?bunch=0&size=1000');
@@ -197,49 +211,76 @@ export const Page = ({idSpace}:Props) =>{
 
 
     const toPage = (id:number) => {
+        if(idTree.includes(String(lastId))){
+            const arr = idTree.filter((id) => id !== String(lastId));
+            setIdTree(arr)
+        }else{
+            setIdTree([...idTree, String(lastId)])
+        }
+
+        localStorage.setItem('tree', JSON.stringify(idTree))
+        //console.log(localStorage.getItem('tree'))
+
         window.location.replace("/wiki/" + login + "/space/" + idSpace +"/page/" + id);
     }
 
 
-    const renderTree = (nodes: any) => (
-        <CustomTreeItem key={nodes.id} nodeId={nodes.id}
-                        label={
-            <Button
-                sx={{
-                    alignItems: 'left',
-                    justifyContent: 'left',
-                    minWidth: '100%'
-                }}
-                className="buttonPage"
-                variant="text"
-                size="small"
+    const tree = ( id:number, i:number) => {
+        console.log(idTree)
+        if(i === 1 && lastId != 0){
+            if(idTree.includes(String(lastId))){
+                const arr = idTree.filter((id) => id !== String(lastId));
+                setIdTree(arr)
+            }else{
+                setIdTree([...idTree, String(lastId)])
+            }
+        }
+        setLastId(id)
+    }
 
-                onClick={()=> toPage(nodes.id)}
-                onContextMenu={(e) => handleClickMenu(e, nodes.name, nodes.shared, nodes.id)}
+    const renderTree = (nodes: any, i:number) => {
+        return(
+
+            <CustomTreeItem key={nodes.id} nodeId={nodes.id}   onClickCapture={() => tree(nodes.id, i)}
+                label={
+                    <Button
+                        sx={{
+                            alignItems: 'left',
+                            justifyContent: 'left',
+                            minWidth: '100%'
+                        }}
+                        className="buttonPage"
+                        variant="text"
+                        size="small"
+
+                        onClick={()=> toPage(nodes.id)}
+                        onContextMenu={(e) => handleClickMenu(e, nodes.name, nodes.shared, nodes.id)}
+                    >
+                        <DescriptionOutlinedIcon className='description'/>
+                        <div>&emsp;</div>
+                        <div className='textButton'>
+                            {nodes.name}
+                        </div>
+                    </Button>
+                }
             >
-                <DescriptionOutlinedIcon className='description'/>
-                <div>&emsp;</div>
-                <div className='textButton'>
-                    {nodes.name}
-                </div>
-            </Button>}
+                {Array.isArray(nodes.subpages)
+                    ? nodes.subpages.map((node:any) => renderTree(node,++i))
+                    : null}
+            </CustomTreeItem>
+        );
+    }
 
-        >
-            {Array.isArray(nodes.subpages)
-                ? nodes.subpages.map((node:any) => renderTree(node))
-                : null}
-        </CustomTreeItem>
-    );
 
     const OList = list.map((l:any) => {
-
+        let i = 0;
         return (
             <div  key={l.id}
                   onContextMenu={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                   }}>
-                {renderTree(l)}
+                {renderTree(l, i)}
             </div>
         )
     });
@@ -263,7 +304,8 @@ export const Page = ({idSpace}:Props) =>{
                 <TreeView
                     aria-label="rich object"
                     defaultCollapseIcon={<ExpandMoreIcon sx={{color: '#747A80'}} />}
-                    defaultExpanded={idTree}
+                    defaultExpanded={JSON.parse(localStorage.getItem('tree')!)}
+
                     defaultExpandIcon={<ChevronRightIcon sx={{color: '#747A80'}} />}
                 >
                     {OList}
