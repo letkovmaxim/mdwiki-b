@@ -32,7 +32,7 @@ export const Header = ({handleDrawerOpen, open, username, handleSubmitToLogout}:
                 color="inherit"
                 onClick={handleDrawerOpen}
                 size="small"
-                sx={{  ...(open && { display: 'none' }) }}
+                sx={{  ...(open && { display: 'none' }), top:'5px' }}
             >
                 <MenuIcon className='menu' />
             </IconButton>
@@ -50,7 +50,8 @@ export const Header = ({handleDrawerOpen, open, username, handleSubmitToLogout}:
             <IconButton
                 sx={{
                     position: 'absolute',
-                    right: '1%'
+                    right: '1%',
+                    top: '5px'
                 }}
                 size="small"
                 id="basic-button"

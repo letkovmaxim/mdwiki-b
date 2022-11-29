@@ -105,8 +105,6 @@ export const Page = ({idSpace}:Props) =>{
         getList()
     }, [setList])
 
-
-
     const treeOpen = () => {
         if(localStorage.getItem('space') !== String(idSpace)){
             localStorage.setItem("tree", JSON.stringify([]))
@@ -165,6 +163,7 @@ export const Page = ({idSpace}:Props) =>{
         }
     }
 
+
     async function backParent(){
         let response = await fetch("/spaces/" + idSpace + "/pages/" + pageId + "/parent");
         if(response.ok){
@@ -176,7 +175,7 @@ export const Page = ({idSpace}:Props) =>{
     }
 
     async function remove() {
-        if(editId === Number(pageId)){
+        if(editId === pageId){
             backParent()
         }
         await fetch('/spaces/' + idSpace + '/pages/' + editId, {
@@ -208,8 +207,6 @@ export const Page = ({idSpace}:Props) =>{
         return error;
     }
 
-
-
     const toPage = (id:number) => {
         if(idTree.includes(String(lastId))){
             const arr = idTree.filter((id) => id !== String(lastId));
@@ -219,7 +216,6 @@ export const Page = ({idSpace}:Props) =>{
         }
 
         localStorage.setItem('tree', JSON.stringify(idTree))
-        //console.log(localStorage.getItem('tree'))
 
         window.location.replace("/wiki/" + login + "/space/" + idSpace +"/page/" + id);
     }
@@ -256,11 +252,9 @@ export const Page = ({idSpace}:Props) =>{
                         onClick={()=> toPage(nodes.id)}
                         onContextMenu={(e) => handleClickMenu(e, nodes.name, nodes.shared, nodes.id)}
                     >
-                        <DescriptionOutlinedIcon className='description'/>
+                        {(nodes.id === pageId ?  <DescriptionOutlinedIcon sx={{color: '#4FB5D7'}} className='description'/> :  <DescriptionOutlinedIcon className='description'/> )}
                         <div>&emsp;</div>
-                        <div className='textButton'>
-                            {nodes.name}
-                        </div>
+                        {(nodes.id === pageId ? <div style={{marginTop: '3px', color: '#4FB5D7'}}>{nodes.name}</div> : <div className='textButton'>{nodes.name}</div>)}
                     </Button>
                 }
             >
