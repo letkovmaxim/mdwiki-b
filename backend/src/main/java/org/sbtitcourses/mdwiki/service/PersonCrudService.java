@@ -38,6 +38,14 @@ public interface PersonCrudService {
     Person update(int id, Person personToUpdateWith);
 
     /**
+     * Обновление заметки пользователя по его ID
+     * @param id ID пользователя
+     * @param note обновленная заметка
+     * @return обновленного пользователя
+     */
+    Person noteUpdate(int id, String note);
+
+    /**
      * Удаление пользователя по его ID
      * @param id ID пользователя
      */

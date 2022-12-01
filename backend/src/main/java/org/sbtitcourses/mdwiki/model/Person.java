@@ -91,6 +91,12 @@ public class Person {
     private boolean enabled;
 
     /**
+     * Текст заметки markdown-документа
+     */
+    @Column(name = "text")
+    private String text;
+
+    /**
      * Список пространств, принадлежащих пользователю
      */
     @OneToMany(mappedBy = "owner", fetch = LAZY)
@@ -204,5 +210,13 @@ public class Person {
 
     public void setSpaces(List<Space> spaces) {
         this.spaces = spaces;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

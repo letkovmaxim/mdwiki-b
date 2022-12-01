@@ -118,7 +118,7 @@
 }
 
 .box{
-    height: calc(100vh - 167px) !important;
+    height: calc(100vh - 210px) !important;
     margin-top: 10px !important;
     max-width: 300px !important;
     overflow-y: auto !important;

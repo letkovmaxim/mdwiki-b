@@ -12,7 +12,11 @@ import {useState, useEffect} from "react";
 import {Header} from "../component/Header";
 import Contact from "../component/SIdePanel/Contact";
 import {SidePanel} from "../component/SIdePanel/SidePanel";
-import {Document} from "../component/Document";
+import {Document} from "../component/Markdown/Document";
+import List from "@mui/material/List";
+import {ListItem, ListItemButton} from "@mui/material";
+import Button from "@mui/material/Button";
+import {Note} from "../component/Markdown/Note";
 
 const drawerWidth = 300;
 
@@ -53,12 +57,14 @@ export default function MainPage() {
     const [authPerson, setAuthPerson] = useState({
         id: '',
         username: '',
+        password: '',
         name: '',
         email: '',
         createdAt: '',
         updateAt: '',
         isEnabled: '',
         role: '',
+        text: ''
     });
 
     useEffect(() => {
@@ -71,12 +77,15 @@ export default function MainPage() {
         setAuthPerson({
             id: json.id,
             username: json.username,
+            password: json.password,
             name: json.name,
             email: json.email,
             createdAt: json.createdAt,
             updateAt: json.updateAt,
             isEnabled: json.isEnabled,
-            role: json.role})
+            role: json.role,
+            text: json.text
+        })
 
         if (!(login === json.username || login === json.email)) {
             window.location.replace('/404');
@@ -101,6 +110,10 @@ export default function MainPage() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const toNote = () => {
+        window.location.replace("/wiki/" + login);
+    }
 
     return (
         <Box sx={{ display: 'flex' }} className='background'>
@@ -130,13 +143,21 @@ export default function MainPage() {
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
+                <List>
+                    <Button sx={{width:'100%'}} className="btn" variant="text" onClick={toNote}>
+                        <div className='textBtn'>
+                            Заметки
+                        </div>
+                    </Button>
+
+                </List>
+                <Divider />
                 <SidePanel/>
             </Drawer>
 
             <Main open={open} >
                 <DrawerHeader />
-                {(pageId ? <Document/> : <div/>)}
-
+                {(pageId ? <Document/> : <Note/>)}
             </Main>
         </Box>
     );

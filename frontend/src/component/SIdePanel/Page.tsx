@@ -208,12 +208,6 @@ export const Page = ({idSpace}:Props) =>{
     }
 
     const toPage = (id:number) => {
-        if(idTree.includes(String(lastId))){
-            const arr = idTree.filter((id) => id !== String(lastId));
-            setIdTree(arr)
-        }else{
-            setIdTree([...idTree, String(lastId)])
-        }
 
         localStorage.setItem('tree', JSON.stringify(idTree))
 

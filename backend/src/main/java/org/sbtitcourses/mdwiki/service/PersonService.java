@@ -103,6 +103,25 @@ public class PersonService implements PersonCrudService {
     }
 
     /**
+     * Метод, отвечающий за обновление заметки пользователя по его ID
+     * @param id ID пользователя
+     * @param note обновленная записка
+     * @return обновленного пользователя
+     * @throws ElementNotFoundException если пользователя с таким ID не существует
+     */
+    @Override
+    @Transactional
+    public Person noteUpdate(int id, String note) throws ElementNotFoundException {
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
+        person.setText(note);
+
+        personRepository.save(person);
+
+        return person;
+    }
+
+    /**
      * Метод, отвечающий за удаление пользователя по его ID
      * @param id ID пользователя
      * @throws ElementNotFoundException если пользователя с таким ID не существует
