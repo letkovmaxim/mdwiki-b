@@ -18,11 +18,6 @@ public class PersonResponse {
     private String username;
 
     /**
-     * Логин пользователя
-     */
-    private String password;
-
-    /**
      * Имя пользователя
      */
     private String name;
@@ -115,13 +110,5 @@ public class PersonResponse {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

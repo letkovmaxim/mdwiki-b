@@ -57,7 +57,6 @@ export default function MainPage() {
     const [authPerson, setAuthPerson] = useState({
         id: '',
         username: '',
-        password: '',
         name: '',
         email: '',
         createdAt: '',
@@ -77,7 +76,6 @@ export default function MainPage() {
         setAuthPerson({
             id: json.id,
             username: json.username,
-            password: json.password,
             name: json.name,
             email: json.email,
             createdAt: json.createdAt,
