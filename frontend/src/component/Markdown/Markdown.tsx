@@ -14,7 +14,11 @@ function useWindowDimensions() {
     const [height, setHeight] = useState(window.innerHeight);
 
     const updateWidthAndHeight = () => {
-        setHeight(window.innerHeight);
+        if(window.innerHeight > 630){
+            setHeight(window.innerHeight);
+        }else {
+            setHeight(630)
+        }
     };
 
     useEffect(() => {

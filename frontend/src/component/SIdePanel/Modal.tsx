@@ -53,7 +53,7 @@ export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, 
                         id="name"
                         value={newObject.name}
                         onChange={handleChange}
-                        autoComplete="name"
+                        autoComplete="off"
                     />
                     <FormControl
                         sx={{
