@@ -54,6 +54,7 @@ export class Login extends React.Component<any, any>{
             if (response.status === 200) {
                 window.localStorage.setItem('login', 'yes')
                 localStorage.setItem("space", '0' )
+                localStorage.setItem("spaceName", '' )
                 localStorage.setItem("tree", JSON.stringify([]))
                 window.location.replace('/wiki/' + person.usernameOrEmail);
             }else {

@@ -18,7 +18,7 @@ type Props = {
 
 interface IComp {
     createdAt: any,
-    id: string,
+    id: number,
     name: string,
     shared: boolean,
     subpages?: readonly IComp[],
@@ -33,7 +33,7 @@ export const Page = ({idSpace}:Props) =>{
     const[idTree, setIdTree] = useState<string[]>([])
     const [lastId, setLastId] = useState(0)
 
-    const[list, setList] = useState<IComp[]>([])
+    const[list, setList] = useState<IComp[]>(JSON.parse(localStorage.getItem("list")!))
 
     const[editId, setEditId] = useState<number>()
 
@@ -102,25 +102,23 @@ export const Page = ({idSpace}:Props) =>{
 
     useEffect(() => {
         treeOpen()
-        getList()
     }, [setList])
 
-
-
-    const treeOpen = () => {
+    const treeOpen = () =>  {
         if(localStorage.getItem('space') !== String(idSpace)){
             localStorage.setItem("tree", JSON.stringify([]))
             localStorage.setItem('space', String(idSpace))
+            getList()
         }else {
             setIdTree(JSON.parse(localStorage.getItem('tree')!))
         }
-
     }
 
     async function getList() {
         let response = await fetch('/spaces/' + idSpace + '/pages?bunch=0&size=1000');
         let json = await response.json()
         setList(json)
+        localStorage.setItem("list", JSON.stringify(json))
     }
 
     async function handleSubmit() {
@@ -208,25 +206,14 @@ export const Page = ({idSpace}:Props) =>{
         return error;
     }
 
-
-
     const toPage = (id:number) => {
-        if(idTree.includes(String(lastId))){
-            const arr = idTree.filter((id) => id !== String(lastId));
-            setIdTree(arr)
-        }else{
-            setIdTree([...idTree, String(lastId)])
-        }
 
         localStorage.setItem('tree', JSON.stringify(idTree))
-        //console.log(localStorage.getItem('tree'))
 
         window.location.replace("/wiki/" + login + "/space/" + idSpace +"/page/" + id);
     }
 
-
     const tree = ( id:number, i:number) => {
-        console.log(idTree)
         if(i === 1 && lastId != 0){
             if(idTree.includes(String(lastId))){
                 const arr = idTree.filter((id) => id !== String(lastId));
@@ -240,8 +227,7 @@ export const Page = ({idSpace}:Props) =>{
 
     const renderTree = (nodes: any, i:number) => {
         return(
-
-            <CustomTreeItem key={nodes.id} nodeId={nodes.id}   onClickCapture={() => tree(nodes.id, i)}
+            <CustomTreeItem key={String(nodes.id)} nodeId={String(nodes.id)}   onClickCapture={() => tree(nodes.id, i)}
                 label={
                     <Button
                         sx={{
@@ -305,7 +291,6 @@ export const Page = ({idSpace}:Props) =>{
                     aria-label="rich object"
                     defaultCollapseIcon={<ExpandMoreIcon sx={{color: '#747A80'}} />}
                     defaultExpanded={JSON.parse(localStorage.getItem('tree')!)}
-
                     defaultExpandIcon={<ChevronRightIcon sx={{color: '#747A80'}} />}
                 >
                     {OList}
