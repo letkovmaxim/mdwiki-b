@@ -128,4 +128,9 @@ public class FileController {
 
         return ResponseEntity.ok().build();
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    private ResponseEntity<HttpStatus> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().build();
+    }
 }
