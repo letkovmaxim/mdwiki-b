@@ -63,10 +63,10 @@ public class SpaceService implements SpaceCrudService {
     }
 
     /**
-     * Метод, отвечающий за получение всех публичных или пользовательских пространств
+     * Метод, отвечающий за получение всех пользовательских пространств
      * @param bunch номер страницы при пагинации
      * @param size количество элементов в странице при пагинации
-     * @return список всех пространств
+     * @return список пользовательских всех пространств
      */
     @Override
     public List<Space> get(int bunch, int size) {
@@ -74,7 +74,20 @@ public class SpaceService implements SpaceCrudService {
 
         Pageable pageable = PageRequest.of(bunch, size);
 
-        return spaceRepository.findByOwnerOrSharedTrue(user, pageable);
+        return spaceRepository.findByOwner(user, pageable);
+    }
+
+    /**
+     * Метод, отвечающий за получение всех публичных пространств
+     * @param bunch номер страницы при пагинации
+     * @param size количество элементов в странице при пагинации
+     * @return список всех публичных пространств
+     */
+    @Override
+    public List<Space> getShared(int bunch, int size) {
+        Pageable pageable = PageRequest.of(bunch, size);
+
+        return spaceRepository.findBySharedTrue(pageable);
     }
 
     /**
