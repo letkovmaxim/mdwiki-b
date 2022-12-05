@@ -21,6 +21,8 @@ export const SidePanel = () => {
 
     const { spaceId } = useParams();
 
+    const { login } = useParams();
+
     const[list, setList] = useState<IComp[]>([])
 
     const[editId, setEditId] = useState<number>()
@@ -136,11 +138,14 @@ export const SidePanel = () => {
         });
         handleCloseMenu()
         await getList();
-        setEditId(undefined)
         setNewObject({
             name: '',
             shared: true
         })
+        if(spaceId === String(editId)){
+            window.location.replace("/wiki/" + login);
+        }
+        setEditId(undefined)
     }
 
     const errorEmpty = () => {

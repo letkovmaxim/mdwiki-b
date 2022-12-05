@@ -14,7 +14,6 @@ import Contact from "../component/SIdePanel/Contact";
 import {SidePanel} from "../component/SIdePanel/SidePanel";
 import {Document} from "../component/Markdown/Document";
 import List from "@mui/material/List";
-import {ListItem, ListItemButton} from "@mui/material";
 import Button from "@mui/material/Button";
 import {Note} from "../component/Markdown/Note";
 
@@ -54,38 +53,24 @@ export default function MainPage() {
 
     const {pageId} = useParams();
 
-    const [authPerson, setAuthPerson] = useState({
-        id: '',
-        username: '',
-        name: '',
-        email: '',
-        createdAt: '',
-        updateAt: '',
-        isEnabled: '',
-        role: '',
-        text: ''
-    });
 
     useEffect(() => {
-        ifLogIn()
-    }, [setAuthPerson])
+        if(window.localStorage.getItem('name') === ''){
+            ifLogIn()
+        }else{
+            if (!(login === window.localStorage.getItem('name') || login === window.localStorage.getItem('email'))) {
+                window.location.replace('/404');
+            }
+        }
+    }, [])
 
     async function ifLogIn() {
         let response = await fetch("/auth/whoami");
         let json = await response.json()
-        setAuthPerson({
-            id: json.id,
-            username: json.username,
-            name: json.name,
-            email: json.email,
-            createdAt: json.createdAt,
-            updateAt: json.updateAt,
-            isEnabled: json.isEnabled,
-            role: json.role,
-            text: json.text
-        })
+        window.localStorage.setItem('name', json.username)
+        window.localStorage.setItem('email', json.email)
 
-        if (!(login === json.username || login === json.email)) {
+        if (!(login === window.localStorage.getItem('name') || login === window.localStorage.getItem('email'))) {
             window.location.replace('/404');
         }
     }
@@ -119,7 +104,6 @@ export default function MainPage() {
                 handleDrawerOpen={handleDrawerOpen}
                 open={open}
                 handleSubmitToLogout={handleSubmitToLogout}
-                username={authPerson.username}
             />
             <Drawer
                 sx={{

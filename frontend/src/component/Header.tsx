@@ -12,10 +12,9 @@ type Props = {
     handleDrawerOpen: () => void,
     open: boolean,
     handleSubmitToLogout: () => void,
-    username: string
 }
 
-export const Header = ({handleDrawerOpen, open, username, handleSubmitToLogout}: Props) =>{
+export const Header = ({handleDrawerOpen, open, handleSubmitToLogout}: Props) =>{
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const openMenu = Boolean(anchorEl);
@@ -71,7 +70,6 @@ export const Header = ({handleDrawerOpen, open, username, handleSubmitToLogout}:
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <MenuItem onClick={handleClose}>{username}</MenuItem>
                 <Button color="primary" type="submit" onClick={handleSubmitToLogout}>
                     <div style={{color: '#F34646'}}>
                         ВЫХОД

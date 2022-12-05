@@ -50,3 +50,38 @@
     right: 22px !important;
     border: none !important;
 }
+
+.saveHelp{
+    margin-top: 3px !important;
+    position: absolute !important;
+    height: 24px !important;
+    border: none !important;
+}
+
+.doc{
+    height: 100% !important;
+    margin-top: 10px !important;
+    width: 100% !important;
+    overflow-y: auto !important;
+}
+
+.doc::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+.doc::-webkit-scrollbar-track {
+    background: white;
+}
+.doc::-webkit-scrollbar-thumb {
+    background-color: #A4A9AE;
+    border-radius: 20px;
+}
+
+.example{
+    border-radius: 5px;
+    color: #000000;
+    padding: 10px 14px 10px 14px;
+    position: relative;
+    box-shadow: 1px 2px 5px #999;
+    background-color: #EEEEEE;
+}

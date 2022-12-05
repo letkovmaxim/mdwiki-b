@@ -24,6 +24,7 @@
 .buttonSpace{
     min-width: 100% !important;
     height: 37px !important;
+    text-transform: none !important;
 }
 
 
@@ -59,7 +60,6 @@
     font-size: 16px;
     font-weight: bold;
     vertical-align: middle;
-    text-transform: uppercase;
 }
 
 .addSpaceError{
@@ -75,7 +75,6 @@
     font-size: 16px;
     font-weight: bold;
     vertical-align: middle;
-    text-transform: uppercase;
 }
 
 .addSpaceError:focus{
@@ -111,7 +110,9 @@
     color: #747A80 !important;
     min-width: 100% !important;
     height: 37px !important;
+    text-transform: none !important;
 }
+
 .buttonPage:hover{
     background: none !important;
 }
