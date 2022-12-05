@@ -132,10 +132,6 @@ public class PageController {
                                                   @PathVariable(name = "pageId") int pageId) {
         Page page = pageService.get(pageId, spaceId);
 
-        if(page.getParent() == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
         PageResponse response = modelMapper.map(page.getParent(), PageResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -11,7 +11,7 @@ public class PageResponse {
     /**
      * ID записи
      */
-    private String id;
+    private int id;
 
     /**
      * Название записи
@@ -38,11 +38,11 @@ public class PageResponse {
      */
     private boolean shared;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

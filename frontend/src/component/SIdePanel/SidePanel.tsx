@@ -21,7 +21,6 @@ export const SidePanel = () => {
 
     const { spaceId } = useParams();
 
-
     const[list, setList] = useState<IComp[]>([])
 
     const[editId, setEditId] = useState<number>()
@@ -29,11 +28,6 @@ export const SidePanel = () => {
     const[styles, setStyles] = useState("addSpace")
 
     const[newObject, setNewObject] = useState({
-        name: '',
-        shared: true
-    })
-
-    const[spaceOpen, setSpaceOpen] = useState({
         name: '',
         shared: true
     })
@@ -49,6 +43,7 @@ export const SidePanel = () => {
             name: '',
             shared: true
         })
+        setStyles("addSpace")
     }
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -102,10 +97,7 @@ export const SidePanel = () => {
     async function getNameSpace(){
         let response = await fetch('/spaces/' + spaceId);
         let json = await response.json()
-        setSpaceOpen({
-            name : json.name,
-            shared : json.shared
-        })
+        localStorage.setItem("spaceName", json.name)
     }
 
     async function handleSubmit() {
@@ -117,15 +109,20 @@ export const SidePanel = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newObject),
+            }).then(async response => {
+                if(response.ok){
+                    handleClose()
+                    handleCloseMenu()
+                    getList();
+                    setEditId(undefined)
+                    setNewObject({
+                            name: '',
+                        shared: true
+                    })
+                }else {
+                    setStyles("addSpaceError")
+                }
             });
-            handleClose()
-            handleCloseMenu()
-            getList();
-            setEditId(undefined)
-            setNewObject({
-                name: '',
-                shared: true
-            })
         }
     }
 
@@ -158,12 +155,10 @@ export const SidePanel = () => {
         return error;
     }
 
-    const toPage = (id:number, name:string, shared:boolean) =>{
-        setSpaceOpen({
-            name : name,
-            shared : shared
-        })
+    const toPage = (id:number, name:string) =>{
         setSpaceOpenId(id)
+        localStorage.setItem("spaceName", name)
+        localStorage.setItem("list", JSON.stringify([]))
     }
 
     const def = () => {}
@@ -188,7 +183,7 @@ export const SidePanel = () => {
                 <div>
                     <List>
                         <div className="headerText">
-                            {spaceOpen.name}
+                            {localStorage.getItem("spaceName")}
                         </div>
                     </List>
                     <Divider />

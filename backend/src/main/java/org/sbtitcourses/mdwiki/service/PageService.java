@@ -4,9 +4,11 @@ import org.sbtitcourses.mdwiki.model.Page;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.repository.PageRepository;
+import org.sbtitcourses.mdwiki.repository.SpaceRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
 import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
+import org.sbtitcourses.mdwiki.util.exception.ElementAlreadyExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Сервис с логикой CRUD операций над сущностью Page
@@ -30,6 +33,11 @@ public class PageService implements PageCrudService {
     private final PageRepository pageRepository;
 
     /**
+     * Репозиторий для взаимодействия с сущностью Space
+     */
+    private final SpaceRepository spaceRepository;
+
+    /**
      * Компонент для получения ресурсов
      */
     private final ResourceFetcher resourceFetcher;
@@ -37,11 +45,13 @@ public class PageService implements PageCrudService {
     /**
      * Конструктор для автоматичекого внедрения зависимостей
      * @param pageRepository  репозиторий для взаимодействия с сущностью Page
+     * @param spaceRepository репозиторий для взаимодействия с сущностью Space
      * @param resourceFetcher компонент для получения ресурсов
      */
     @Autowired
-    public PageService(PageRepository pageRepository, ResourceFetcher resourceFetcher) {
+    public PageService(PageRepository pageRepository, SpaceRepository spaceRepository, ResourceFetcher resourceFetcher) {
         this.pageRepository = pageRepository;
+        this.spaceRepository = spaceRepository;
         this.resourceFetcher = resourceFetcher;
     }
 
@@ -60,6 +70,10 @@ public class PageService implements PageCrudService {
 
         if (ResourceAccessHelper.isAccessToCreatePageDenied(space, user)) {
             throw new AccessDeniedException("Отказано в доступе");
+        }
+
+        if(pageRepository.findBySpaceAndName(space, page.getName()).isPresent()){
+            throw new ElementAlreadyExists("Страница с таким именем уже существует в данном пространстве");
         }
 
         page.setSpace(space);
@@ -83,11 +97,16 @@ public class PageService implements PageCrudService {
     @Override
     @Transactional
     public Page createSubpage(Page subpage, int parentId, int spaceId) throws AccessDeniedException {
+        Optional<Space> space = spaceRepository.findById(spaceId);
         Page parent = resourceFetcher.fetchPage(parentId, spaceId);
         Person user = resourceFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToCreateSubpageDenied(parent, user)) {
             throw new AccessDeniedException("Отказано в доступе");
+        }
+
+        if(pageRepository.findBySpaceAndName(space.get(), subpage.getName()).isPresent()){
+            throw new ElementAlreadyExists("Страница с таким именем уже существует в данном пространстве");
         }
 
         subpage.setSpace(parent.getSpace());
@@ -151,11 +170,16 @@ public class PageService implements PageCrudService {
      */
     @Transactional
     public Page update(int pageId, int spaceId, Page pageToUpdateWith) throws AccessDeniedException {
+        Optional<Space> space = spaceRepository.findById(spaceId);
         Page page = resourceFetcher.fetchPage(pageId, spaceId);
         Person user = resourceFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToUpdatePageDenied(page, user)) {
             throw new AccessDeniedException("Отказано в доступе");
+        }
+
+        if(pageRepository.findBySpaceAndName(space.get(), pageToUpdateWith.getName()).isPresent()){
+            throw new ElementAlreadyExists("Страница с таким именем уже существует в данном пространстве");
         }
 
         page.setName(pageToUpdateWith.getName());

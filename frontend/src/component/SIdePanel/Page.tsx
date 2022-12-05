@@ -18,7 +18,7 @@ type Props = {
 
 interface IComp {
     createdAt: any,
-    id: string,
+    id: number,
     name: string,
     shared: boolean,
     subpages?: readonly IComp[],
@@ -33,7 +33,7 @@ export const Page = ({idSpace}:Props) =>{
     const[idTree, setIdTree] = useState<string[]>([])
     const [lastId, setLastId] = useState(0)
 
-    const[list, setList] = useState<IComp[]>([])
+    const[list, setList] = useState<IComp[]>(JSON.parse(localStorage.getItem("list")!))
 
     const[editId, setEditId] = useState<number>()
 
@@ -56,6 +56,7 @@ export const Page = ({idSpace}:Props) =>{
             shared: true
         })
         setAddSub(false)
+        setStyles("addSpace")
     }
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -102,23 +103,27 @@ export const Page = ({idSpace}:Props) =>{
 
     useEffect(() => {
         treeOpen()
-        getList()
     }, [setList])
 
     const treeOpen = () => {
         if(localStorage.getItem('space') !== String(idSpace)){
             localStorage.setItem("tree", JSON.stringify([]))
             localStorage.setItem('space', String(idSpace))
+            getList()
         }else {
             setIdTree(JSON.parse(localStorage.getItem('tree')!))
         }
 
+        if(localStorage.getItem('space') === String(idSpace) && list.length === 0){
+            getList()
+        }
     }
 
     async function getList() {
         let response = await fetch('/spaces/' + idSpace + '/pages?bunch=0&size=1000');
         let json = await response.json()
         setList(json)
+        localStorage.setItem("list", JSON.stringify(json))
     }
 
     async function handleSubmit() {
@@ -130,15 +135,20 @@ export const Page = ({idSpace}:Props) =>{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newObject),
+            }).then(async response => {
+                if(response.ok){
+                    handleClose()
+                    handleCloseMenu()
+                    getList();
+                    setEditId(undefined)
+                    setNewObject({
+                            name: '',
+                        shared: true
+                    })
+                }else {
+                    setStyles("addSpaceError")
+                }
             });
-            handleClose()
-            handleCloseMenu()
-            getList();
-            setEditId(undefined)
-            setNewObject({
-                name: '',
-                shared: true
-            })
         }
     }
 
@@ -151,21 +161,25 @@ export const Page = ({idSpace}:Props) =>{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newObject),
+            }).then(async response => {
+                if(response.ok){
+                    handleClose()
+                    handleCloseMenu()
+                    getList();
+                    setEditId(undefined)
+                    setNewObject({
+                            name: '',
+                        shared: true
+                    })
+                }else {
+                    setStyles("addSpaceError")
+                }
             });
-            handleClose()
-            handleCloseMenu()
-            getList();
-            setEditId(undefined)
-            setNewObject({
-                name: '',
-                shared: true
-            })
         }
     }
 
 
-    async function backParent(){
-        let response = await fetch("/spaces/" + idSpace + "/pages/" + pageId + "/parent");
+    async function backParent(response: any){
         if(response.ok){
             let json = await response.json()
             window.location.replace("/wiki/" + login +"/space/" + idSpace +"/page/" + json.id);
@@ -175,24 +189,36 @@ export const Page = ({idSpace}:Props) =>{
     }
 
     async function remove() {
-        if(editId === pageId){
-            backParent()
-        }
-        await fetch('/spaces/' + idSpace + '/pages/' + editId, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        });
+        if(String(editId) === pageId) {
+            let response = await fetch("/spaces/" + idSpace + "/pages/" + pageId + "/parent");
 
-        handleCloseMenu()
-        await getList();
-        setEditId(undefined)
-        setNewObject({
-            name: '',
-            shared: true
-        })
+            await fetch('/spaces/' + idSpace + '/pages/' + editId, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            handleCloseMenu()
+            await getList();
+
+            backParent(response)
+        }else {
+            await fetch('/spaces/' + idSpace + '/pages/' + editId, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            handleCloseMenu()
+            await getList();
+            setEditId(undefined)
+            setNewObject({
+                name: '',
+                shared: true
+            })
+        }
     }
 
     const errorEmpty = () => {
@@ -231,7 +257,7 @@ export const Page = ({idSpace}:Props) =>{
     const renderTree = (nodes: any, i:number) => {
         return(
 
-            <CustomTreeItem key={nodes.id} nodeId={nodes.id}   onClickCapture={() => tree(nodes.id, i)}
+            <CustomTreeItem key={String(nodes.id)} nodeId={String(nodes.id)}   onClickCapture={() => tree(nodes.id, i)}
                 label={
                     <Button
                         sx={{
@@ -246,9 +272,9 @@ export const Page = ({idSpace}:Props) =>{
                         onClick={()=> toPage(nodes.id)}
                         onContextMenu={(e) => handleClickMenu(e, nodes.name, nodes.shared, nodes.id)}
                     >
-                        {(nodes.id === pageId ?  <DescriptionOutlinedIcon sx={{color: '#4FB5D7'}} className='description'/> :  <DescriptionOutlinedIcon className='description'/> )}
+                        {(String(nodes.id) === pageId ?  <DescriptionOutlinedIcon sx={{color: '#4FB5D7'}} className='description'/> :  <DescriptionOutlinedIcon className='description'/> )}
                         <div>&emsp;</div>
-                        {(nodes.id === pageId ? <div style={{marginTop: '3px', color: '#4FB5D7'}}>{nodes.name}</div> : <div className='textButton'>{nodes.name}</div>)}
+                        {(String(nodes.id) === pageId ? <div style={{marginTop: '3px', color: '#4FB5D7'}}>{nodes.name}</div> : <div className='textButton'>{nodes.name}</div>)}
                     </Button>
                 }
             >
@@ -293,7 +319,6 @@ export const Page = ({idSpace}:Props) =>{
                     aria-label="rich object"
                     defaultCollapseIcon={<ExpandMoreIcon sx={{color: '#747A80'}} />}
                     defaultExpanded={JSON.parse(localStorage.getItem('tree')!)}
-
                     defaultExpandIcon={<ChevronRightIcon sx={{color: '#747A80'}} />}
                 >
                     {OList}
