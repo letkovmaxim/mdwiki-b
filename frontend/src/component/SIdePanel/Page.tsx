@@ -56,6 +56,7 @@ export const Page = ({idSpace}:Props) =>{
             shared: true
         })
         setAddSub(false)
+        setStyles("addSpace")
     }
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -112,6 +113,10 @@ export const Page = ({idSpace}:Props) =>{
         }else {
             setIdTree(JSON.parse(localStorage.getItem('tree')!))
         }
+
+        if(localStorage.getItem('space') === String(idSpace) && list.length === 0){
+            getList()
+        }
     }
 
     async function getList() {
@@ -130,15 +135,20 @@ export const Page = ({idSpace}:Props) =>{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newObject),
+            }).then(async response => {
+                if(response.ok){
+                    handleClose()
+                    handleCloseMenu()
+                    getList();
+                    setEditId(undefined)
+                    setNewObject({
+                        name: '',
+                        shared: true
+                    })
+                }else {
+                    setStyles("addSpaceError")
+                }
             });
-            handleClose()
-            handleCloseMenu()
-            getList();
-            setEditId(undefined)
-            setNewObject({
-                name: '',
-                shared: true
-            })
         }
     }
 
@@ -151,47 +161,63 @@ export const Page = ({idSpace}:Props) =>{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newObject),
+            }).then(async response => {
+                if(response.ok){
+                    handleClose()
+                    handleCloseMenu()
+                    getList();
+                    setEditId(undefined)
+                    setNewObject({
+                        name: '',
+                        shared: true
+                    })
+                }else {
+                    setStyles("addSpaceError")
+                }
             });
-            handleClose()
+        }
+    }
+
+    const backParent = async (response: any) => {
+        if (response.ok) {
+            let json = await response.json()
+            window.location.replace("/wiki/" + login + "/space/" + idSpace + "/page/" + json.id);
+        } else {
+            window.location.replace("/wiki/" + login + "/space/" + idSpace);
+        }
+    }
+
+    async function remove() {
+        if(String(editId) === pageId) {
+            let response = await fetch("/spaces/" + idSpace + "/pages/" + pageId + "/parent");
+
+            await fetch('/spaces/' + idSpace + '/pages/' + editId, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
             handleCloseMenu()
-            getList();
+            await getList();
+
+            backParent(response)
+        }else {
+            await fetch('/spaces/' + idSpace + '/pages/' + editId, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            handleCloseMenu()
+            await getList();
             setEditId(undefined)
             setNewObject({
                 name: '',
                 shared: true
             })
         }
-    }
-
-    async function backParent(){
-        let response = await fetch("/spaces/" + idSpace + "/pages/" + pageId + "/parent");
-        if(response.ok){
-            let json = await response.json()
-            window.location.replace("/wiki/" + login +"/space/" + idSpace +"/page/" + json.id);
-        }else {
-            window.location.replace("/wiki/" + login +"/space/" + idSpace);
-        }
-    }
-
-    async function remove() {
-        if(editId === Number(pageId)){
-            backParent()
-        }
-        await fetch('/spaces/' + idSpace + '/pages/' + editId, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        });
-
-        handleCloseMenu()
-        await getList();
-        setEditId(undefined)
-        setNewObject({
-            name: '',
-            shared: true
-        })
     }
 
     const errorEmpty = () => {

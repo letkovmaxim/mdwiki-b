@@ -43,6 +43,7 @@ export const SidePanel = () => {
             name: '',
             shared: true
         })
+        setStyles("addSpace")
     }
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -108,15 +109,20 @@ export const SidePanel = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newObject),
+            }).then(async response => {
+                if(response.ok){
+                    handleClose()
+                    handleCloseMenu()
+                    getList();
+                    setEditId(undefined)
+                    setNewObject({
+                        name: '',
+                        shared: true
+                    })
+                }else {
+                    setStyles("addSpaceError")
+                }
             });
-            handleClose()
-            handleCloseMenu()
-            getList();
-            setEditId(undefined)
-            setNewObject({
-                name: '',
-                shared: true
-            })
         }
     }
 

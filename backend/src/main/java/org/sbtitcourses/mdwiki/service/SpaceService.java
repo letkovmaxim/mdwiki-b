@@ -6,6 +6,7 @@ import org.sbtitcourses.mdwiki.repository.SpaceRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
 import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
+import org.sbtitcourses.mdwiki.util.exception.ElementAlreadyExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -52,6 +53,10 @@ public class SpaceService implements SpaceCrudService {
     @Transactional
     public Space create(Space space) {
         Person user = resourceFetcher.getLoggedInUser();
+
+        if(spaceRepository.findByOwnerAndName(user, space.getName()).isPresent()){
+            throw new ElementAlreadyExists("Пространство с таким именем уже существует");
+        }
 
         space.setOwner(user);
         Date now = new Date();
@@ -110,6 +115,10 @@ public class SpaceService implements SpaceCrudService {
 
         if (ResourceAccessHelper.isAccessToUpdateSpaceDenied(space, user)) {
             throw new AccessDeniedException("Отказано в доступе");
+        }
+
+        if(spaceRepository.findByOwnerAndName(user, spaceToUpdateWith.getName()).isPresent()){
+            throw new ElementAlreadyExists("Пространство с таким именем уже существует");
         }
 
         space.setName(spaceToUpdateWith.getName());

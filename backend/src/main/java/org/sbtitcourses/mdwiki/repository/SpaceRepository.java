@@ -23,6 +23,13 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
     Optional<Space> findByName(String name);
 
     /**
+     * Поиск по id пространства
+     * @param id id пространства
+     * @return возвращает найденое пространтсво
+     */
+    Optional<Space> findById(int id);
+
+    /**
      * Поиск публичных пространств
      * @return возвращает список найденых пространтсв
      */
@@ -33,4 +40,10 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
      * @return возвращает список найденых пространтсв
      */
     List<Space> findByOwnerOrSharedTrue(Person owner, Pageable pageable);
+
+    /**
+     * Поиск пространства и именя у авторизированного пользователя
+     * @return возвращает найденое пространтсво
+     */
+    Optional<Space> findByOwnerAndName(Person owner, String name);
 }
