@@ -3,6 +3,7 @@ package org.sbtitcourses.mdwiki.service;
 import org.sbtitcourses.mdwiki.model.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Интерфейс сервиса CRUD операций над сущностью Page
@@ -34,6 +35,14 @@ public interface PageCrudService {
      * @return список найденых страниц
      */
     List<Page> get(int spaceId, int bunch, int size);
+
+    /**
+     * Получение страницы-родителя
+     * @param id ID страница, родителя которой нужно получить
+     * @param spaceId ID пространтсва, в котором нужно получить страницу
+     * @return найденую страницу
+     */
+    Page getParent(int id, int spaceId);
 
     /**
      * Получение страницы в пространстве по её ID
