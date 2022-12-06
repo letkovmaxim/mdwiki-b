@@ -98,6 +98,13 @@ public class Person {
     private List<Space> spaces;
 
     /**
+     * Список хранимых файлов, принадлежащих пользователю
+     */
+    @OneToMany(mappedBy = "owner", fetch = LAZY)
+    @Cascade(ALL)
+    private List<StoredFile> storedFiles;
+
+    /**
      * Создание экземпляра класса
      */
     public Person() {
@@ -204,5 +211,13 @@ public class Person {
 
     public void setSpaces(List<Space> spaces) {
         this.spaces = spaces;
+    }
+
+    public List<StoredFile> getStoredFiles() {
+        return storedFiles;
+    }
+
+    public void setStoredFiles(List<StoredFile> storedFiles) {
+        this.storedFiles = storedFiles;
     }
 }
