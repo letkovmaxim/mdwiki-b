@@ -59,17 +59,42 @@ public class SpaceController {
     }
 
     /**
-     * Метод, отвечающий за получение всех пространств
+     * Метод, отвечающий за получение всех пространств пользователя
      * @param bunch номер страницы при пагинации
      * @param size количество элементов в странице при пагинации
      * @return список DTO сущности Space для ответа с кодом 200
      */
     @GetMapping
-    public ResponseEntity<List<SpaceResponse>> get(@RequestParam(name = "bunch") @Min(value = 0, message = "Номер запрашиваемой страницы не может быть меньше 0") int bunch,
-                                                   @RequestParam(name = "size")  @Min(value = 1, message = "Количество элементов на странице не должно быть меньше 1") int size) {
+    public ResponseEntity<List<SpaceResponse>>
+    get(@RequestParam(name = "bunch")
+        @Min(value = 0, message = "Номер запрашиваемой страницы не может быть меньше 0") int bunch,
+        @RequestParam(name = "size")
+        @Min(value = 1, message = "Количество элементов на странице не должно быть меньше 1") int size) {
         List<SpaceResponse> spaces = new LinkedList<>();
 
         for (Space space: spaceService.get(bunch, size)) {
+            SpaceResponse spaceResponse = modelMapper.map(space, SpaceResponse.class);
+            spaces.add(spaceResponse);
+        }
+
+        return new ResponseEntity<>(spaces, HttpStatus.OK);
+    }
+
+    /**
+     * Метод, отвечающий за получение всех публичных пространств
+     * @param bunch номер страницы при пагинации
+     * @param size количество элементов в странице при пагинации
+     * @return список DTO сущности Space для ответа с кодом 200
+     */
+    @GetMapping("/shared")
+    public ResponseEntity<List<SpaceResponse>>
+    getShared(@RequestParam(name = "bunch")
+              @Min(value = 0, message = "Номер запрашиваемой страницы не может быть меньше 0") int bunch,
+              @RequestParam(name = "size")
+              @Min(value = 1, message = "Количество элементов на странице не должно быть меньше 1") int size) {
+        List<SpaceResponse> spaces = new LinkedList<>();
+
+        for (Space space: spaceService.getShared(bunch, size)) {
             SpaceResponse spaceResponse = modelMapper.map(space, SpaceResponse.class);
             spaces.add(spaceResponse);
         }

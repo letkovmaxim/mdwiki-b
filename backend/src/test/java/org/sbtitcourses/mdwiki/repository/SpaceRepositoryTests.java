@@ -53,7 +53,7 @@ class SpaceRepositoryTests {
 
     @Test
     public void findBySharedTrueShouldReturnSpaceList() {
-        List<Space> found = spaceRepository.findBySharedTrue();
+        List<Space> found = spaceRepository.findBySharedTrue(PageRequest.of(0, 1));
 
         assertFalse(found.isEmpty());
         assertEquals(space.getId(), found.get(0).getId());
@@ -62,7 +62,7 @@ class SpaceRepositoryTests {
     @Test
     public void findByOwnerShouldReturnSpaceList() {
         Pageable pageable = PageRequest.of(0, 1);
-        List<Space> found = spaceRepository.findByOwnerOrSharedTrue(owner, pageable);
+        List<Space> found = spaceRepository.findByOwner(owner, pageable);
 
         assertFalse(found.isEmpty());
         assertEquals(space.getId(), found.get(0).getId());

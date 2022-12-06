@@ -6,8 +6,8 @@ import org.sbtitcourses.mdwiki.repository.SpaceRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
 import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
+import org.sbtitcourses.mdwiki.util.exception.ElementAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.sbtitcourses.mdwiki.util.exception.ElementAlreadyExists;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -48,14 +48,15 @@ public class SpaceService implements SpaceCrudService {
      * Метод, отвечающий за создание нового пространства
      * @param space пространство, которое нужно сохранить
      * @return сохраненное пространство
+     * @throws ElementAlreadyExistsException если пространство уже существует
      */
     @Override
     @Transactional
     public Space create(Space space) {
         Person user = resourceFetcher.getLoggedInUser();
 
-        if(spaceRepository.findByOwnerAndName(user, space.getName()).isPresent()){
-            throw new ElementAlreadyExists("Пространство с таким именем уже существует");
+        if (spaceRepository.findByOwnerAndName(user, space.getName()).isPresent()){
+            throw new ElementAlreadyExistsException("Пространство с таким именем уже существует");
         }
 
         space.setOwner(user);
@@ -68,10 +69,10 @@ public class SpaceService implements SpaceCrudService {
     }
 
     /**
-     * Метод, отвечающий за получение всех публичных или пользовательских пространств
+     * Метод, отвечающий за получение всех пользовательских пространств
      * @param bunch номер страницы при пагинации
      * @param size количество элементов в странице при пагинации
-     * @return список всех пространств
+     * @return список пользовательских всех пространств
      */
     @Override
     public List<Space> get(int bunch, int size) {
@@ -79,7 +80,20 @@ public class SpaceService implements SpaceCrudService {
 
         Pageable pageable = PageRequest.of(bunch, size);
 
-        return spaceRepository.findByOwnerOrSharedTrue(user, pageable);
+        return spaceRepository.findByOwner(user, pageable);
+    }
+
+    /**
+     * Метод, отвечающий за получение всех публичных пространств
+     * @param bunch номер страницы при пагинации
+     * @param size количество элементов в странице при пагинации
+     * @return список всех публичных пространств
+     */
+    @Override
+    public List<Space> getShared(int bunch, int size) {
+        Pageable pageable = PageRequest.of(bunch, size);
+
+        return spaceRepository.findBySharedTrue(pageable);
     }
 
     /**
@@ -106,6 +120,7 @@ public class SpaceService implements SpaceCrudService {
      * @param spaceToUpdateWith пространство, значениями полей которого нужно обновить требуемое пространство
      * @return обновленное пространство
      * @throws AccessDeniedException если не удалось определить пользователя
+     * @throws ElementAlreadyExistsException если пространство уже существует
      */
     @Override
     @Transactional
@@ -117,8 +132,8 @@ public class SpaceService implements SpaceCrudService {
             throw new AccessDeniedException("Отказано в доступе");
         }
 
-        if(spaceRepository.findByOwnerAndName(user, spaceToUpdateWith.getName()).isPresent()){
-            throw new ElementAlreadyExists("Пространство с таким именем уже существует");
+        if (spaceRepository.findByOwnerAndName(user, spaceToUpdateWith.getName()).isPresent()){
+            throw new ElementAlreadyExistsException("Пространство с таким именем уже существует");
         }
 
         space.setName(spaceToUpdateWith.getName());

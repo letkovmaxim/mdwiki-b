@@ -91,17 +91,18 @@ public class Person {
     private boolean enabled;
 
     /**
-     * Текст заметки markdown-документа
-     */
-    @Column(name = "text")
-    private String text;
-
-    /**
      * Список пространств, принадлежащих пользователю
      */
     @OneToMany(mappedBy = "owner", fetch = LAZY)
     @Cascade(ALL)
     private List<Space> spaces;
+
+    /**
+     * Список хранимых файлов, принадлежащих пользователю
+     */
+    @OneToMany(mappedBy = "owner", fetch = LAZY)
+    @Cascade(ALL)
+    private List<StoredFile> storedFiles;
 
     /**
      * Создание экземпляра класса
@@ -212,11 +213,11 @@ public class Person {
         this.spaces = spaces;
     }
 
-    public String getText() {
-        return text;
+    public List<StoredFile> getStoredFiles() {
+        return storedFiles;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setStoredFiles(List<StoredFile> storedFiles) {
+        this.storedFiles = storedFiles;
     }
 }

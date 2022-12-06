@@ -23,26 +23,19 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
     Optional<Space> findByName(String name);
 
     /**
-     * Поиск по id пространства
-     * @param id id пространства
-     * @return возвращает найденое пространтсво
-     */
-    Optional<Space> findById(int id);
-
-    /**
      * Поиск публичных пространств
      * @return возвращает список найденых пространтсв
      */
-    List<Space> findBySharedTrue();
+    List<Space> findBySharedTrue(Pageable pageable);
 
     /**
-     * Поиск публичных или пользовательских пространств
+     * Поиск пользовательских пространств
      * @return возвращает список найденых пространтсв
      */
-    List<Space> findByOwnerOrSharedTrue(Person owner, Pageable pageable);
+    List<Space> findByOwner(Person owner, Pageable pageable);
 
     /**
-     * Поиск пространства и именя у авторизированного пользователя
+     * Поиск пользовательсого пространства по названию
      * @return возвращает найденое пространтсво
      */
     Optional<Space> findByOwnerAndName(Person owner, String name);
