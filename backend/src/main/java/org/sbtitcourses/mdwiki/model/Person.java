@@ -91,6 +91,12 @@ public class Person {
     private boolean enabled;
 
     /**
+     * Текст заметки markdown-документа
+     */
+    @Column(name = "note")
+    private String note;
+
+    /**
      * Список пространств, принадлежащих пользователю
      */
     @OneToMany(mappedBy = "owner", fetch = LAZY)
@@ -203,6 +209,14 @@ public class Person {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public List<Space> getSpaces() {

@@ -1,7 +1,7 @@
 package org.sbtitcourses.mdwiki.controller;
 
 import org.modelmapper.ModelMapper;
-import org.sbtitcourses.mdwiki.dto.person.PersonNote;
+import org.sbtitcourses.mdwiki.dto.person.PersonNoteRequest;
 import org.sbtitcourses.mdwiki.dto.person.PersonRequest;
 import org.sbtitcourses.mdwiki.dto.person.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
@@ -107,14 +107,13 @@ public class PersonController {
     /**
      * Метод, отвечающий за обновление заметки пользователя
      * @param id ID пользователя
-     * @param personNote DTO сущности запроса с новой заметкой
+     * @param personNoteRequest DTO сущности запроса с новой заметкой
      * @return DTO сущности Person для ответа с кодом 200
      */
     @PutMapping("/{id}/note")
     public ResponseEntity<PersonResponse> noteUpdate(@PathVariable(name = "id") int id,
-                                                 @RequestBody @Valid PersonNote personNote) {
-
-        Person updatedPerson = personService.noteUpdate(id, personNote.getText());
+                                                     @RequestBody @Valid PersonNoteRequest personNoteRequest) {
+        Person updatedPerson = personService.noteUpdate(id, personNoteRequest.getNote());
 
         PersonResponse response = modelMapper.map(updatedPerson, PersonResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);

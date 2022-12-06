@@ -83,7 +83,7 @@ public class EntryService {
         person.setCreatedAt(now);
         person.setUpdatedAt(now);
         person.setEnabled(true);
-        person.setText("# Привет, " + person.getUsername());
+        person.setNote("# Привет, " + person.getUsername());
         person.setId(personRepository.save(person).getId());
 
         return person;

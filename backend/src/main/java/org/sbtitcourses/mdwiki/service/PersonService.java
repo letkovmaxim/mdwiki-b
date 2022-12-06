@@ -114,7 +114,7 @@ public class PersonService implements PersonCrudService {
     public Person noteUpdate(int id, String note) throws ElementNotFoundException {
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
-        person.setText(note);
+        person.setNote(note);
 
         personRepository.save(person);
 
