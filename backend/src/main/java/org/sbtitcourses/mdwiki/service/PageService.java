@@ -7,6 +7,8 @@ import org.sbtitcourses.mdwiki.repository.PageRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
 import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
+import org.sbtitcourses.mdwiki.util.exception.ElementAlreadyExistsException;
+import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -51,6 +53,7 @@ public class PageService implements PageCrudService {
      * @param spaceId ID пространства, в котором нужно создать страницу
      * @return сохраненную страницу
      * @throws AccessDeniedException если не удалось определить пользователя
+     * @throws ElementAlreadyExistsException если страница уже существует
      */
     @Override
     @Transactional
@@ -60,6 +63,10 @@ public class PageService implements PageCrudService {
 
         if (ResourceAccessHelper.isAccessToCreatePageDenied(space, user)) {
             throw new AccessDeniedException("Отказано в доступе");
+        }
+
+        if (pageRepository.findBySpaceAndName(space, page.getName()).isPresent()){
+            throw new ElementAlreadyExistsException("Страница с таким именем уже существует в этом пространстве");
         }
 
         page.setSpace(space);
@@ -79,6 +86,7 @@ public class PageService implements PageCrudService {
      * @param spaceId ID пространства, в котором нужно создать подстраницу
      * @return сохраненную подстраницу
      * @throws AccessDeniedException если не удалось определить пользователя
+     * @throws ElementAlreadyExistsException если страница уже существует
      */
     @Override
     @Transactional
@@ -86,8 +94,14 @@ public class PageService implements PageCrudService {
         Page parent = resourceFetcher.fetchPage(parentId, spaceId);
         Person user = resourceFetcher.getLoggedInUser();
 
+        Space space = parent.getSpace();
+
         if (ResourceAccessHelper.isAccessToCreateSubpageDenied(parent, user)) {
             throw new AccessDeniedException("Отказано в доступе");
+        }
+
+        if (pageRepository.findBySpaceAndName(space, subpage.getName()).isPresent()){
+            throw new ElementAlreadyExistsException("Страница с таким именем уже существует в этом пространстве");
         }
 
         subpage.setSpace(parent.getSpace());
@@ -142,20 +156,53 @@ public class PageService implements PageCrudService {
     }
 
     /**
+     * Метод, отвечающий за получение страницы-родителя
+     * @param pageId ID страница, родителя которой нужно получить
+     * @param spaceId ID пространтсва, в котором нужно получить страницу
+     * @return найденую страницу
+     * @throws ElementNotFoundException если страница не найдена
+     * @throws AccessDeniedException если не удалось определить пользователя
+     */
+    @Override
+    public Page getParent(int pageId, int spaceId) {
+        Page page = resourceFetcher.fetchPage(pageId, spaceId);
+        Person user = resourceFetcher.getLoggedInUser();
+
+        Page parent = page.getParent();
+        if (parent == null) {
+            throw new ElementNotFoundException("Страница не найдена");
+        }
+
+        if (ResourceAccessHelper.isAccessToReadPageDenied(parent, user)) {
+            throw new AccessDeniedException("Отказано в доступе");
+        }
+
+        return parent;
+    }
+
+    /**
      * Метод, отвечающий за обновление страницы
      * @param pageId ID страницы
      * @param spaceId ID пространтсва, в котором нужно обновить страницу
      * @param pageToUpdateWith страница, значениями полей которой нужно обновить требуемую страницу
      * @return обновленную страницу
      * @throws AccessDeniedException если не удалось определить пользователя
+     * @throws ElementAlreadyExistsException если страница уже существует
      */
+    @Override
     @Transactional
     public Page update(int pageId, int spaceId, Page pageToUpdateWith) throws AccessDeniedException {
         Page page = resourceFetcher.fetchPage(pageId, spaceId);
         Person user = resourceFetcher.getLoggedInUser();
 
+        Space space = page.getSpace();
+
         if (ResourceAccessHelper.isAccessToUpdatePageDenied(page, user)) {
             throw new AccessDeniedException("Отказано в доступе");
+        }
+
+        if (pageRepository.findBySpaceAndName(space, pageToUpdateWith.getName()).isPresent()){
+            throw new ElementAlreadyExistsException("Страница с таким именем уже существует в этом пространстве");
         }
 
         page.setName(pageToUpdateWith.getName());
@@ -172,6 +219,7 @@ public class PageService implements PageCrudService {
      * @param spaceId ID пространтсва, в котором нужно удалить страницу
      * @throws AccessDeniedException если не удалось определить пользователя
      */
+    @Override
     @Transactional
     public void delete(int pageId, int spaceId) throws AccessDeniedException {
         Page page = resourceFetcher.fetchPage(pageId, spaceId);

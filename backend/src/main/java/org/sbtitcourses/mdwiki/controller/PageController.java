@@ -122,6 +122,21 @@ public class PageController {
     }
 
     /**
+     * Метод, отвечающий за получение родителя страницы
+     * @param spaceId ID пространства
+     * @param pageId ID страницы, родителя которой нужно получить
+     * @return DTO сущности Page для ответа с кодом 200
+     */
+    @GetMapping("/{pageId}/parent")
+    public ResponseEntity<PageResponse> getParent(@PathVariable(name = "spaceId") int spaceId,
+                                                  @PathVariable(name = "pageId") int pageId) {
+        Page parent = pageService.getParent(pageId, spaceId);
+
+        PageResponse response = modelMapper.map(parent, PageResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
      * Метод, отвечающий за получение страницы по его ID для данного пространства
      * @param spaceId ID пространства
      * @param pageId ID страницы

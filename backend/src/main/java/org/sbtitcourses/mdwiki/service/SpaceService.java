@@ -6,6 +6,7 @@ import org.sbtitcourses.mdwiki.repository.SpaceRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
 import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
+import org.sbtitcourses.mdwiki.util.exception.ElementAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,11 +48,16 @@ public class SpaceService implements SpaceCrudService {
      * Метод, отвечающий за создание нового пространства
      * @param space пространство, которое нужно сохранить
      * @return сохраненное пространство
+     * @throws ElementAlreadyExistsException если пространство уже существует
      */
     @Override
     @Transactional
     public Space create(Space space) {
         Person user = resourceFetcher.getLoggedInUser();
+
+        if (spaceRepository.findByOwnerAndName(user, space.getName()).isPresent()){
+            throw new ElementAlreadyExistsException("Пространство с таким именем уже существует");
+        }
 
         space.setOwner(user);
         Date now = new Date();
@@ -114,6 +120,7 @@ public class SpaceService implements SpaceCrudService {
      * @param spaceToUpdateWith пространство, значениями полей которого нужно обновить требуемое пространство
      * @return обновленное пространство
      * @throws AccessDeniedException если не удалось определить пользователя
+     * @throws ElementAlreadyExistsException если пространство уже существует
      */
     @Override
     @Transactional
@@ -123,6 +130,10 @@ public class SpaceService implements SpaceCrudService {
 
         if (ResourceAccessHelper.isAccessToUpdateSpaceDenied(space, user)) {
             throw new AccessDeniedException("Отказано в доступе");
+        }
+
+        if (spaceRepository.findByOwnerAndName(user, spaceToUpdateWith.getName()).isPresent()){
+            throw new ElementAlreadyExistsException("Пространство с таким именем уже существует");
         }
 
         space.setName(spaceToUpdateWith.getName());

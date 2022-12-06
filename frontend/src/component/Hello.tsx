@@ -1,6 +1,6 @@
 import React from "react";
 import "../css/hello.css"
-import Contacts from "../component/Button";
+import Contacts from "./Button";
 
 export class Hello extends React.Component<any, any>{
     render() {

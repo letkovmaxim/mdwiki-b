@@ -33,4 +33,10 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
      * @return возвращает список найденых пространтсв
      */
     List<Space> findByOwner(Person owner, Pageable pageable);
+
+    /**
+     * Поиск пользовательсого пространства по названию
+     * @return возвращает найденое пространтсво
+     */
+    Optional<Space> findByOwnerAndName(Person owner, String name);
 }

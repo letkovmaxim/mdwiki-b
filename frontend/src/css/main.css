@@ -1,48 +1,95 @@
 .background{
-    position: absolute;
-    height: calc(100%);
-    width: calc(100%);
-    top: 0;
-    left: 0;
-    background: #4FB5D7;
+    min-height: 600px;
+    min-width: 1000px;
 }
 
-.img{
-    width: 3.5vmax;
-    height: 3.5vmax;
+@media all and (max-height: 630px) {
+    .img{
+        width: 35px !important;
+        height: 35px !important;
+    }
+
+    .logoText{
+        font-family: 'algerian';
+        font-style: normal;
+        font-size: 30px !important;
+        text-align: center;
+        color: #FEFCFC;
+        top: calc(1.5%);
+    }
+
+    .logo{
+        position: absolute;
+        height: 38px !important;
+        width: calc(20%);
+        top: calc(1%);
+        left: calc(40%);
+    }
+
+    .menu{
+        margin-top: 0px !important;
+        width: 30px !important;
+        height: 30px !important;
+        color: #FFFFFF !important;
+    }
 }
 
-.logo{
-    position: absolute;
-    height: calc(6%);
-    width: calc(20%);
-    top: calc(1%);
-    left: calc(40%);
+@media all and (min-height: 630px) {
+    .img{
+        width: 3.5vh;
+        height: 3.5vh;
+    }
+
+    .logoText{
+        font-family: 'algerian';
+        font-style: normal;
+        font-size: 5vh;
+        text-align: center;
+        color: #FEFCFC;
+        top: calc(1.5%);
+    }
+
+    .logo{
+        position: absolute;
+        height: calc(100%);
+        width: calc(20%);
+        top: calc(1%);
+        left: calc(40%);
+    }
+
+    .menu{
+        margin-top: 0px !important;
+        width: 5vh !important;
+        height: 5vh !important;
+        color: #FFFFFF !important;
+    }
 }
+
+.AppBar{
+    position: absolute !important;
+    height: 7% !important;
+    width: 100% !important;
+    background: #4FB5D7 !important;
+    min-height: 40px !important;
+    min-width: 1000px !important;
+}
+
 
 .rec1{
     position: absolute;
     height: calc(4%);
     width: calc(30%);
-    top: calc(50%);
-    left: calc(5%);
+    top: calc(45%);
+    right: calc(75%);
     background: #FFFFFF;
-}
-
-.logoText{
-    font-family: 'algerian';
-    font-style: normal;
-    font-size: 3vmax;
-    text-align: center;
-    color: #FEFCFC;
-    top: calc(1.5%);
 }
 
 .rec2{
     position: absolute;
     height: calc(4%);
     width: calc(30%);
-    top: calc(50%);
-    right: calc(5%);
+    top: calc(45%);
+    left: calc(75%);
     background: #FFFFFF;
 }
+

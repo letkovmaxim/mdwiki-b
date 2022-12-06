@@ -43,4 +43,12 @@ public interface PageRepository extends JpaRepository<Page, Integer> {
      * @return возвращает список найденых записней
      */
     List<Page> findBySpaceAndParentIsNull(Space space, Pageable pageable);
+
+    /**
+     * Поиск записи данного пространства по названию
+     * @param space пространство, в котором ищутся записи
+     * @param name имя записи
+     * @return возвращает найденую запись
+     */
+    Optional<Page> findBySpaceAndName(Space space, String name);
 }
