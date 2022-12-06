@@ -58,7 +58,7 @@ class SpaceServiceTests {
         Pageable pageable = PageRequest.of(0, 1);
 
         when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
-        when(spaceRepository.findByOwnerOrSharedTrue(owner, pageable)).thenReturn(spaces);
+        when(spaceRepository.findByOwner(owner, pageable)).thenReturn(spaces);
 
         List<Space> gottenSpaces = spaceService.get(0, 1);
 
@@ -66,7 +66,23 @@ class SpaceServiceTests {
         assertEquals(1, gottenSpaces.get(0).getId());
 
         verify(resourceFetcher).getLoggedInUser();
-        verify(spaceRepository).findByOwnerOrSharedTrue(owner, pageable);
+        verify(spaceRepository).findByOwner(owner, pageable);
+    }
+
+    @Test
+    public void getSharedShouldReturnSpaceList() {
+        List<Space> spaces = new LinkedList<>();
+        spaces.add(spaceWithId);
+        Pageable pageable = PageRequest.of(0, 1);
+
+        when(spaceRepository.findBySharedTrue(pageable)).thenReturn(spaces);
+
+        List<Space> gottenSpaces = spaceService.getShared(0, 1);
+
+        assertEquals(1, gottenSpaces.size());
+        assertEquals(1, gottenSpaces.get(0).getId());
+
+        verify(spaceRepository).findBySharedTrue(pageable);
     }
 
     @Test

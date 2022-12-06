@@ -26,11 +26,11 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
      * Поиск публичных пространств
      * @return возвращает список найденых пространтсв
      */
-    List<Space> findBySharedTrue();
+    List<Space> findBySharedTrue(Pageable pageable);
 
     /**
-     * Поиск публичных или пользовательских пространств
+     * Поиск пользовательских пространств
      * @return возвращает список найденых пространтсв
      */
-    List<Space> findByOwnerOrSharedTrue(Person owner, Pageable pageable);
+    List<Space> findByOwner(Person owner, Pageable pageable);
 }
