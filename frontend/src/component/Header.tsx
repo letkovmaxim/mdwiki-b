@@ -5,7 +5,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import {Container} from "reactstrap";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 
 type Props = {

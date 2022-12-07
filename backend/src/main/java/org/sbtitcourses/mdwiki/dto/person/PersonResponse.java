@@ -46,7 +46,7 @@ public class PersonResponse {
     /**
      * Текст заметки markdown-документа
      */
-    private String text;
+    private String note;
 
     public int getId() {
         return id;
@@ -104,11 +104,11 @@ public class PersonResponse {
         this.enabled = enabled;
     }
 
-    public String getText() {
-        return text;
+    public String getNote() {
+        return note;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setNote(String note) {
+        this.note = note;
     }
 }

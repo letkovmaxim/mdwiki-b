@@ -11,13 +11,13 @@ public class PersonNoteRequest {
      * Текст заметки markdown-документа
      */
     @NotEmpty(message = "Заметка не должна быть пустой")
-    private String note;
+    private String text;
 
-    public String getNote() {
-        return note;
+    public String getText() {
+        return text;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setText(String text) {
+        this.text = text;
     }
 }

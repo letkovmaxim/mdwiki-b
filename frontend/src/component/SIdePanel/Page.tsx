@@ -105,7 +105,7 @@ export const Page = ({idSpace}:Props) =>{
         treeOpen()
     }, [setList])
 
-    const treeOpen = () =>  {
+    const treeOpen = () => {
         if(localStorage.getItem('space') !== String(idSpace)){
             localStorage.setItem("tree", JSON.stringify([]))
             localStorage.setItem('space', String(idSpace))
@@ -178,12 +178,13 @@ export const Page = ({idSpace}:Props) =>{
         }
     }
 
-    const backParent = async (response: any) => {
-        if (response.ok) {
+
+    async function backParent(response: any){
+        if(response.ok){
             let json = await response.json()
-            window.location.replace("/wiki/" + login + "/space/" + idSpace + "/page/" + json.id);
-        } else {
-            window.location.replace("/wiki/" + login + "/space/" + idSpace);
+            window.location.replace("/wiki/" + login +"/space/" + idSpace +"/page/" + json.id);
+        }else {
+            window.location.replace("/wiki/" + login +"/space/" + idSpace);
         }
     }
 
@@ -253,28 +254,27 @@ export const Page = ({idSpace}:Props) =>{
 
     const renderTree = (nodes: any, i:number) => {
         return(
-            <CustomTreeItem key={String(nodes.id)} nodeId={String(nodes.id)}   onClickCapture={() => tree(nodes.id, i)}
-                label={
-                    <Button
-                        sx={{
-                            alignItems: 'left',
-                            justifyContent: 'left',
-                            minWidth: '100%'
-                        }}
-                        className="buttonPage"
-                        variant="text"
-                        size="small"
 
-                        onClick={()=> toPage(nodes.id)}
-                        onContextMenu={(e) => handleClickMenu(e, nodes.name, nodes.shared, nodes.id)}
-                    >
-                        <DescriptionOutlinedIcon className='description'/>
-                        <div>&emsp;</div>
-                        <div className='textButton'>
-                            {nodes.name}
-                        </div>
-                    </Button>
-                }
+            <CustomTreeItem key={String(nodes.id)} nodeId={String(nodes.id)}   onClickCapture={() => tree(nodes.id, i)}
+                            label={
+                                <Button
+                                    sx={{
+                                        alignItems: 'left',
+                                        justifyContent: 'left',
+                                        minWidth: '100%'
+                                    }}
+                                    className="buttonPage"
+                                    variant="text"
+                                    size="small"
+
+                                    onClick={()=> toPage(nodes.id)}
+                                    onContextMenu={(e) => handleClickMenu(e, nodes.name, nodes.shared, nodes.id)}
+                                >
+                                    {(String(nodes.id) === pageId ?  <DescriptionOutlinedIcon sx={{color: '#4FB5D7'}} className='description'/> :  <DescriptionOutlinedIcon className='description'/> )}
+                                    <div>&emsp;</div>
+                                    {(String(nodes.id) === pageId ? <div style={{marginTop: '3px', color: '#4FB5D7'}}>{nodes.name}</div> : <div className='textButton'>{nodes.name}</div>)}
+                                </Button>
+                            }
             >
                 {Array.isArray(nodes.subpages)
                     ? nodes.subpages.map((node:any) => renderTree(node,++i))

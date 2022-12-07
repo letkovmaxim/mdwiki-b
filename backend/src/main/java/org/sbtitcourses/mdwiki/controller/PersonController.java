@@ -113,7 +113,7 @@ public class PersonController {
     @PutMapping("/{id}/note")
     public ResponseEntity<PersonResponse> noteUpdate(@PathVariable(name = "id") int id,
                                                      @RequestBody @Valid PersonNoteRequest personNoteRequest) {
-        Person updatedPerson = personService.noteUpdate(id, personNoteRequest.getNote());
+        Person updatedPerson = personService.noteUpdate(id, personNoteRequest.getText());
 
         PersonResponse response = modelMapper.map(updatedPerson, PersonResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);

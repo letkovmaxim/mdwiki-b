@@ -21,6 +21,8 @@ export const SidePanel = () => {
 
     const { spaceId } = useParams();
 
+    const { login } = useParams();
+
     const[list, setList] = useState<IComp[]>([])
 
     const[editId, setEditId] = useState<number>()
@@ -136,11 +138,14 @@ export const SidePanel = () => {
         });
         handleCloseMenu()
         await getList();
-        setEditId(undefined)
         setNewObject({
             name: '',
             shared: true
         })
+        if(spaceId === String(editId)){
+            window.location.replace("/wiki/" + login);
+        }
+        setEditId(undefined)
     }
 
     const errorEmpty = () => {
@@ -166,44 +171,44 @@ export const SidePanel = () => {
     return(
         <div>
             {( !spaceOpenId ?
-                <div>
-                    <Space
-                        handleOpen={handleOpen}
-                        list={list}
-                        anchorEl={anchorEl}
-                        openMenu={openMenu}
-                        handleCloseMenu={handleCloseMenu}
-                        handleCloseMenuForEdit={handleCloseMenuForEdit}
-                        remove={remove}
-                        toPage={toPage}
-                        handleClickMenu={handleClickMenu}
-                    />
-                </div>
-            :
-                <div>
-                    <List>
-                        <div className="headerText">
-                            {localStorage.getItem("spaceName")}
-                        </div>
-                    </List>
-                    <Divider />
-                    <List>
-                        <IconButton
-                            sx={{
-                                marginLeft: '12px'
-                            }}
-                            aria-label="delete"
-                            size="small"
-                            onClick={handleBack}
-                        >
-                            <ArrowBackIcon sx={{ height:25, width:25}}/>
-                        </IconButton>
+                    <div>
+                        <Space
+                            handleOpen={handleOpen}
+                            list={list}
+                            anchorEl={anchorEl}
+                            openMenu={openMenu}
+                            handleCloseMenu={handleCloseMenu}
+                            handleCloseMenuForEdit={handleCloseMenuForEdit}
+                            remove={remove}
+                            toPage={toPage}
+                            handleClickMenu={handleClickMenu}
+                        />
+                    </div>
+                    :
+                    <div>
+                        <List>
+                            <div className="headerText">
+                                {localStorage.getItem("spaceName")}
+                            </div>
+                        </List>
+                        <Divider />
+                        <List>
+                            <IconButton
+                                sx={{
+                                    marginLeft: '12px'
+                                }}
+                                aria-label="delete"
+                                size="small"
+                                onClick={handleBack}
+                            >
+                                <ArrowBackIcon sx={{ height:25, width:25}}/>
+                            </IconButton>
 
-                        <Page idSpace={spaceOpenId}/>
+                            <Page idSpace={spaceOpenId}/>
 
-                    </List>
+                        </List>
 
-                </div>
+                    </div>
             )}
 
             <ModalWindow

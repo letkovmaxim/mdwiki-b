@@ -27,7 +27,7 @@ export const Note = () =>{
             let json = await response.json()
             setIdPerson(json.id)
             setDocument({
-                text: json.text
+                text: json.note
             })
         }
     }
