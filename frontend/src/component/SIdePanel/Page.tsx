@@ -39,6 +39,8 @@ export const Page = ({idSpace}:Props) =>{
 
     const[styles, setStyles] = useState("addSpace")
 
+    const[error, setError] = useState("")
+
     const[newObject, setNewObject] = useState({
         name: '',
         shared: true
@@ -57,6 +59,7 @@ export const Page = ({idSpace}:Props) =>{
         })
         setAddSub(false)
         setStyles("addSpace")
+        setError("")
     }
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -147,6 +150,7 @@ export const Page = ({idSpace}:Props) =>{
                     })
                 }else {
                     setStyles("addSpaceError")
+                    setError("Страница уже существует")
                 }
             });
         }
@@ -173,6 +177,7 @@ export const Page = ({idSpace}:Props) =>{
                     })
                 }else {
                     setStyles("addSpaceError")
+                    setError("Страница уже существует")
                 }
             });
         }
@@ -227,6 +232,7 @@ export const Page = ({idSpace}:Props) =>{
 
         if(newObject.name.length === 0){
             setStyles("addSpaceError")
+            setError("Поле не должно быть пустым")
             error = true;
         }
 
@@ -342,6 +348,7 @@ export const Page = ({idSpace}:Props) =>{
                 AddSubpage={AddSubpage}
                 handleSubmit={handleSubmit}
                 editId={editId}
+                error={error}
             />
         </div>
     )

@@ -29,6 +29,8 @@ export const SidePanel = () => {
 
     const[styles, setStyles] = useState("addSpace")
 
+    const[error, setError] = useState("")
+
     const[newObject, setNewObject] = useState({
         name: '',
         shared: true
@@ -46,6 +48,7 @@ export const SidePanel = () => {
             shared: true
         })
         setStyles("addSpace")
+        setError("")
     }
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -123,6 +126,7 @@ export const SidePanel = () => {
                     })
                 }else {
                     setStyles("addSpaceError")
+                    setError("Пространство уже существует")
                 }
             });
         }
@@ -154,6 +158,7 @@ export const SidePanel = () => {
 
         if(newObject.name.length === 0){
             setStyles("addSpaceError")
+            setError("Поле не должно быть пустым")
             error = true;
         }
 
@@ -221,6 +226,7 @@ export const SidePanel = () => {
                 AddSubpage={def}
                 handleSubmit={handleSubmit}
                 editId={editId}
+                error={error}
             />
         </div>
     )
