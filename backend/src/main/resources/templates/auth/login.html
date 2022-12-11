@@ -7,7 +7,7 @@
 <body>
 
 <form name="f" method="post" action="/process_login">
-<!--    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
     <input type="text" name="username" placeholder="Логин или email" id="username"/>
     <br/>

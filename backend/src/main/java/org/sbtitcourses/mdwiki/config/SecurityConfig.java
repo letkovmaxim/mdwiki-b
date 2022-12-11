@@ -46,22 +46,20 @@ public class SecurityConfig {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(personDetailsService).passwordEncoder(passwordEncoder());
 
-//        http
-//                .authorizeRequests()
-//                    .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
-//                    .anyRequest().hasAnyRole("USER", "ADMIN")
-//                .and()
-//                .formLogin()
-//                    .loginPage("/auth/login")
-//                    .loginProcessingUrl("/process_login")
-//                    .defaultSuccessUrl("/main", true)
-//                    .failureUrl("/auth/login?error")
-//                .and()
-//                .logout()
-//                    .logoutUrl("/logout")
-//                    .logoutSuccessUrl("/auth/login");
-
-        http.httpBasic().and().authorizeRequests().anyRequest().permitAll();
+        http
+                .authorizeRequests()
+                    .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
+                    .anyRequest().hasAnyRole("USER", "ADMIN")
+                .and()
+                .formLogin()
+                    .loginPage("/auth/login")
+                    .loginProcessingUrl("/process_login")
+                    .defaultSuccessUrl("/main", true)
+                    .failureUrl("/auth/login?error")
+                .and()
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/auth/login");
 
         return http.build();
     }
@@ -69,7 +67,7 @@ public class SecurityConfig {
     /**
      * Фильтр, отвечающий за проверку аутентифицированного пользователя
      */
-//    @Bean
+    @Bean
     public FilterRegistrationBean<AuthFilter> authFilter() {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
 
