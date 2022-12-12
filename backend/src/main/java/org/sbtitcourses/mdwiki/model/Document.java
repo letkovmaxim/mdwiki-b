@@ -3,22 +3,21 @@ package org.sbtitcourses.mdwiki.model;
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 
 
 /**
  * Сущность markdown-документа
  */
 @Entity
-@Table(name = "document")
+@Table(name = "documents")
 public class Document {
 
     /**
      * ID документа
      */
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = "documentSequence")
-    @SequenceGenerator(name = "documentSequence", initialValue = 1, allocationSize = 1, sequenceName = "document_sequence")
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
@@ -32,7 +31,7 @@ public class Document {
      * Запись, содержащая этот докумет
      */
     @OneToOne(fetch = EAGER)
-    @JoinColumn(name = "page_id", referencedColumnName = "id")
+    @JoinColumn(name = "page_id", referencedColumnName = "id", nullable = false)
     private Page page;
 
     public Document() {

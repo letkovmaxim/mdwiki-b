@@ -3,69 +3,56 @@ package org.sbtitcourses.mdwiki.model;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
- * Данный класс описывает какие данные необходимо ввести юзеру при регистрации
- * (role и active заполняются автоматически в RegistrationService.register)
+ * Сущность, описывающая зарегестрированных пользователей
  */
 @Entity
-@Table(name = "person")
+@Table(name = "persons")
 public class Person {
 
     /**
-     * id пользователя в базе данных
+     * ID пользователя в базе данных
      */
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = "personSequence")
-    @SequenceGenerator(name = "personSequence", initialValue = 1, allocationSize = 1, sequenceName = "person_sequence")
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
     /**
      * Логин пользователя
      */
-    @NotEmpty(message = "Логин не должен быть пустым")
-    @Size(min = 4, max = 50, message = "Логин не должен быть короче 4 и длинее 50 символов")
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     /**
      * Пароль пользователя
      */
-    @NotEmpty(message = "Пароль не должен быть пустым")
-    @Size(min = 6, message = "Пароль не должен быть короче 6 символов")
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     /**
      * Роль пользователя
      */
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private String role;
 
     /**
      * Имя пользователя
      */
-    @NotEmpty(message = "Имя не должно быть пустым")
-    @Size(max = 128, message = "Имя не должно быть длинее 128 символов")
     @Column(name = "name")
     private String name;
 
     /**
      * Email пользователя
      */
-    @NotEmpty(message = "Email не должен быть пустым")
-    @Email(message = "Email введен неккоректно")
     @Column(name = "email")
     private String email;
 
@@ -73,21 +60,21 @@ public class Person {
      * Точное время создания пользователя
      */
     @Temporal(TIMESTAMP)
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
     /**
      * Точное время обновления пользователя
      */
     @Temporal(TIMESTAMP)
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
     /**
      * Тип аккаунта
      * Активный (true) или заблокированный (false)
      */
-    @Column(name = "enabled")
+    @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
     /**
@@ -104,9 +91,6 @@ public class Person {
     @Cascade(ALL)
     private List<StoredFile> storedFiles;
 
-    /**
-     * Создание экземпляра класса
-     */
     public Person() {
     }
 

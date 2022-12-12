@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
@@ -15,49 +15,48 @@ import static org.hibernate.annotations.CascadeType.ALL;
  * Сущность пользовательских пространств.
  */
 @Entity
-@Table(name = "space")
+@Table(name = "spaces")
 public class Space {
 
     /**
      * ID пространства
      */
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = "spaceSequence")
-    @SequenceGenerator(name = "spaceSequence", initialValue = 1, allocationSize = 1, sequenceName = "space_sequence")
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
     /**
      * Название пространства
      */
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     /**
      * Владелец данного пространства
      */
     @ManyToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private Person owner;
 
     /**
      * Точное время создания пространства
      */
     @Temporal(TIMESTAMP)
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
     /**
      * Точное время обновления пространства
      */
     @Temporal(TIMESTAMP)
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
     /**
      * Статус публичности пространства
      */
-    @Column(name = "shared")
+    @Column(name = "shared", nullable = false)
     private boolean shared;
 
     /**
@@ -67,6 +66,9 @@ public class Space {
     @Cascade(ALL)
     private List<Page> pages;
 
+    /**
+     * Список хранимых файлов, связанных с данным пространством
+     **/
     @OneToMany(mappedBy = "space", fetch = LAZY)
     @Cascade(ALL)
     private List<StoredFile> storedFiles;
