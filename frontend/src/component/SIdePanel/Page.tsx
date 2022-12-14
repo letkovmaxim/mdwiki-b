@@ -39,6 +39,8 @@ export const Page = ({idSpace}:Props) =>{
 
     const[styles, setStyles] = useState("addSpace")
 
+    const[error, setError] = useState("")
+
     const[newObject, setNewObject] = useState({
         name: '',
         shared: true
@@ -57,6 +59,7 @@ export const Page = ({idSpace}:Props) =>{
         })
         setAddSub(false)
         setStyles("addSpace")
+        setError("")
     }
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -105,7 +108,7 @@ export const Page = ({idSpace}:Props) =>{
         treeOpen()
     }, [setList])
 
-    const treeOpen = () =>  {
+    const treeOpen = () => {
         if(localStorage.getItem('space') !== String(idSpace)){
             localStorage.setItem("tree", JSON.stringify([]))
             localStorage.setItem('space', String(idSpace))
@@ -147,6 +150,7 @@ export const Page = ({idSpace}:Props) =>{
                     })
                 }else {
                     setStyles("addSpaceError")
+                    setError("Страница уже существует")
                 }
             });
         }
@@ -173,17 +177,19 @@ export const Page = ({idSpace}:Props) =>{
                     })
                 }else {
                     setStyles("addSpaceError")
+                    setError("Страница уже существует")
                 }
             });
         }
     }
 
-    const backParent = async (response: any) => {
-        if (response.ok) {
+
+    async function backParent(response: any){
+        if(response.ok){
             let json = await response.json()
-            window.location.replace("/wiki/" + login + "/space/" + idSpace + "/page/" + json.id);
-        } else {
-            window.location.replace("/wiki/" + login + "/space/" + idSpace);
+            window.location.replace("/wiki/" + login +"/space/" + idSpace +"/page/" + json.id);
+        }else {
+            window.location.replace("/wiki/" + login +"/space/" + idSpace);
         }
     }
 
@@ -226,6 +232,7 @@ export const Page = ({idSpace}:Props) =>{
 
         if(newObject.name.length === 0){
             setStyles("addSpaceError")
+            setError("Поле не должно быть пустым")
             error = true;
         }
 
@@ -253,28 +260,27 @@ export const Page = ({idSpace}:Props) =>{
 
     const renderTree = (nodes: any, i:number) => {
         return(
-            <CustomTreeItem key={String(nodes.id)} nodeId={String(nodes.id)}   onClickCapture={() => tree(nodes.id, i)}
-                label={
-                    <Button
-                        sx={{
-                            alignItems: 'left',
-                            justifyContent: 'left',
-                            minWidth: '100%'
-                        }}
-                        className="buttonPage"
-                        variant="text"
-                        size="small"
 
-                        onClick={()=> toPage(nodes.id)}
-                        onContextMenu={(e) => handleClickMenu(e, nodes.name, nodes.shared, nodes.id)}
-                    >
-                        <DescriptionOutlinedIcon className='description'/>
-                        <div>&emsp;</div>
-                        <div className='textButton'>
-                            {nodes.name}
-                        </div>
-                    </Button>
-                }
+            <CustomTreeItem key={String(nodes.id)} nodeId={String(nodes.id)}   onClickCapture={() => tree(nodes.id, i)}
+                            label={
+                                <Button
+                                    sx={{
+                                        alignItems: 'left',
+                                        justifyContent: 'left',
+                                        minWidth: '100%'
+                                    }}
+                                    className="buttonPage"
+                                    variant="text"
+                                    size="small"
+
+                                    onClick={()=> toPage(nodes.id)}
+                                    onContextMenu={(e) => handleClickMenu(e, nodes.name, nodes.shared, nodes.id)}
+                                >
+                                    {(String(nodes.id) === pageId ?  <DescriptionOutlinedIcon sx={{color: '#4FB5D7'}} className='description'/> :  <DescriptionOutlinedIcon className='description'/> )}
+                                    <div>&emsp;</div>
+                                    {(String(nodes.id) === pageId ? <div style={{marginTop: '3px', color: '#4FB5D7'}}>{nodes.name}</div> : <div className='textButton'>{nodes.name}</div>)}
+                                </Button>
+                            }
             >
                 {Array.isArray(nodes.subpages)
                     ? nodes.subpages.map((node:any) => renderTree(node,++i))
@@ -342,6 +348,7 @@ export const Page = ({idSpace}:Props) =>{
                 AddSubpage={AddSubpage}
                 handleSubmit={handleSubmit}
                 editId={editId}
+                error={error}
             />
         </div>
     )

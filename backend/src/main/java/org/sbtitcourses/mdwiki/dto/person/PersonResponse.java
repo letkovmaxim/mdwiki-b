@@ -43,6 +43,11 @@ public class PersonResponse {
      */
     private boolean enabled;
 
+    /**
+     * Текст заметки markdown-документа
+     */
+    private String note;
+
     public int getId() {
         return id;
     }
@@ -97,5 +102,13 @@ public class PersonResponse {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

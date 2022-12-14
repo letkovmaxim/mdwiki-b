@@ -24,6 +24,7 @@
 .buttonSpace{
     min-width: 100% !important;
     height: 37px !important;
+    text-transform: none !important;
 }
 
 
@@ -59,7 +60,6 @@
     font-size: 16px;
     font-weight: bold;
     vertical-align: middle;
-    text-transform: uppercase;
 }
 
 .addSpaceError{
@@ -68,6 +68,13 @@
     background: #4FB5D7;
     border: 3px solid #F34646;
     border-radius: 5px;
+}
+
+.addSpaceError:valid{
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+    vertical-align: middle;
 }
 
 .addSpaceError:focus{
@@ -103,7 +110,9 @@
     color: #747A80 !important;
     min-width: 100% !important;
     height: 37px !important;
+    text-transform: none !important;
 }
+
 .buttonPage:hover{
     background: none !important;
 }
@@ -119,7 +128,7 @@
 }
 
 .box{
-    height: calc(100vh - 167px) !important;
+    height: calc(100vh - 210px) !important;
     margin-top: 10px !important;
     max-width: 300px !important;
     overflow-y: auto !important;

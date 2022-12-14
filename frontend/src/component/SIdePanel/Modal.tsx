@@ -17,7 +17,8 @@ type Props ={
     addSub:boolean,
     AddSubpage: () => void,
     handleSubmit: () => void
-    editId: any
+    editId: any,
+    error: any
 }
 
 const style = {
@@ -36,7 +37,7 @@ const style = {
     p: 2,
 };
 
-export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, addSub, AddSubpage, handleSubmit, editId}: Props) => {
+export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, addSub, AddSubpage, handleSubmit, editId, error}: Props) => {
     return(
         <div>
             <Modal
@@ -55,6 +56,9 @@ export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, 
                         onChange={handleChange}
                         autoComplete="off"
                     />
+                    <div style={{color:"red", fontWeight: "bold"}}>
+                        {error}
+                    </div>
                     <FormControl
                         sx={{
                             top: '8px'

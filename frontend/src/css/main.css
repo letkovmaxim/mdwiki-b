@@ -3,77 +3,43 @@
     min-width: 1000px;
 }
 
-@media all and (max-height: 630px) {
-    .img{
-        width: 35px !important;
-        height: 35px !important;
-    }
-
-    .logoText{
-        font-family: 'algerian';
-        font-style: normal;
-        font-size: 30px !important;
-        text-align: center;
-        color: #FEFCFC;
-        top: calc(1.5%);
-    }
-
-    .logo{
-        position: absolute;
-        height: 38px !important;
-        width: calc(20%);
-        top: calc(1%);
-        left: calc(40%);
-    }
-
-    .menu{
-        margin-top: 0px !important;
-        width: 30px !important;
-        height: 30px !important;
-        color: #FFFFFF !important;
-    }
+.img{
+    width: 40px;
+    height: 40px;
 }
 
-@media all and (min-height: 630px) {
-    .img{
-        width: 3.5vh;
-        height: 3.5vh;
-    }
+.logoText{
+    font-family: 'algerian';
+    font-style: normal;
+    font-size: 45px;
+    text-align: center;
+    color: #FEFCFC;
+    top: calc(1.5%);
+}
 
-    .logoText{
-        font-family: 'algerian';
-        font-style: normal;
-        font-size: 5vh;
-        text-align: center;
-        color: #FEFCFC;
-        top: calc(1.5%);
-    }
+.logo{
+    position: absolute;
+    height: calc(100%);
+    width: calc(20%);
+    top: calc(1%);
+    left: calc(40%);
+}
 
-    .logo{
-        position: absolute;
-        height: calc(100%);
-        width: calc(20%);
-        top: calc(1%);
-        left: calc(40%);
-    }
-
-    .menu{
-        margin-top: 0px !important;
-        width: 5vh !important;
-        height: 5vh !important;
-        color: #FFFFFF !important;
-    }
+.menu{
+    margin-top: 0px !important;
+    width: 40px !important;
+    height: 40px !important;
+    color: #FFFFFF !important;
 }
 
 .AppBar{
     position: absolute !important;
-    height: 7% !important;
+    height: 60px !important;
     width: 100% !important;
     background: #4FB5D7 !important;
     min-height: 40px !important;
     min-width: 1000px !important;
 }
-
 
 .rec1{
     position: absolute;
@@ -91,5 +57,16 @@
     top: calc(45%);
     left: calc(75%);
     background: #FFFFFF;
+}
+
+.btn {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.textBtn{
+    font-family: Scada, sans-serif;
+    color: #747A80;
+    font-size: 15px;
 }
 

@@ -5,17 +5,15 @@ import MenuIcon from "@mui/icons-material/Menu";
 import {Container} from "reactstrap";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 
 type Props = {
     handleDrawerOpen: () => void,
     open: boolean,
     handleSubmitToLogout: () => void,
-    username: string
 }
 
-export const Header = ({handleDrawerOpen, open, username, handleSubmitToLogout}: Props) =>{
+export const Header = ({handleDrawerOpen, open, handleSubmitToLogout}: Props) =>{
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const openMenu = Boolean(anchorEl);
@@ -32,7 +30,7 @@ export const Header = ({handleDrawerOpen, open, username, handleSubmitToLogout}:
                 color="inherit"
                 onClick={handleDrawerOpen}
                 size="small"
-                sx={{  ...(open && { display: 'none' }) }}
+                sx={{  ...(open && { display: 'none' }), top:'5px' }}
             >
                 <MenuIcon className='menu' />
             </IconButton>
@@ -50,7 +48,8 @@ export const Header = ({handleDrawerOpen, open, username, handleSubmitToLogout}:
             <IconButton
                 sx={{
                     position: 'absolute',
-                    right: '1%'
+                    right: '1%',
+                    top: '5px'
                 }}
                 size="small"
                 id="basic-button"
@@ -70,7 +69,6 @@ export const Header = ({handleDrawerOpen, open, username, handleSubmitToLogout}:
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <MenuItem onClick={handleClose}>{username}</MenuItem>
                 <Button color="primary" type="submit" onClick={handleSubmitToLogout}>
                     <div style={{color: '#F34646'}}>
                         ВЫХОД

@@ -21,11 +21,15 @@ export const SidePanel = () => {
 
     const { spaceId } = useParams();
 
+    const { login } = useParams();
+
     const[list, setList] = useState<IComp[]>([])
 
     const[editId, setEditId] = useState<number>()
 
     const[styles, setStyles] = useState("addSpace")
+
+    const[error, setError] = useState("")
 
     const[newObject, setNewObject] = useState({
         name: '',
@@ -44,6 +48,7 @@ export const SidePanel = () => {
             shared: true
         })
         setStyles("addSpace")
+        setError("")
     }
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -121,6 +126,7 @@ export const SidePanel = () => {
                     })
                 }else {
                     setStyles("addSpaceError")
+                    setError("Пространство уже существует")
                 }
             });
         }
@@ -136,11 +142,14 @@ export const SidePanel = () => {
         });
         handleCloseMenu()
         await getList();
-        setEditId(undefined)
         setNewObject({
             name: '',
             shared: true
         })
+        if(spaceId === String(editId)){
+            window.location.replace("/wiki/" + login);
+        }
+        setEditId(undefined)
     }
 
     const errorEmpty = () => {
@@ -149,6 +158,7 @@ export const SidePanel = () => {
 
         if(newObject.name.length === 0){
             setStyles("addSpaceError")
+            setError("Поле не должно быть пустым")
             error = true;
         }
 
@@ -166,44 +176,44 @@ export const SidePanel = () => {
     return(
         <div>
             {( !spaceOpenId ?
-                <div>
-                    <Space
-                        handleOpen={handleOpen}
-                        list={list}
-                        anchorEl={anchorEl}
-                        openMenu={openMenu}
-                        handleCloseMenu={handleCloseMenu}
-                        handleCloseMenuForEdit={handleCloseMenuForEdit}
-                        remove={remove}
-                        toPage={toPage}
-                        handleClickMenu={handleClickMenu}
-                    />
-                </div>
-            :
-                <div>
-                    <List>
-                        <div className="headerText">
-                            {localStorage.getItem("spaceName")}
-                        </div>
-                    </List>
-                    <Divider />
-                    <List>
-                        <IconButton
-                            sx={{
-                                marginLeft: '12px'
-                            }}
-                            aria-label="delete"
-                            size="small"
-                            onClick={handleBack}
-                        >
-                            <ArrowBackIcon sx={{ height:25, width:25}}/>
-                        </IconButton>
+                    <div>
+                        <Space
+                            handleOpen={handleOpen}
+                            list={list}
+                            anchorEl={anchorEl}
+                            openMenu={openMenu}
+                            handleCloseMenu={handleCloseMenu}
+                            handleCloseMenuForEdit={handleCloseMenuForEdit}
+                            remove={remove}
+                            toPage={toPage}
+                            handleClickMenu={handleClickMenu}
+                        />
+                    </div>
+                    :
+                    <div>
+                        <List>
+                            <div className="headerText">
+                                {localStorage.getItem("spaceName")}
+                            </div>
+                        </List>
+                        <Divider />
+                        <List>
+                            <IconButton
+                                sx={{
+                                    marginLeft: '12px'
+                                }}
+                                aria-label="delete"
+                                size="small"
+                                onClick={handleBack}
+                            >
+                                <ArrowBackIcon sx={{ height:25, width:25}}/>
+                            </IconButton>
 
-                        <Page idSpace={spaceOpenId}/>
+                            <Page idSpace={spaceOpenId}/>
 
-                    </List>
+                        </List>
 
-                </div>
+                    </div>
             )}
 
             <ModalWindow
@@ -216,6 +226,7 @@ export const SidePanel = () => {
                 AddSubpage={def}
                 handleSubmit={handleSubmit}
                 editId={editId}
+                error={error}
             />
         </div>
     )
