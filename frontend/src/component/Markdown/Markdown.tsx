@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
+import Help from "./Help";
 
 const styleEdit = {
     backgroundColor: '#4FB5D7',
@@ -45,6 +46,7 @@ export const Markdown = ({save, edit, CloseEdit, OpenEdit, document, newText}: P
     return (
         <div data-color-mode="light">
             <Box className='buttons'>
+                <Help/>
                 {(edit ?
                         <Button style={styleEdit} className='editButton' variant="contained" onClick={CloseEdit}>
                             <EditIcon className='iconEdit2'/>
