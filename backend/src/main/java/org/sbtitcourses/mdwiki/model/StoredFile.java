@@ -2,61 +2,60 @@ package org.sbtitcourses.mdwiki.model;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * Сущность записанных в системе файлов
  * для хранения информации о них в базе данных
  */
 @Entity
-@Table(name = "file")
+@Table(name = "files")
 public class StoredFile {
 
     /**
      * ID файла в базе данных
      */
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = "fileSequence")
-    @SequenceGenerator(name = "fileSequence", initialValue = 1, allocationSize = 1, sequenceName = "file_sequence")
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
     /**
      * Уникальный идентификатор файла
      */
-    @Column(name = "guid")
+    @Column(name = "guid", nullable = false)
     private String GUID;
 
     /**
      * Оригинальное название файла
      */
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String originalName;
 
     /**
      * MIME-тип файла
      */
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     private String MimeType;
 
     /**
      * Размер файла в битах
      */
-    @Column(name = "size")
+    @Column(name = "size", nullable = false)
     private long size;
 
     /**
      * Пользователь-владелец файла
      */
     @ManyToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private Person owner;
 
     /**
      * Пространство, с которым связан файл
      */
     @ManyToOne
-    @JoinColumn(name = "space_id", referencedColumnName = "id")
+    @JoinColumn(name = "space_id", referencedColumnName = "id", nullable = false)
     private Space space;
 
     public StoredFile() {

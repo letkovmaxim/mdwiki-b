@@ -8,7 +8,7 @@ import java.util.List;
 
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
@@ -16,22 +16,21 @@ import static org.hibernate.annotations.CascadeType.ALL;
  * Сущность пользовательских записей.
  */
 @Entity
-@Table(name = "page")
+@Table(name = "pages")
 public class Page {
 
     /**
      * ID записи
      */
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = "pageSequence")
-    @SequenceGenerator(name = "pageSequence", initialValue = 1, allocationSize = 1, sequenceName = "page_sequence")
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
     /**
      * Название записи
      */
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     /**
@@ -52,27 +51,27 @@ public class Page {
      * Пространство, которое содержит эту запись
      */
     @ManyToOne(fetch = EAGER)
-    @JoinColumn(name = "space_id", referencedColumnName = "id")
+    @JoinColumn(name = "space_id", referencedColumnName = "id", nullable = false)
     private Space space;
 
     /**
      * Точное время создания записи
      */
     @Temporal(TIMESTAMP)
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
     /**
      * Точное время обновления записи
      */
     @Temporal(TIMESTAMP)
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
     /**
      * Статус публичности записи
      */
-    @Column(name = "shared")
+    @Column(name = "shared", nullable = false)
     private boolean shared;
 
     /**
