@@ -9,3 +9,5 @@ databaseChangeLog:
       file: db/changeset/create-table-documents.yaml
   - include:
       file: db/changeset/create-table-files.yaml
+  - include:
+      file: db/changeset/add-column-note.yaml

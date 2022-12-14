@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: '20.6'
+      author: Maxim Letkov
+      changes:
+        - addColumn:
+            tableName: persons
+            columns:
+              - column:
+                  name: note
+                  type: VARCHAR
