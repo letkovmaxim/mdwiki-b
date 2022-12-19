@@ -3,14 +3,21 @@ package org.sbtitcourses.mdwiki.controller;
 import org.modelmapper.ModelMapper;
 import org.sbtitcourses.mdwiki.dto.document.DocumentRequest;
 import org.sbtitcourses.mdwiki.dto.document.DocumentResponse;
+import org.sbtitcourses.mdwiki.model.ConvertedDocument;
 import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 /**
  * REST контроллер для CRUD операций над сущностью Document
@@ -104,5 +111,26 @@ public class DocumentController {
         documentService.delete(pageId, spaceId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Метод, обрабатывающий запросы на скачку документа в PDF формате
+     * @param spaceId ID пространтсва
+     * @param pageId ID страницы
+     * @return HTTP ответ с PDF файлом и статусом 200
+     */
+    @GetMapping("/pdfherereere")
+    public ResponseEntity<InputStreamResource> convertToPdf(@PathVariable(name = "spaceId") int spaceId,
+                                                            @PathVariable(name = "pageId") int pageId) {
+        ConvertedDocument convertedDocument = documentService.convertToPdf(spaceId, pageId);
+
+        InputStreamResource inputStreamResource = convertedDocument.getInputStreamResource();
+        String documentName = convertedDocument.getDocumentName();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"".concat(documentName).concat("\""))
+                .body(inputStreamResource);
     }
 }

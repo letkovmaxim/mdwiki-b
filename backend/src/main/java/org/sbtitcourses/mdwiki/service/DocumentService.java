@@ -1,15 +1,21 @@
 package org.sbtitcourses.mdwiki.service;
 
-import org.sbtitcourses.mdwiki.model.Document;
-import org.sbtitcourses.mdwiki.model.Page;
-import org.sbtitcourses.mdwiki.model.Person;
+import com.qkyrie.markdown2pdf.Markdown2PdfConverter;
+import com.qkyrie.markdown2pdf.internal.exceptions.ConversionException;
+import com.qkyrie.markdown2pdf.internal.exceptions.Markdown2PdfLogicException;
+import org.sbtitcourses.mdwiki.model.*;
 import org.sbtitcourses.mdwiki.repository.DocumentRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
 import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
+import org.sbtitcourses.mdwiki.util.exception.PdfConversionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.*;
 
 /**
  * Сервис с логикой CRUD операций над сущностью Document
@@ -129,5 +135,44 @@ public class DocumentService implements DocumentCrudService {
         document.getPage().setDocument(null);
 
         documentRepository.delete(document);
+    }
+
+    /**
+     * Метод, отвечающий за конвертацию докумета в PDF формат
+     * @param spaceId ID пространства
+     * @param pageId ID страницы
+     * @return поток данных с документом в формате PDF
+     */
+    @Override
+    public ConvertedDocument convertToPdf(int spaceId, int pageId) {
+        Document document = resourceFetcher.fetchDocument(spaceId, pageId);
+        Person user = resourceFetcher.getLoggedInUser();
+
+        if (ResourceAccessHelper.isAccessToReadDocumentDenied(document, user)) {
+            throw new AccessDeniedException("Доступ запрещен");
+        }
+
+        String mdText = document.getText();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        try {
+            Markdown2PdfConverter.newConverter()
+                    .readFrom(() -> mdText)
+                    .writeTo(out -> {
+                        try {
+                            outputStream.write(out);
+                        } catch (IOException e) {
+                            throw new PdfConversionException("Ошибка конвертации");
+                        }
+                    })
+                    .doIt();
+        } catch (ConversionException | Markdown2PdfLogicException ex) {
+            throw new PdfConversionException("Ошибка конвертации");
+        }
+        InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
+        String documentName = document.getPage().getName();
+
+        return new ConvertedDocument(inputStreamResource, documentName);
     }
 }
