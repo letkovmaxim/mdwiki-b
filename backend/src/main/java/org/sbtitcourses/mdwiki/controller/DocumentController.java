@@ -119,7 +119,7 @@ public class DocumentController {
      * @param pageId ID страницы
      * @return HTTP ответ с PDF файлом и статусом 200
      */
-    @GetMapping("/pdfherereere")
+    @GetMapping("/pdf")
     public ResponseEntity<InputStreamResource> convertToPdf(@PathVariable(name = "spaceId") int spaceId,
                                                             @PathVariable(name = "pageId") int pageId) {
         ConvertedDocument convertedDocument = documentService.convertToPdf(spaceId, pageId);
