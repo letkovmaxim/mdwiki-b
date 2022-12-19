@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import "../../css/document.css"
-import {Markdown} from "./Markdown";
+import {MarkdownDocument} from "./MarkdownDocument";
 
 export const Document = () =>{
 
@@ -45,21 +45,27 @@ export const Document = () =>{
             },
             body: JSON.stringify(document),
         })
+        await getText()
     }
 
     const newText = (val:any) => {
         setDocument({text: val!})
     }
 
+    const image = (url:string) => {
+        setDocument({text: document.text + url})
+    }
+
     return (
         <div data-color-mode="light">
-            <Markdown
+            <MarkdownDocument
                 save={save}
                 edit={edit}
                 CloseEdit={CloseEdit}
                 OpenEdit={OpenEdit}
                 document={document}
                 newText={newText}
+                image={image}
             />
         </div>
     );

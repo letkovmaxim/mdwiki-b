@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from "react";
 import "../../css/document.css"
-import { Markdown} from "./Markdown";
+import { MarkdowNote} from "./MarkdowNote";
 
 export const Note = () =>{
 
@@ -50,7 +50,7 @@ export const Note = () =>{
 
     return (
         <div data-color-mode="light">
-            <Markdown
+            <MarkdowNote
                 save={save}
                 edit={edit}
                 CloseEdit={CloseEdit}

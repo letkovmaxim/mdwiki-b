@@ -39,7 +39,7 @@ type Props ={
     newText: (val:any) => void
 }
 
-export const Markdown = ({save, edit, CloseEdit, OpenEdit, document, newText}: Props) =>{
+export const MarkdowNote = ({save, edit, CloseEdit, OpenEdit, document, newText}: Props) =>{
 
     const { height } = useWindowDimensions()
 
