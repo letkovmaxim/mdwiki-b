@@ -8,22 +8,24 @@ import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 /**
  * REST контроллер для CRUD операций над сущностью Document
  */
 @RestController
 @RequestMapping("/spaces/{spaceId}/pages/{pageId}/document")
+@Validated
 public class DocumentController {
 
     /**
@@ -120,9 +122,16 @@ public class DocumentController {
      * @return HTTP ответ с PDF файлом и статусом 200
      */
     @GetMapping("/pdf")
-    public ResponseEntity<InputStreamResource> convertToPdf(@PathVariable(name = "spaceId") int spaceId,
-                                                            @PathVariable(name = "pageId") int pageId) {
-        ConvertedDocument convertedDocument = documentService.convertToPdf(spaceId, pageId);
+    public ResponseEntity<InputStreamResource>
+    convertToPdf(@PathVariable(name = "spaceId") int spaceId,
+                 @PathVariable(name = "pageId") int pageId,
+                 @RequestParam(name = "font", required = false, defaultValue = "times") String font,
+                 @RequestParam(name = "fontSize", required = false, defaultValue = "16")
+                 @Min(value = 6, message = "Мин. размер шрифта - 6")
+                 @Max(value = 66, message = "Макс. размер шрифта - 66") int fontSize,
+                 @RequestParam(name = "tree", required = false, defaultValue = "false") boolean tree) {
+        ConvertedDocument convertedDocument = documentService
+                .convertToPdf(spaceId, pageId, font, fontSize, tree);
 
         InputStreamResource inputStreamResource = convertedDocument.getInputStreamResource();
         String documentName = convertedDocument.getDocumentName();
@@ -130,7 +139,7 @@ public class DocumentController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"".concat(documentName).concat("\""))
+                        String.format("attachment; filename=\"%s.%s\"", documentName, "pdf"))
                 .body(inputStreamResource);
     }
 }

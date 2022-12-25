@@ -48,7 +48,9 @@ public interface DocumentCrudService {
      * Конвертация докумета в PDF формат
      * @param spaceId ID пространства
      * @param pageId ID страницы
+     * @param font название шрифта
+     * @param fontSize размер шрифта в пикселях
      * @return поток данных с документом в формате PDF
      */
-    ConvertedDocument convertToPdf(int spaceId, int pageId);
+    ConvertedDocument convertToPdf(int spaceId, int pageId, String font, int fontSize, boolean tree);
 }

@@ -1,21 +1,19 @@
 package org.sbtitcourses.mdwiki.service;
 
-import com.qkyrie.markdown2pdf.Markdown2PdfConverter;
-import com.qkyrie.markdown2pdf.internal.exceptions.ConversionException;
-import com.qkyrie.markdown2pdf.internal.exceptions.Markdown2PdfLogicException;
-import org.sbtitcourses.mdwiki.model.*;
+import org.sbtitcourses.mdwiki.model.ConvertedDocument;
+import org.sbtitcourses.mdwiki.model.Document;
+import org.sbtitcourses.mdwiki.model.Page;
+import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.DocumentRepository;
+import org.sbtitcourses.mdwiki.util.PdfConverter;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
 import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.PdfConversionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.*;
 
 /**
  * Сервис с логикой CRUD операций над сущностью Document
@@ -141,38 +139,48 @@ public class DocumentService implements DocumentCrudService {
      * Метод, отвечающий за конвертацию докумета в PDF формат
      * @param spaceId ID пространства
      * @param pageId ID страницы
+     * @param font название шрифта
+     * @param size размер шрифта в писелях
      * @return поток данных с документом в формате PDF
+     * @throws AccessDeniedException если не удалось определить пользователя
+     * @throws PdfConversionException если возникла ошибка конвертации
      */
     @Override
-    public ConvertedDocument convertToPdf(int spaceId, int pageId) {
-        Document document = resourceFetcher.fetchDocument(spaceId, pageId);
+    public ConvertedDocument convertToPdf(int spaceId, int pageId, String font, int size, boolean tree) {
+        Page page = resourceFetcher.fetchPage(pageId, spaceId);
+        Document document = page.getDocument();
         Person user = resourceFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToReadDocumentDenied(document, user)) {
             throw new AccessDeniedException("Доступ запрещен");
         }
 
-        String mdText = document.getText();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PdfConverter converter = PdfConverter
+                .builder()
+                .font(font)
+                .size(size)
+                .build();
 
-        try {
-            Markdown2PdfConverter.newConverter()
-                    .readFrom(() -> mdText)
-                    .writeTo(out -> {
-                        try {
-                            outputStream.write(out);
-                        } catch (IOException e) {
-                            throw new PdfConversionException("Ошибка конвертации");
-                        }
-                    })
-                    .doIt();
-        } catch (ConversionException | Markdown2PdfLogicException ex) {
-            throw new PdfConversionException("Ошибка конвертации");
-        }
-        InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-        InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
+        String markdown = tree ? treeOf(page) : document.getText();
         String documentName = document.getPage().getName();
 
+        InputStreamResource inputStreamResource = converter
+                .convert(markdown);
+
         return new ConvertedDocument(inputStreamResource, documentName);
+    }
+
+    private String treeOf(Page page) {
+        StringBuilder markdown = new StringBuilder();
+        readTree(page, markdown);
+        return markdown.toString();
+    }
+
+    private void readTree(Page page, StringBuilder markdown) {
+        markdown.append(page.getDocument().getText());
+        for (Page subpage: page.getSubpages()) {
+            markdown.append("\n");
+            readTree(subpage, markdown);
+        }
     }
 }
