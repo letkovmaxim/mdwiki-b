@@ -51,6 +51,14 @@
     border: none !important;
 }
 
+.photo{
+    margin-top: 3px !important;
+    position: absolute !important;
+    height: 24px !important;
+    right: 300px !important;
+    border: none !important;
+}
+
 .saveHelp{
     margin-top: 3px !important;
     position: absolute !important;
@@ -84,4 +92,108 @@
     position: relative;
     box-shadow: 1px 2px 5px #999;
     background-color: #EEEEEE;
+}
+
+.buttonsImage{
+    position: absolute !important;
+    height: 100% !important;
+    margin-top: 3px !important;
+    width: 20% !important;
+}
+
+.textImage{
+    font-size: 13px !important;
+}
+
+.workingAria{
+    position: absolute !important;
+    height: 91% !important;
+    margin-top: 3px !important;
+    width: 75% !important;
+    margin-left: 20% !important;
+}
+
+.rectangle{
+    position: absolute !important;
+    height: 90% !important;
+    width: 90% !important;
+    margin-top: 2% !important;
+    margin-left: 5% !important;
+    border-style: dashed;
+    border-color: #4FB5D7;
+    border-radius: 20px;
+}
+
+.camera{
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-right: -50% !important;
+    transform: translate(-50%, -50%) !important;
+    height: 90%!important;
+    width: 90% !important;
+    margin-left: 3px !important;
+    margin-top: -3px !important;
+    border-radius: 15px !important;
+}
+
+.iconCamera{
+    color: #4FB5D7 !important;
+    width: 50px !important;
+    height: 50px !important;
+}
+
+.addPath{
+    margin-top: 20px;
+    height: 28px;
+    width: 95%;
+    background: #FFFFFF;
+    border: 3px solid #4FB5D7;
+    border-radius: 5px;
+}
+
+.addPath:focus{
+    border: 3px solid #8482FF;
+    outline: none !important;
+}
+
+.addPath::placeholder {
+    color: rgba(79,181,215, 0.8);
+    font-size: 16px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.addPath:valid{
+    color: #747A80;
+    font-size: 16px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.addLink{
+    position: absolute !important;
+    right: 23px !important;
+    bottom: 15px !important;
+}
+
+.iconAddImage{
+    width: 15px !important;
+    height: 15px !important;
+}
+
+.delText{
+    font-size: 10px;
+    color: red;
+}
+
+.delIcon{
+    font-size: 12px!important;
+    color: red !important;
+}
+
+.linkErrorText{
+    font-size: 15px;
+    color: red;
+    font-weight: bold;
 }

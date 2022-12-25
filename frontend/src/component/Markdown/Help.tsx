@@ -56,7 +56,7 @@ export default function Help() {
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                             Что такое Wiki-service
                         </Typography>
-                        <Typography component="p" id="modal-modal-description" sx={{ mt: 2 }}>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                             Данный веб-сайт предназначен для создания markdown документов, у каждого пользователя есть пространства,
                             в которых будут храниться его страницы, которые как раз и будут являться markdown документами. Каждая страница может содержаться любое количество под страниц,
                             которые будут выстраиваться в виде дерева. Так же у пользователя будет дефолтная страница «ЗАПИСКИ»,
