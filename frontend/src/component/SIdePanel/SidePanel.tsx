@@ -17,7 +17,11 @@ interface IComp {
     shared:any
 }
 
-export const SidePanel = () => {
+type Props = {
+    checkText: string
+}
+
+export const SidePanel = ({checkText}:Props) => {
 
     const { spaceId } = useParams();
 
@@ -209,13 +213,12 @@ export const SidePanel = () => {
                                 <ArrowBackIcon sx={{ height:25, width:25}}/>
                             </IconButton>
 
-                            <Page idSpace={spaceOpenId}/>
+                            <Page idSpace={spaceOpenId} checkText={checkText}/>
 
                         </List>
 
                     </div>
             )}
-
             <ModalWindow
                 open={open}
                 handleClose={handleClose}
