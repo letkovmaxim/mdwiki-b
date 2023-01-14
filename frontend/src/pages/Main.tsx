@@ -53,6 +53,11 @@ export default function MainPage() {
 
     const {pageId} = useParams();
 
+    const [checkText, setCheckText] = useState("")
+
+    const addText = (text:string) => {
+        setCheckText(text)
+    }
 
     useEffect(() => {
         if(window.localStorage.getItem('name') === ''){
@@ -134,12 +139,12 @@ export default function MainPage() {
 
                 </List>
                 <Divider />
-                <SidePanel/>
+                <SidePanel checkText={checkText}/>
             </Drawer>
 
             <Main open={open} >
                 <DrawerHeader />
-                {(pageId ? <Document/> : <Note/>)}
+                {(pageId ? <Document addText={addText}/> : <Note/>)}
             </Main>
         </Box>
     );

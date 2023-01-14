@@ -3,7 +3,11 @@ import {useParams} from "react-router-dom";
 import "../../css/document.css"
 import {MarkdownDocument} from "./MarkdownDocument";
 
-export const Document = () =>{
+type Props = {
+    addText:(text:string) => void
+}
+
+export const Document = ({addText}:Props) =>{
 
     const {spaceId} = useParams();
     const { pageId } = useParams();
@@ -31,6 +35,7 @@ export const Document = () =>{
             setDocument({
                 text: json.text
             })
+            addText(json.text)
             setNewDoc(false)
         }
     }
@@ -50,10 +55,12 @@ export const Document = () =>{
 
     const newText = (val:any) => {
         setDocument({text: val!})
+        addText(val)
     }
 
     const image = (url:string) => {
         setDocument({text: document.text + url})
+        addText(document.text + url)
     }
 
     return (

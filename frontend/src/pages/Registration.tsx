@@ -96,21 +96,21 @@ export class Registration extends React.Component<any, any>{
             isError = true;
         }
 
-        if(person.username.length < 3){
+        if(person.username.length <= 3){
             this.setState({
-                checkUsername: "Логин не должно быть короче 4 символов"
+                checkUsername: "Логин не должен быть короче 4 символов"
             })
             isError = true;
         }
 
         if(person.email.length === 0){
             this.setState({
-                checkEmail: "Email не должно быть пустым"
+                checkEmail: "Email не должен быть пустым"
             })
             isError = true;
         }
 
-        if(person.password.length < 5){
+        if(person.password.length <= 5){
             this.setState({
                 checkPassword: "Пароль не должен быть короче 6 символов"
             })

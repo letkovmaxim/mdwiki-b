@@ -11,9 +11,12 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import Box from "@mui/material/Box";
 import {ModalWindow} from "./Modal";
 import { useParams } from "react-router-dom";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
 
 type Props = {
-    idSpace: number
+    idSpace: number,
+    checkText: string
 }
 
 interface IComp {
@@ -25,10 +28,27 @@ interface IComp {
     updatedAt: any
 }
 
-export const Page = ({idSpace}:Props) =>{
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '350px',
+    height: '80px',
+    backgroundColor: '#4FB5D7',
+    borderStyle: 'solid',
+    borderWidth: 3,
+    borderColor: '#FCFCFC',
+    borderRadius: 5,
+    boxShadow: 24,
+    p: 2,
+};
+
+export const Page = ({idSpace, checkText}:Props) =>{
 
     const { login } = useParams();
     const { pageId } = useParams();
+    const { spaceId } = useParams();
 
     const[idTree, setIdTree] = useState<string[]>([])
     const [lastId, setLastId] = useState(0)
@@ -45,6 +65,16 @@ export const Page = ({idSpace}:Props) =>{
         name: '',
         shared: true
     })
+
+    const [openSave, setOpenSave] = React.useState(false);
+
+    const [redirectId, setRedirectId] = useState(0)
+
+    const handleOpenSave = () => setOpenSave(true);
+
+    const[document, setDocument] = useState({
+        text: checkText
+    });
 
     const[addSub, setAddSub] = useState(false)
 
@@ -239,11 +269,56 @@ export const Page = ({idSpace}:Props) =>{
         return error;
     }
 
-    const toPage = (id:number) => {
+    async function save(){
+        let newDoc = false
+        let response = await fetch('/spaces/' + spaceId + '/pages/' + pageId + '/document');
+        if(!response.ok){
+            newDoc = true
+        }
+        await fetch('/spaces/' + spaceId + '/pages/' + pageId + '/document', {
+            method: (newDoc ? 'POST' : 'PUT'),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(document),
+        })
+        redirect(redirectId)
+    }
 
+    const checkSave = async (id: number) => {
+        let response = await fetch('/spaces/' + spaceId + '/pages/' + pageId + '/document');
+        if (response.ok) {
+            let json = await response.json()
+            if (json.text !== checkText) {
+                handleOpenSave()
+            } else {
+                redirect(id)
+            }
+        } else {
+            if (checkText !== "") {
+                handleOpenSave()
+            } else {
+                redirect(id)
+            }
+        }
+    }
+
+    const toPage = async (id: number) => {
+        setDocument({
+            text: checkText
+        })
         localStorage.setItem('tree', JSON.stringify(idTree))
+        setRedirectId(id)
+        if (pageId !== undefined) {
+            await checkSave(id)
+        } else {
+            redirect(id)
+        }
+    }
 
-        window.location.replace("/wiki/" + login + "/space/" + idSpace +"/page/" + id);
+    const redirect = (id: number) => {
+        window.location.replace("/wiki/" + login + "/space/" + idSpace + "/page/" + id);
     }
 
     const tree = ( id:number, i:number) => {
@@ -350,6 +425,30 @@ export const Page = ({idSpace}:Props) =>{
                 editId={editId}
                 error={error}
             />
+
+            <Modal
+                open={openSave}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        <div style={{color:"white"}}>
+                            Последние изменения не сохранены
+                        </div>
+                    </Typography>
+                    <Button variant="text" sx={{position: 'absolute', bottom: '0px', right: '135px'}} onClick={save}>
+                        <div style={{color:"white"}}>
+                            Сохранить
+                        </div>
+                    </Button>
+                    <Button variant="text" sx={{position: 'absolute', bottom: '0px', right: '10px'}} onClick={() => redirect(redirectId)}>
+                        <div style={{color:"white"}}>
+                            Продолжить
+                        </div>
+                    </Button>
+                </Box>
+            </Modal>
         </div>
     )
 }
