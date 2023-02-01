@@ -197,3 +197,32 @@
     color: red;
     font-weight: bold;
 }
+
+
+.pdfButton{
+    margin-top: 3px !important;
+    position: absolute !important;
+    height: 24px !important;
+    right: 305px !important;
+    border: none !important;
+}
+
+.fontInput{
+    height: 40px !important;
+    color: #FFFFFF !important;
+    font-weight: bold !important;
+}
+
+.fontText{
+    color: #FFFFFF !important;
+}
+
+.fontText:focus{
+    color: #FFFFFF !important;
+}
+
+.pdfDownload{
+    position: absolute !important;
+    bottom: 10px !important;
+    right: 15px !important;
+}
