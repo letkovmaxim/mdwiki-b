@@ -1,6 +1,10 @@
 package org.sbtitcourses.mdwiki.service;
 
+import org.sbtitcourses.mdwiki.model.ConvertedDocument;
 import org.sbtitcourses.mdwiki.model.Document;
+import org.springframework.core.io.InputStreamResource;
+
+import java.io.InputStream;
 
 /**
  * Интерфейс сервиса CRUD операций над сущностью Document
@@ -39,4 +43,14 @@ public interface DocumentCrudService {
      * @param spaceId ID пространства, в котором нужно удалить документ
      */
     void delete(int pageId, int spaceId);
+
+    /**
+     * Конвертация докумета в PDF формат
+     * @param spaceId ID пространства
+     * @param pageId ID страницы
+     * @param font название шрифта
+     * @param fontSize размер шрифта в пикселях
+     * @return поток данных с документом в формате PDF
+     */
+    ConvertedDocument convertToPdf(int spaceId, int pageId, String font, int fontSize, boolean tree);
 }

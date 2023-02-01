@@ -3,20 +3,29 @@ package org.sbtitcourses.mdwiki.controller;
 import org.modelmapper.ModelMapper;
 import org.sbtitcourses.mdwiki.dto.document.DocumentRequest;
 import org.sbtitcourses.mdwiki.dto.document.DocumentResponse;
+import org.sbtitcourses.mdwiki.model.ConvertedDocument;
 import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 /**
  * REST контроллер для CRUD операций над сущностью Document
  */
 @RestController
 @RequestMapping("/spaces/{spaceId}/pages/{pageId}/document")
+@Validated
 public class DocumentController {
 
     /**
@@ -104,5 +113,33 @@ public class DocumentController {
         documentService.delete(pageId, spaceId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Метод, обрабатывающий запросы на скачку документа в PDF формате
+     * @param spaceId ID пространтсва
+     * @param pageId ID страницы
+     * @return HTTP ответ с PDF файлом и статусом 200
+     */
+    @GetMapping("/pdf")
+    public ResponseEntity<InputStreamResource>
+    convertToPdf(@PathVariable(name = "spaceId") int spaceId,
+                 @PathVariable(name = "pageId") int pageId,
+                 @RequestParam(name = "font", required = false, defaultValue = "times") String font,
+                 @RequestParam(name = "fontSize", required = false, defaultValue = "16")
+                 @Min(value = 6, message = "Мин. размер шрифта - 6")
+                 @Max(value = 66, message = "Макс. размер шрифта - 66") int fontSize,
+                 @RequestParam(name = "tree", required = false, defaultValue = "false") boolean tree) {
+        ConvertedDocument convertedDocument = documentService
+                .convertToPdf(spaceId, pageId, font, fontSize, tree);
+
+        InputStreamResource inputStreamResource = convertedDocument.getInputStreamResource();
+        String documentName = convertedDocument.getDocumentName();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        String.format("attachment; filename=\"%s.%s\"", documentName, "pdf"))
+                .body(inputStreamResource);
     }
 }
