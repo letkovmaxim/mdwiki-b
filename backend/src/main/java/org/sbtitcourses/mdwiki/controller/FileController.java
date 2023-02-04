@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,15 +139,5 @@ public class FileController {
         imageStorageService.deleteImage(GUID);
 
         return ResponseEntity.ok().build();
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    private ResponseEntity<HttpStatus> handleIllegalArgumentException(IllegalArgumentException e) {
-        return ResponseEntity.badRequest().build();
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    private ResponseEntity<HttpStatus> handleConstraintViolationException(ConstraintViolationException e) {
-        return ResponseEntity.badRequest().build();
     }
 }

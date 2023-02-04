@@ -10,13 +10,6 @@ import java.util.List;
 public interface PersonCrudService {
 
     /**
-     * Создание нового пользователя
-     * @param personToCreate пользователь, которого нужно сохранить
-     * @return созданного пользователя
-     */
-    Person create(Person personToCreate);
-
-    /**
      * Получение всех пользователей
      * @return список всех пользователей
      */
