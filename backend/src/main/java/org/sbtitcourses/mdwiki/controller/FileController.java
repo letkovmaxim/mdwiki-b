@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 /**
  * REST контроллер для загрузки и скачивания файлов
  */
+@Validated
 @RestController
 public class FileController {
 
@@ -142,6 +144,11 @@ public class FileController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     private ResponseEntity<HttpStatus> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    private ResponseEntity<HttpStatus> handleConstraintViolationException(ConstraintViolationException e) {
         return ResponseEntity.badRequest().build();
     }
 }
