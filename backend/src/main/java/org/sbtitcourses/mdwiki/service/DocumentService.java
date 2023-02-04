@@ -179,7 +179,7 @@ public class DocumentService implements DocumentCrudService {
     private void readTree(Page page, StringBuilder markdown) {
         markdown.append(page.getDocument().getText());
         for (Page subpage: page.getSubpages()) {
-            markdown.append("\n");
+            markdown.append("\n\n");
             readTree(subpage, markdown);
         }
     }
