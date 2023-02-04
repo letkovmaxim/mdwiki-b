@@ -10,9 +10,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.List;
 /**
  * REST контроллер для загрузки и скачивания файлов
  */
+@Validated
 @RestController
 public class FileController {
 
@@ -30,6 +33,7 @@ public class FileController {
 
     /**
      * Конструктор для автоматического внедрения зависимостей
+     *
      * @param imageStorageService сервис с логикой записи и получения файлов
      */
     @Autowired
@@ -39,14 +43,19 @@ public class FileController {
 
     /**
      * Метод, обрабатывающий запрос на загрузку изображения
-     * @param spaceId ID пространства, с которым связано изображение
-     * @param file файл изображения
+     *
+     * @param spaceId         ID пространства, с которым связано изображение
+     * @param file            файл изображения
+     * @param thumbnailHeight высота превью изображения
+     * @param thumbnailWidth  ширина превью изображения
      * @return HTTP ответ с информацией о загруженном изображении и статусом 200
      */
     @PostMapping("/spaces/{spaceId}/upload/image")
     public ResponseEntity<FileUploadResponse> uploadImage(@PathVariable("spaceId") int spaceId,
-                                                          @RequestParam("file") MultipartFile file) {
-        StoredFile storedFile = imageStorageService.storeImage(file, spaceId);
+                                                          @RequestParam("file") MultipartFile file,
+                                                          @RequestParam("thumbnailHeight") int thumbnailHeight,
+                                                          @RequestParam("thumbnailWidth") int thumbnailWidth) {
+        StoredFile storedFile = imageStorageService.storeImage(file, spaceId, thumbnailHeight, thumbnailWidth);
 
         FileUploadResponse response = new FileUploadResponse(storedFile.getOriginalName(), storedFile.getGUID(),
                 storedFile.getMimeType(), file.getSize());
@@ -56,6 +65,7 @@ public class FileController {
 
     /**
      * Метод, обрабатывающий запрос на скачку изображения
+     *
      * @param GUID уникальный идентификатор изображения
      * @return HTTP ответ с изображением и статусом 200
      */
@@ -76,6 +86,7 @@ public class FileController {
 
     /**
      * Метод, обрабатывающий запрос на скачку превью изображения
+     *
      * @param GUID уникальный идентификатор изображения
      * @return HTTP ответ с превью изображения и статусом 200
      */
@@ -96,8 +107,9 @@ public class FileController {
 
     /**
      * Метод, обрабатывающий запрос на получение информации обо всех загруженных пользователем файлов
+     *
      * @param bunch номер страницы при пагинации
-     * @param size количество элементов в странице при пагинации
+     * @param size  количество элементов в странице при пагинации
      * @return HTTP ответ со списком файлов и статусом 200
      */
     @GetMapping("/user/uploads")
@@ -119,6 +131,7 @@ public class FileController {
 
     /**
      * Метод, обрабатывающий запрос на удаления изображения
+     *
      * @param GUID уникальный идентификатор изображения
      * @return HTTP ответ со статусом 200
      */
@@ -127,5 +140,15 @@ public class FileController {
         imageStorageService.deleteImage(GUID);
 
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    private ResponseEntity<HttpStatus> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    private ResponseEntity<HttpStatus> handleConstraintViolationException(ConstraintViolationException e) {
+        return ResponseEntity.badRequest().build();
     }
 }

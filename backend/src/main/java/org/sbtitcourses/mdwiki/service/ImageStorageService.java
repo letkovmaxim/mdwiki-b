@@ -1,11 +1,11 @@
 package org.sbtitcourses.mdwiki.service;
 
 import net.coobird.thumbnailator.Thumbnails;
+import org.sbtitcourses.mdwiki.model.LoadedFile;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.model.StoredFile;
 import org.sbtitcourses.mdwiki.repository.StoredFileRepository;
-import org.sbtitcourses.mdwiki.model.LoadedFile;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
 import org.sbtitcourses.mdwiki.util.ResourceFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
@@ -13,6 +13,7 @@ import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.sbtitcourses.mdwiki.util.exception.FileStorageException;
 import org.sbtitcourses.mdwiki.util.exception.UnsupportedTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.PageRequest;
@@ -46,29 +47,50 @@ public class ImageStorageService implements StorageService {
     private final ResourceFetcher resourceFetcher;
 
     /**
+     * Директория для хранения загруженных изображений
+     */
+    private final String uploadsDirectory;
+
+    /**
+     * Директория для хранения превью загруженных изображений
+     */
+    private final String thumbnailsDirectory;
+
+    /**
      * Конструктор для автоматического внедрения зависимостей
+     *
      * @param storedFileRepository репозиторий для взаимодействия с сущностью StoredFile
-     * @param resourceFetcher компонент для получения ресурсов
+     * @param resourceFetcher      компонент для получения ресурсов
+     * @param uploadsDirectory     директория для хранения загруженных изображений
+     * @param thumbnailsDirectory  директория для хранения превью загруженных изображений
      */
     @Autowired
     public ImageStorageService(StoredFileRepository storedFileRepository,
-                               ResourceFetcher resourceFetcher) {
+                               ResourceFetcher resourceFetcher,
+                               @Value("${file.uploads-directory}") String uploadsDirectory,
+                               @Value("${file.thumbnails-directory}") String thumbnailsDirectory) {
         this.storedFileRepository = storedFileRepository;
         this.resourceFetcher = resourceFetcher;
+        this.uploadsDirectory = uploadsDirectory;
+        this.thumbnailsDirectory = thumbnailsDirectory;
     }
 
     /**
      * Метод, отвечающий за создание пользовательских директорий в файловой системе для хранения изображений,
      * запись изображения в соответствующию директорию, создание превью для этого изображения,
      * сохранение информации об изображении в базу данных
-     * @param file файл изображения
-     * @param spaceId ID пространства, с которым связано изображение
+     *
+     * @param file            файл изображения
+     * @param spaceId         ID пространства, с которым связано изображение
+     * @param thumbnailHeight высота превью изображения
+     * @param thumbnailWidth  ширина превью изображения
      * @return объек с информацией о записанном изображении
      * @throws AccessDeniedException если не удалось определить пользователя
-     * @throws FileStorageException если произошла ошибка записи файла
+     * @throws FileStorageException  если произошла ошибка записи файла
      */
     @Override
-    public StoredFile storeImage(MultipartFile file, int spaceId) throws AccessDeniedException, FileStorageException {
+    public StoredFile storeImage(MultipartFile file, int spaceId,
+                                 int thumbnailHeight, int thumbnailWidth) {
         if (isFileNotAnImage(file)) {
             throw new UnsupportedTypeException("Недопустимый тип файла");
         }
@@ -84,9 +106,9 @@ public class ImageStorageService implements StorageService {
             throw new AccessDeniedException("Доступ запрещен");
         }
 
-        String imageStorageName = "uploads/".concat(user.getUsername());
-        Path imageStorageLocation = Path.of(imageStorageName);
-        Path thumbnailStorageLocation = imageStorageLocation.resolve("thumbnails");
+        String userDirectory = getUserDirectory(user);
+        Path imageStorageLocation = Path.of(uploadsDirectory).resolve(userDirectory);
+        Path thumbnailStorageLocation = imageStorageLocation.resolve(thumbnailsDirectory);
 
         try {
             Files.createDirectories(imageStorageLocation);
@@ -110,7 +132,7 @@ public class ImageStorageService implements StorageService {
 
             Path thumbnailLocation = renameAndResolveLocation(GUID, originalFileName, thumbnailStorageLocation);
             Thumbnails.of(file.getInputStream())
-                    .size(80, 80)
+                    .size(thumbnailHeight, thumbnailWidth)
                     .toFile(thumbnailLocation.toFile());
 
             return storedFile;
@@ -121,13 +143,14 @@ public class ImageStorageService implements StorageService {
 
     /**
      * Метод, отвечающий за получение изображения в виде ресурса и информацию о нем
+     *
      * @param GUID уникальный идентификатор изображения
      * @return объект с изображением в виде ресурса и информацию о нем
      * @throws ElementNotFoundException если не удалось найти изображение
-     * @throws AccessDeniedException если не удалось определить пользователя
+     * @throws AccessDeniedException    если не удалось определить пользователя
      */
     @Override
-    public LoadedFile loadImage(String GUID) throws ElementNotFoundException, AccessDeniedException {
+    public LoadedFile loadImage(String GUID) {
         Person user = resourceFetcher.getLoggedInUser();
         StoredFile storedFile = storedFileRepository.findByGUID(GUID)
                 .orElseThrow(() -> new ElementNotFoundException("Файл не найден"));
@@ -136,8 +159,8 @@ public class ImageStorageService implements StorageService {
             throw new AccessDeniedException("Доступ запрещен");
         }
 
-        String imageStorageName = "uploads/".concat(user.getUsername());
-        Path imageStorageLocation = Paths.get(imageStorageName);
+        String userDirectory = getUserDirectory(user);
+        Path imageStorageLocation = Paths.get(uploadsDirectory).resolve(userDirectory);
         Path imageLocation = renameAndResolveLocation(GUID, storedFile.getOriginalName(), imageStorageLocation);
 
         Resource resource = getResource(imageLocation);
@@ -146,13 +169,14 @@ public class ImageStorageService implements StorageService {
 
     /**
      * Метод, отвечающий за получение изображения в виде ресурса и информацию о нем
-     * @param GUID  уникальный идентификатор изображения
+     *
+     * @param GUID уникальный идентификатор изображения
      * @return объект с превью изображения в виде ресурса и информацию о нем
      * @throws ElementNotFoundException если не удалось найти изображение
-     * @throws AccessDeniedException если не удалось определить пользователя
+     * @throws AccessDeniedException    если не удалось определить пользователя
      */
     @Override
-    public LoadedFile loadThumbnail(String GUID) throws ElementNotFoundException, AccessDeniedException {
+    public LoadedFile loadThumbnail(String GUID) {
         Person user = resourceFetcher.getLoggedInUser();
         StoredFile storedFile = storedFileRepository.findByGUID(GUID)
                 .orElseThrow(() -> new ElementNotFoundException("Файл не найден"));
@@ -161,8 +185,8 @@ public class ImageStorageService implements StorageService {
             throw new AccessDeniedException("Доступ запрещен");
         }
 
-        String thumbnailsDirectoryName = "uploads/".concat(user.getUsername()).concat("/thumbnails");
-        Path thumbnailStorageLocation = Paths.get(thumbnailsDirectoryName);
+        String userDirectory = getUserDirectory(user);
+        Path thumbnailStorageLocation = Paths.get(uploadsDirectory).resolve(userDirectory).resolve(thumbnailsDirectory);
         Path thumbnailLocation = renameAndResolveLocation(GUID, storedFile.getOriginalName(), thumbnailStorageLocation);
 
         Resource resource = getResource(thumbnailLocation);
@@ -172,12 +196,13 @@ public class ImageStorageService implements StorageService {
     /**
      * Метод, отвечающий за удаление изображения и его превтю из файловой системы
      * и информации о нем из базы данных
+     *
      * @param GUID уникальный идентификатор изображения
      * @throws ElementNotFoundException если не удалось найти изображение
-     * @throws AccessDeniedException если не удалось определить пользователя
+     * @throws AccessDeniedException    если не удалось определить пользователя
      */
     @Override
-    public void deleteImage(String GUID) throws ElementNotFoundException, AccessDeniedException {
+    public void deleteImage(String GUID) {
         Person user = resourceFetcher.getLoggedInUser();
         StoredFile storedFile = storedFileRepository.findByGUID(GUID)
                 .orElseThrow(() -> new ElementNotFoundException("Файл не найден"));
@@ -186,12 +211,11 @@ public class ImageStorageService implements StorageService {
             throw new AccessDeniedException("Доступ запрещен");
         }
 
-        String imageStorageName = "uploads/".concat(user.getUsername());
-        Path imageStorageLocation = Paths.get(imageStorageName);
+        String userDirectory = getUserDirectory(user);
+        Path imageStorageLocation = Paths.get(uploadsDirectory).resolve(userDirectory);
         Path imageLocation = renameAndResolveLocation(GUID, storedFile.getOriginalName(), imageStorageLocation);
 
-        String thumbnailStorageName = "uploads/".concat(user.getUsername()).concat("/thumbnails");
-        Path thumbnailStorageLocation = Paths.get(thumbnailStorageName);
+        Path thumbnailStorageLocation = imageStorageLocation.resolve(thumbnailsDirectory);
         Path thumbnailLocation = renameAndResolveLocation(GUID, storedFile.getOriginalName(), thumbnailStorageLocation);
 
         try {
@@ -206,8 +230,9 @@ public class ImageStorageService implements StorageService {
 
     /**
      * Метод, отвечающий за получение информации обо всех загруженных пользователем файлов
+     *
      * @param bunch номер страницы при пагинации
-     * @param size количество элементов в странице при пагинации
+     * @param size  количество элементов в странице при пагинации
      * @return список объектов с информацией о файлах
      */
     @Override
@@ -233,7 +258,7 @@ public class ImageStorageService implements StorageService {
         return fileStorageLocation.resolve(targetName);
     }
 
-    private Resource getResource(Path targetLocation) throws ElementNotFoundException {
+    private Resource getResource(Path targetLocation) {
         try {
             Resource resource = new UrlResource(targetLocation.toUri());
 
@@ -245,5 +270,9 @@ public class ImageStorageService implements StorageService {
         } catch (MalformedURLException e) {
             throw new ElementNotFoundException("Файл не найден");
         }
+    }
+
+    private String getUserDirectory(Person user) {
+        return user.getUsername();
     }
 }

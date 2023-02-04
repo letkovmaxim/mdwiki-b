@@ -23,3 +23,6 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+file:
+  uploads-directory: "uploads"
+  thumbnails-directory: "thumbnails"
