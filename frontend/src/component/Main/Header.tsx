@@ -1,11 +1,13 @@
 import React from "react";
-import "../css/main.css"
+import "../../css/main.css"
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import {Container} from "reactstrap";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
+import LogoutIcon from '@mui/icons-material/Logout';
+import {Profile} from "./Profile";
 
 type Props = {
     handleDrawerOpen: () => void,
@@ -69,7 +71,10 @@ export const Header = ({handleDrawerOpen, open, handleSubmitToLogout}: Props) =>
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <Button color="primary" type="submit" onClick={handleSubmitToLogout}>
+                <Profile/>
+                <Button sx={{alignItems: 'left', justifyContent: 'left', width: '100%'}} color="primary" type="submit" onClick={handleSubmitToLogout}>
+                    <LogoutIcon sx={{color: '#F34646', height:20}}/>
+                    <div>&emsp;</div>
                     <div style={{color: '#F34646'}}>
                         ВЫХОД
                     </div>

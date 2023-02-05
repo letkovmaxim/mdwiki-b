@@ -46,7 +46,6 @@ const style = {
 
 export const Page = ({idSpace, checkText}:Props) =>{
 
-    const { login } = useParams();
     const { pageId } = useParams();
     const { spaceId } = useParams();
 
@@ -217,9 +216,9 @@ export const Page = ({idSpace, checkText}:Props) =>{
     async function backParent(response: any){
         if(response.ok){
             let json = await response.json()
-            window.location.replace("/wiki/" + login +"/space/" + idSpace +"/page/" + json.id);
+            window.location.replace("/wiki/space/" + idSpace +"/page/" + json.id);
         }else {
-            window.location.replace("/wiki/" + login +"/space/" + idSpace);
+            window.location.replace("/wiki/space/" + idSpace);
         }
     }
 
@@ -318,7 +317,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
     }
 
     const redirect = (id: number) => {
-        window.location.replace("/wiki/" + login + "/space/" + idSpace + "/page/" + id);
+        window.location.replace("/wiki/space/" + idSpace + "/page/" + id);
     }
 
     const tree = ( id:number, i:number) => {
