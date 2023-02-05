@@ -4,19 +4,19 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 /**
- * DTO сущности Space для запроса
+ * DTO сущности Space для запроса.
  */
 public class SpaceRequest {
 
     /**
-     * Название пространства
+     * Название пространства.
      */
     @NotEmpty
     @Size(max = 128)
     private String name;
 
     /**
-     * Статус публичности пространства
+     * Статус публичности пространства.
      */
     private boolean shared;
 

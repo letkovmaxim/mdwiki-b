@@ -3,32 +3,32 @@ package org.sbtitcourses.mdwiki.dto.space;
 import java.util.Date;
 
 /**
- * DTO сущности Space для ответа
+ * DTO сущности Space для ответа.
  */
 public class SpaceResponse {
 
     /**
-     * ID пространства
+     * ID пространства.
      */
     private int id;
 
     /**
-     * Название пространства
+     * Название пространства.
      */
     private String name;
 
     /**
-     * Точное время создания пространства
+     * Точное время создания пространства.
      */
     private Date createdAt;
 
     /**
-     * Точное время обновления пространства
+     * Точное время обновления пространства.
      */
     private Date updatedAt;
 
     /**
-     * Статус публичности пространства
+     * Статус публичности пространства.
      */
     private boolean shared;
 

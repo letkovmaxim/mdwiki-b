@@ -9,19 +9,19 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * Класс, предоставляющий основную информацию о пользователе
+ * Класс, предоставляющий основную информацию о пользователе.
  */
 public class PersonDetails implements UserDetails {
 
     /**
-     * Объект сущности пользователя
+     * Объект сущности пользователя.
      */
     private final Person person;
 
     /**
-     * Конструктор для создания объекта класса
+     * Конструктор для создания объекта класса.
      *
-     * @param person объект сущности пользователя
+     * @param person объект сущности пользователя.
      */
     public PersonDetails(Person person) {
         this.person = person;

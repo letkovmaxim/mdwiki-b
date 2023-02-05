@@ -19,21 +19,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * REST контроллер для загрузки и скачивания файлов
+ * REST контроллер для загрузки и скачивания файлов.
  */
 @RestController
 @Validated
 public class FileController {
 
     /**
-     * Сервис с логикой записи и получения файлов
+     * Сервис с логикой записи и получения файлов.
      */
     private final ImageStorageService imageStorageService;
 
     /**
-     * Конструктор для автоматического внедрения зависимостей
+     * Конструктор для автоматического внедрения зависимостей.
      *
-     * @param imageStorageService сервис с логикой записи и получения файлов
+     * @param imageStorageService сервис с логикой записи и получения файлов.
      */
     @Autowired
     public FileController(ImageStorageService imageStorageService) {
@@ -41,13 +41,13 @@ public class FileController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на загрузку изображения
+     * Метод, обрабатывающий запрос на загрузку изображения.
      *
-     * @param spaceId         ID пространства, с которым связано изображение
-     * @param file            файл изображения
-     * @param thumbnailHeight высота превью изображения
-     * @param thumbnailWidth  ширина превью изображения
-     * @return HTTP ответ с информацией о загруженном изображении и статусом 200
+     * @param spaceId         ID пространства, с которым связано изображение.
+     * @param file            файл изображения.
+     * @param thumbnailHeight высота превью изображения.
+     * @param thumbnailWidth  ширина превью изображения.
+     * @return HTTP ответ с информацией о загруженном изображении и статусом 200.
      */
     @PostMapping("/spaces/{spaceId}/upload/image")
     public ResponseEntity<FileUploadResponse> uploadImage(@PathVariable("spaceId") int spaceId,
@@ -63,10 +63,10 @@ public class FileController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на скачку изображения
+     * Метод, обрабатывающий запрос на скачку изображения.
      *
-     * @param GUID уникальный идентификатор изображения
-     * @return HTTP ответ с изображением и статусом 200
+     * @param GUID уникальный идентификатор изображения.
+     * @return HTTP ответ с изображением и статусом 200.
      */
     @GetMapping("/download/image/{GUID}")
     public ResponseEntity<Resource> downloadImage(@PathVariable("GUID") String GUID) {
@@ -84,10 +84,10 @@ public class FileController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на скачку превью изображения
+     * Метод, обрабатывающий запрос на скачку превью изображения.
      *
-     * @param GUID уникальный идентификатор изображения
-     * @return HTTP ответ с превью изображения и статусом 200
+     * @param GUID уникальный идентификатор изображения.
+     * @return HTTP ответ с превью изображения и статусом 200.
      */
     @GetMapping("/download/thumbnail/{GUID}")
     public ResponseEntity<Resource> downloadThumbnail(@PathVariable("GUID") String GUID) {
@@ -105,11 +105,11 @@ public class FileController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на получение информации обо всех загруженных пользователем файлов
+     * Метод, обрабатывающий запрос на получение информации обо всех загруженных пользователем файлов.
      *
-     * @param bunch номер страницы при пагинации
-     * @param size  количество элементов в странице при пагинации
-     * @return HTTP ответ со списком файлов и статусом 200
+     * @param bunch номер страницы при пагинации.
+     * @param size  количество элементов в странице при пагинации.
+     * @return HTTP ответ со списком файлов и статусом 200.
      */
     @GetMapping("/user/uploads")
     public ResponseEntity<List<FileUploadResponse>>
@@ -127,10 +127,10 @@ public class FileController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на удаления изображения
+     * Метод, обрабатывающий запрос на удаления изображения.
      *
-     * @param GUID уникальный идентификатор изображения
-     * @return HTTP ответ со статусом 200
+     * @param GUID уникальный идентификатор изображения.
+     * @return HTTP ответ со статусом 200.
      */
     @DeleteMapping("/delete/image/{GUID}")
     public ResponseEntity<HttpStatus> deleteFile(@PathVariable("GUID") String GUID) {

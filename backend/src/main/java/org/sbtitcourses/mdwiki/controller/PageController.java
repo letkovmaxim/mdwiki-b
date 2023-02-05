@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * REST контроллер для CRUD операций над сущностью Page
+ * REST контроллер для CRUD операций над сущностью Page.
  */
 @RestController
 @RequestMapping("/spaces/{spaceId}/pages")
@@ -26,20 +26,20 @@ import java.util.List;
 public class PageController {
 
     /**
-     * Сервис с логикой CRUD операций над сущностью Page
+     * Сервис с логикой CRUD операций над сущностью Page.
      */
     private final PageService pageService;
 
     /**
-     * Маппер для конвертации сущностей
+     * Маппер для конвертации сущностей.
      */
     private final ModelMapper modelMapper;
 
     /**
-     * Конструктор для автоматичекого внедрения зависимостей
+     * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param pageService сервис с логикой CRUD операций над сущностью Page
-     * @param modelMapper маппер для конвертации сущностей
+     * @param pageService сервис с логикой CRUD операций над сущностью Page.
+     * @param modelMapper маппер для конвертации сущностей.
      */
     @Autowired
     public PageController(PageService pageService, ModelMapper modelMapper) {
@@ -48,11 +48,11 @@ public class PageController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на создание новой страницы
+     * Метод, обрабатывающий запрос на создание новой страницы.
      *
-     * @param spaceId     ID пространства, в котором нужно создать страницу
-     * @param pageRequest информация о новой странице
-     * @return HTTP ответ с информацией о новой станице и статусом 201
+     * @param spaceId     ID пространства, в котором нужно создать страницу.
+     * @param pageRequest информация о новой странице.
+     * @return HTTP ответ с информацией о новой станице и статусом 201.
      */
     @PostMapping
     private ResponseEntity<PageResponse> create(@PathVariable("spaceId") int spaceId,
@@ -66,12 +66,12 @@ public class PageController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на создание новой подстраницы
+     * Метод, обрабатывающий запрос на создание новой подстраницы.
      *
-     * @param spaceId     ID пространства, в котором нужно создать подстраницу
-     * @param parentId    ID страницы-родителя
-     * @param pageRequest информация о новой подстранице
-     * @return HTTP ответ с информацией о новой подстанице и статусом 201
+     * @param spaceId     ID пространства, в котором нужно создать подстраницу.
+     * @param parentId    ID страницы-родителя.
+     * @param pageRequest информация о новой подстранице.
+     * @return HTTP ответ с информацией о новой подстанице и статусом 201.
      */
     @PostMapping("/{parentId}")
     public ResponseEntity<PageResponse> createSubpage(@PathVariable("spaceId") int spaceId,
@@ -86,12 +86,12 @@ public class PageController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на получение всех страниц данного пространства
+     * Метод, обрабатывающий запрос на получение всех страниц данного пространства.
      *
-     * @param spaceId ID пространства
-     * @param bunch   номер страницы при пагинации
-     * @param size    количество элементов в странице при пагинации
-     * @return HTTP ответ со списком страниц и статусом 200
+     * @param spaceId ID пространства.
+     * @param bunch   номер страницы при пагинации.
+     * @param size    количество элементов в странице при пагинации.
+     * @return HTTP ответ со списком страниц и статусом 200.
      */
     @GetMapping
     public ResponseEntity<List<PageResponse>> get(@PathVariable("spaceId") int spaceId,
@@ -108,12 +108,12 @@ public class PageController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на получение всех страниц данного пространства без списка подстраниц
+     * Метод, обрабатывающий запрос на получение всех страниц данного пространства без списка подстраниц.
      *
-     * @param spaceId ID пространства
-     * @param bunch   номер страницы при пагинации
-     * @param size    количество элементов в странице при пагинации
-     * @return HTTP ответ со списком страниц и статусом 200
+     * @param spaceId ID пространства.
+     * @param bunch   номер страницы при пагинации.
+     * @param size    количество элементов в странице при пагинации.
+     * @return HTTP ответ со списком страниц и статусом 200.
      */
     @GetMapping("/plain")
     public ResponseEntity<List<PlainPageResponse>> getPlain(@PathVariable("spaceId") int spaceId,
@@ -130,11 +130,11 @@ public class PageController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на получение родителя страницы
+     * Метод, обрабатывающий запрос на получение родителя страницы.
      *
-     * @param spaceId ID пространства
-     * @param pageId  ID страницы, родителя которой нужно получить
-     * @return HTTP ответ с информацией о странице и статусом 200
+     * @param spaceId ID пространства.
+     * @param pageId  ID страницы, родителя которой нужно получить.
+     * @return HTTP ответ с информацией о странице и статусом 200.
      */
     @GetMapping("/{pageId}/parent")
     public ResponseEntity<PageResponse> getParent(@PathVariable("spaceId") int spaceId,
@@ -146,11 +146,11 @@ public class PageController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на получение страницы по его ID для данного пространства
+     * Метод, обрабатывающий запрос на получение страницы по его ID для данного пространства.
      *
-     * @param spaceId ID пространства
-     * @param pageId  ID страницы
-     * @return HTTP ответ с информацией о странице и статусом 200
+     * @param spaceId ID пространства.
+     * @param pageId  ID страницы.
+     * @return HTTP ответ с информацией о странице и статусом 200.
      */
     @GetMapping("/{pageId}")
     public ResponseEntity<PageResponse> get(@PathVariable("spaceId") int spaceId,
@@ -162,11 +162,11 @@ public class PageController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на получение подстраниц по ID страницы-родителя
+     * Метод, обрабатывающий запрос на получение подстраниц по ID страницы-родителя.
      *
-     * @param spaceId ID пространства
-     * @param pageId  ID страницы-родителя
-     * @return HTTP ответ со списком подстраниц и статусом 200
+     * @param spaceId ID пространства.
+     * @param pageId  ID страницы-родителя.
+     * @return HTTP ответ со списком подстраниц и статусом 200.
      */
     @GetMapping("/{pageId}/subpages")
     public ResponseEntity<List<PlainPageResponse>> getSubpages(@PathVariable("spaceId") int spaceId,
@@ -183,12 +183,12 @@ public class PageController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на обновление страницы по его ID для данного пространства
+     * Метод, обрабатывающий запрос на обновление страницы по его ID для данного пространства.
      *
-     * @param spaceId     ID пространства
-     * @param pageId      ID страницы
-     * @param pageRequest информация о странице, которую нужно обновить
-     * @return HTTP ответ с информацией об обновленной странице и статусом 200
+     * @param spaceId     ID пространства.
+     * @param pageId      ID страницы.
+     * @param pageRequest информация о странице, которую нужно обновить.
+     * @return HTTP ответ с информацией об обновленной странице и статусом 200.
      */
     @PutMapping("/{pageId}")
     private ResponseEntity<PageResponse> update(@PathVariable("spaceId") int spaceId,
@@ -203,11 +203,11 @@ public class PageController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на удаление страницы по его ID для данного пространства
+     * Метод, обрабатывающий запрос на удаление страницы по его ID для данного пространства.
      *
-     * @param spaceId ID пространства
-     * @param pageId  ID страницы
-     * @return HTTP ответ со статусом 204
+     * @param spaceId ID пространства.
+     * @param pageId  ID страницы.
+     * @return HTTP ответ со статусом 204.
      */
     @DeleteMapping("/{pageId}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("spaceId") int spaceId,

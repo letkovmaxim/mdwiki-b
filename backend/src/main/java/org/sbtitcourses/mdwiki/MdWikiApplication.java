@@ -6,17 +6,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 /**
- * Запуск wiki-сервиса
+ * Главный класс с точкой входа приложения
  */
 @SpringBootApplication
 public class MdWikiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MdWikiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MdWikiApplication.class, args);
+    }
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 }

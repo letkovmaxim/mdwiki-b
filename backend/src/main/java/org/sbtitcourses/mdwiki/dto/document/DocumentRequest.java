@@ -3,12 +3,12 @@ package org.sbtitcourses.mdwiki.dto.document;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * DTO сущности Document для запроса
+ * DTO сущности Document для запроса.
  */
 public class DocumentRequest {
 
     /**
-     * Текст markdown-документа
+     * Текст markdown-документа.
      */
     @NotEmpty
     private String text;

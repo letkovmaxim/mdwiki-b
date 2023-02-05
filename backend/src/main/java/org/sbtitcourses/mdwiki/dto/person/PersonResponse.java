@@ -3,47 +3,47 @@ package org.sbtitcourses.mdwiki.dto.person;
 import java.util.Date;
 
 /**
- * DTO сущности Person для ответа
+ * DTO сущности Person для ответа.
  */
 public class PersonResponse {
 
     /**
-     * ID пользователя в базе данных
+     * ID пользователя в базе данных.
      */
     private int id;
 
     /**
-     * Логин пользователя
+     * Логин пользователя.
      */
     private String username;
 
     /**
-     * Имя пользователя
+     * Имя пользователя.
      */
     private String name;
 
     /**
-     * Email пользователя
+     * Эл. почта пользователя.
      */
     private String email;
 
     /**
-     * Точное время создания пользователя
+     * Точное время создания пользователя.
      */
     private Date createdAt;
 
     /**
-     * Точное время обновления пользователя
+     * Точное время обновления пользователя.
      */
     private Date updatedAt;
 
     /**
-     * Статус активности аккаунта
+     * Статус активности аккаунта.
      */
     private boolean enabled;
 
     /**
-     * Текст заметки markdown-документа
+     * Текст заметки markdown-документа.
      */
     private String note;
 

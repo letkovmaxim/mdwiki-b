@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import static org.springframework.http.HttpStatus.CONFLICT;
 
 /**
- * Исключение "ошибка записи файла"
+ * Исключение "ошибка записи файла".
  */
 @ResponseStatus(CONFLICT)
 public class FileStorageException extends RuntimeException {

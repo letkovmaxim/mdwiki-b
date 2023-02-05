@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * REST контроллер для CRUD операций над сущностью Space
+ * REST контроллер для CRUD операций над сущностью Space.
  */
 @RestController
 @RequestMapping("/spaces")
@@ -25,20 +25,20 @@ import java.util.List;
 public class SpaceController {
 
     /**
-     * Сервис с логикой CRUD операций над сущностью Space
+     * Сервис с логикой CRUD операций над сущностью Space.
      */
     private final SpaceService spaceService;
 
     /**
-     * Маппер для конвертации сущностей
+     * Маппер для конвертации сущностей.
      */
     private final ModelMapper modelMapper;
 
     /**
-     * Конструктор для автоматичекого внедрения зависимостей
+     * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param spaceService сервис с логикой CRUD операций над сущностью Space
-     * @param modelMapper  маппер для конвертации сущностей
+     * @param spaceService сервис с логикой CRUD операций над сущностью Space.
+     * @param modelMapper  маппер для конвертации сущностей.
      */
     @Autowired
     public SpaceController(SpaceService spaceService, ModelMapper modelMapper) {
@@ -47,10 +47,10 @@ public class SpaceController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на создание нового пространства
+     * Метод, обрабатывающий запрос на создание нового пространства.
      *
-     * @param spaceRequest информация о новом пространстве
-     * @return HTTP ответ с информацией о новом пространстве и статусом 201
+     * @param spaceRequest информация о новом пространстве.
+     * @return HTTP ответ с информацией о новом пространстве и статусом 201.
      */
     @PostMapping
     public ResponseEntity<SpaceResponse> create(@RequestBody @Valid SpaceRequest spaceRequest) {
@@ -63,11 +63,11 @@ public class SpaceController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на получение всех пространств пользователя
+     * Метод, обрабатывающий запрос на получение всех пространств пользователя.
      *
-     * @param bunch номер страницы при пагинации
-     * @param size  количество элементов на странице при пагинации
-     * @return HTTP ответ со списком пространств и статусом 200
+     * @param bunch номер страницы при пагинации.
+     * @param size  количество элементов на странице при пагинации.
+     * @return HTTP ответ со списком пространств и статусом 200.
      */
     @GetMapping
     public ResponseEntity<List<SpaceResponse>> get(@RequestParam("bunch") @Min(0) int bunch,
@@ -83,11 +83,11 @@ public class SpaceController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на получение всех публичных пространств
+     * Метод, обрабатывающий запрос на получение всех публичных пространств.
      *
-     * @param bunch номер страницы при пагинации
-     * @param size  количество элементов на странице при пагинации
-     * @return HTTP ответ со списком пространств и статусом 200
+     * @param bunch номер страницы при пагинации.
+     * @param size  количество элементов на странице при пагинации.
+     * @return HTTP ответ со списком пространств и статусом 200.
      */
     @GetMapping("/shared")
     public ResponseEntity<List<SpaceResponse>> getShared(@RequestParam("bunch") @Min(0) int bunch,
@@ -103,10 +103,10 @@ public class SpaceController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на получение пространства по его ID
+     * Метод, обрабатывающий запрос на получение пространства по его ID.
      *
-     * @param id ID пространства
-     * @return HTTP ответ с информацией о пространстве и статусом 200
+     * @param id ID пространства.
+     * @return HTTP ответ с информацией о пространстве и статусом 200.
      */
     @GetMapping("/{id}")
     public ResponseEntity<SpaceResponse> get(@PathVariable("id") int id) {
@@ -117,11 +117,11 @@ public class SpaceController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на обновление пространства по его ID
+     * Метод, обрабатывающий запрос на обновление пространства по его ID.
      *
-     * @param id           ID пространства
-     * @param spaceRequest информация о пространстве, которую нужно обновить
-     * @return HTTP ответ с информацией об обновленном пространстве и статусом 200
+     * @param id           ID пространства.
+     * @param spaceRequest информация о пространстве, которую нужно обновить.
+     * @return HTTP ответ с информацией об обновленном пространстве и статусом 200.
      */
     @PutMapping("/{id}")
     public ResponseEntity<SpaceResponse> update(@PathVariable("id") int id,
@@ -135,10 +135,10 @@ public class SpaceController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на удаление пространтсва по его ID
+     * Метод, обрабатывающий запрос на удаление пространтсва по его ID.
      *
-     * @param id ID пространства
-     * @return HTTP ответ со статусом 204
+     * @param id ID пространства.
+     * @return HTTP ответ со статусом 204.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {

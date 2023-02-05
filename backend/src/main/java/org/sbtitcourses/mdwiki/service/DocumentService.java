@@ -1,13 +1,13 @@
 package org.sbtitcourses.mdwiki.service;
 
-import org.sbtitcourses.mdwiki.util.ConvertedDocument;
 import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.model.Page;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.DocumentRepository;
+import org.sbtitcourses.mdwiki.util.ConvertedDocument;
+import org.sbtitcourses.mdwiki.util.EntityFetcher;
 import org.sbtitcourses.mdwiki.util.PdfConverter;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
-import org.sbtitcourses.mdwiki.util.EntityFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.PdfConversionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,27 +16,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Сервис с логикой CRUD операций над сущностью Document
+ * Сервис с логикой CRUD операций над сущностью Document.
  */
 @Service
 @Transactional(readOnly = true)
-public class DocumentService implements DocumentCrudService {
-
+public class DocumentService implements IDocumentService {
 
     /**
-     * Репозиторий для взаимодействия с сущностью Document
+     * Репозиторий для взаимодействия с сущностью Document.
      */
     private final DocumentRepository documentRepository;
 
     /**
-     * Компонент для получения сущностей
+     * Компонент для получения сущностей.
      */
     private final EntityFetcher entityFetcher;
 
     /**
-     * Конструктор для автоматичекого внедрения зависимостей
-     * @param documentRepository репозиторий для взаимодействия с сущностью Document
-     * @param entityFetcher компонент для получения ресурсов
+     * Конструктор для автоматичекого внедрения зависимостей.
+     *
+     * @param documentRepository репозиторий для взаимодействия с сущностью Document.
+     * @param entityFetcher      компонент для получения ресурсов.
      */
     @Autowired
     public DocumentService(DocumentRepository documentRepository,
@@ -46,16 +46,17 @@ public class DocumentService implements DocumentCrudService {
     }
 
     /**
-     * Метод, отвечающий за создание нового документа
-     * @param document документ, который нужно сохранить
-     * @param pageId ID страницы, в которой нужно создать документ
-     * @param spaceId ID пространства, в котором нужно создать документ
-     * @return сохраненный документ
-     * @throws AccessDeniedException если не удалось определить пользователя
+     * Метод, отвечающий за создание нового документа.
+     *
+     * @param document документ, который нужно сохранить.
+     * @param pageId   ID страницы, в которой нужно создать документ.
+     * @param spaceId  ID пространства, в котором нужно создать документ.
+     * @return сохраненный документ.
+     * @throws AccessDeniedException если не удалось определить пользователя.
      */
     @Override
     @Transactional
-    public Document create(Document document, int pageId, int spaceId) throws AccessDeniedException{
+    public Document create(Document document, int pageId, int spaceId) {
         Page page = entityFetcher.fetchPage(pageId, spaceId);
         Person user = entityFetcher.getLoggedInUser();
 
@@ -70,15 +71,16 @@ public class DocumentService implements DocumentCrudService {
     }
 
     /**
-     * Метод, отвечающий за получение документа
-     * @param pageId ID страницы, в которой нужно найти документ
-     * @param spaceId ID пространства, в котором нужно найти документ
-     * @return найденый документ
-     * @throws AccessDeniedException если не удалось определить пользователя
+     * Метод, отвечающий за получение документа.
+     *
+     * @param pageId  ID страницы, в которой нужно найти документ.
+     * @param spaceId ID пространства, в котором нужно найти документ.
+     * @return найденый документ.
+     * @throws AccessDeniedException если не удалось определить пользователя.
      */
     @Override
     @Transactional
-    public Document get(int pageId, int spaceId) throws AccessDeniedException {
+    public Document get(int pageId, int spaceId) {
         Document document = entityFetcher.fetchDocument(pageId, spaceId);
         Person user = entityFetcher.getLoggedInUser();
 
@@ -90,16 +92,17 @@ public class DocumentService implements DocumentCrudService {
     }
 
     /**
-     * Метод, отвечающий за обновление документа
-     * @param pageId ID страницы, в которой нужно обновить документ
-     * @param spaceId ID пространства, в котором нужно обновить документ
-     * @param documentToUpdateWith документ, значениями полей которого нужно обновить требуемый документ
-     * @return обновленный документ
-     * @throws AccessDeniedException если не удалось определить пользователя
+     * Метод, отвечающий за обновление документа.
+     *
+     * @param pageId               ID страницы, в которой нужно обновить документ.
+     * @param spaceId              ID пространства, в котором нужно обновить документ.
+     * @param documentToUpdateWith документ, значениями полей которого нужно обновить требуемый документ.
+     * @return обновленный документ.
+     * @throws AccessDeniedException если не удалось определить пользователя.
      */
     @Override
     @Transactional
-    public Document update(int pageId, int spaceId, Document documentToUpdateWith) throws AccessDeniedException {
+    public Document update(int pageId, int spaceId, Document documentToUpdateWith) {
         Document document = entityFetcher.fetchDocument(pageId, spaceId);
         Person user = entityFetcher.getLoggedInUser();
 
@@ -115,14 +118,15 @@ public class DocumentService implements DocumentCrudService {
     }
 
     /**
-     * Метод, отвечающий за удаление документа
-     * @param pageId ID страницы, в которой нужно удалить документ
-     * @param spaceId ID пространства, в котором нужно удалить документ
-     * @throws AccessDeniedException если не удалось определить пользователя
+     * Метод, отвечающий за удаление документа.
+     *
+     * @param pageId  ID страницы, в которой нужно удалить документ.
+     * @param spaceId ID пространства, в котором нужно удалить документ.
+     * @throws AccessDeniedException если не удалось определить пользователя.
      */
     @Override
     @Transactional
-    public void delete(int pageId, int spaceId) throws AccessDeniedException {
+    public void delete(int pageId, int spaceId) {
         Document document = entityFetcher.fetchDocument(pageId, spaceId);
         Person user = entityFetcher.getLoggedInUser();
 
@@ -136,14 +140,15 @@ public class DocumentService implements DocumentCrudService {
     }
 
     /**
-     * Метод, отвечающий за конвертацию докумета в PDF формат
-     * @param spaceId ID пространства
-     * @param pageId ID страницы
-     * @param font название шрифта
-     * @param size размер шрифта в писелях
-     * @return поток данных с документом в формате PDF
-     * @throws AccessDeniedException если не удалось определить пользователя
-     * @throws PdfConversionException если возникла ошибка конвертации
+     * Метод, отвечающий за конвертацию докумета в PDF формат.
+     *
+     * @param spaceId ID пространства.
+     * @param pageId  ID страницы.
+     * @param font    название шрифта.
+     * @param size    размер шрифта в писелях.
+     * @return поток данных с документом в формате PDF.
+     * @throws AccessDeniedException  если не удалось определить пользователя.
+     * @throws PdfConversionException если возникла ошибка конвертации.
      */
     @Override
     public ConvertedDocument convertToPdf(int spaceId, int pageId, String font, int size, boolean tree) {
@@ -178,7 +183,7 @@ public class DocumentService implements DocumentCrudService {
 
     private void readTree(Page page, StringBuilder markdown) {
         markdown.append(page.getDocument().getText());
-        for (Page subpage: page.getSubpages()) {
+        for (Page subpage : page.getSubpages()) {
             markdown.append("\n\n");
             readTree(subpage, markdown);
         }

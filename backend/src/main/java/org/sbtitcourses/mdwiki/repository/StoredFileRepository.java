@@ -10,24 +10,24 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Репозиторий для взаимодействия с сущностью StoredFile
+ * Репозиторий для взаимодействия с сущностью StoredFile.
  */
 public interface StoredFileRepository extends JpaRepository<StoredFile, Integer> {
 
     /**
-     * Поиск файла по уникальному идентификатору
+     * Поиск файла по уникальному идентификатору.
      *
-     * @param GUID уникальный идентификатор файла
-     * @return найденый файл
+     * @param GUID уникальный идентификатор файла.
+     * @return найденый файл.
      */
     Optional<StoredFile> findByGUID(String GUID);
 
     /**
-     * Поиск файла по владульцу
+     * Поиск файла по владульцу.
      *
-     * @param owner    владелец файла
-     * @param pageable объект, определяющий нужное колличество страниц
-     * @return найденый файл
+     * @param owner    владелец файла.
+     * @param pageable объект, определяющий нужное колличество страниц.
+     * @return найденый файл.
      */
     List<StoredFile> findByOwner(Person owner, Pageable pageable);
 }

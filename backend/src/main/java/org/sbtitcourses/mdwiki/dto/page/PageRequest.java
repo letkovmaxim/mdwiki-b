@@ -5,19 +5,19 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 /**
- * DTO сущности Page для запроса
+ * DTO сущности Page для запроса.
  */
 public class PageRequest {
 
     /**
-     * Название записи
+     * Название записи.
      */
     @NotEmpty
     @Size(max = 128)
     private String name;
 
     /**
-     * Статус публичности записи
+     * Статус публичности записи.
      */
     private boolean shared;
 

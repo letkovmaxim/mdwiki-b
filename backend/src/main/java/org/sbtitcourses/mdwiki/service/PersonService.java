@@ -16,27 +16,27 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Сервис с логикой CRUD операций над сущностью Person
+ * Сервис с логикой CRUD операций над сущностью Person.
  */
 @Service
 @Transactional(readOnly = true)
-public class PersonService implements PersonCrudService {
+public class PersonService implements IPersonService {
 
     /**
-     * Компонент для получения сущностей
+     * Компонент для получения сущностей.
      */
     private final EntityFetcher entityFetcher;
 
     /**
-     * Репозиторий для взаимодействия с сущностью Person
+     * Репозиторий для взаимодействия с сущностью Person.
      */
     private final PersonRepository personRepository;
 
     /**
-     * Конструктор для автоматичекого внедрения зависимостей
+     * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param entityFetcher  компонент для получения ресурсов
-     * @param personRepository репозиторий для взаимодействия с сущностью Person
+     * @param entityFetcher    компонент для получения ресурсов.
+     * @param personRepository репозиторий для взаимодействия с сущностью Person.
      */
     @Autowired
     public PersonService(EntityFetcher entityFetcher,
@@ -46,9 +46,9 @@ public class PersonService implements PersonCrudService {
     }
 
     /**
-     * Метод, отвечающий за получение всех пользователей
+     * Метод, отвечающий за получение всех пользователей.
      *
-     * @return список всех пользователей
+     * @return список всех пользователей.
      */
     @Override
     public List<Person> get(int bunch, int size) {
@@ -58,14 +58,14 @@ public class PersonService implements PersonCrudService {
     }
 
     /**
-     * Метод, отвечающий за получение пользователя по его ID
+     * Метод, отвечающий за получение пользователя по его ID.
      *
-     * @param id ID пользователя
-     * @return найденого пользователя
-     * @throws ElementNotFoundException если пользователя с таким ID не существует
+     * @param id ID пользователя.
+     * @return найденого пользователя.
+     * @throws ElementNotFoundException если пользователя с таким ID не существует.
      */
     @Override
-    public Person get(int id) throws ElementNotFoundException {
+    public Person get(int id) {
         Person user = entityFetcher.getLoggedInUser();
 
         if (user.getId() != id) {
@@ -77,16 +77,16 @@ public class PersonService implements PersonCrudService {
     }
 
     /**
-     * Метод, отвечающий за обновление пользователя по его ID
+     * Метод, отвечающий за обновление пользователя по его ID.
      *
-     * @param id            ID пользователя
-     * @param updatedPerson объект класса Person, значениями полей которого нужно обновить пользователя
-     * @return обновленного пользователя
-     * @throws ElementNotFoundException если пользователя с таким ID не существует
+     * @param id            ID пользователя.
+     * @param updatedPerson объект класса Person, значениями полей которого нужно обновить пользователя.
+     * @return обновленного пользователя.
+     * @throws ElementNotFoundException если пользователя с таким ID не существует.
      */
     @Override
     @Transactional
-    public Person update(int id, Person updatedPerson) throws ElementNotFoundException {
+    public Person update(int id, Person updatedPerson) {
         Person user = entityFetcher.getLoggedInUser();
 
         if (user.getId() != id) {
@@ -111,16 +111,16 @@ public class PersonService implements PersonCrudService {
     }
 
     /**
-     * Метод, отвечающий за обновление заметки пользователя по его ID
+     * Метод, отвечающий за обновление заметки пользователя по его ID.
      *
-     * @param id   ID пользователя
-     * @param note обновленная записка
-     * @return обновленного пользователя
-     * @throws ElementNotFoundException если пользователя с таким ID не существует
+     * @param id   ID пользователя.
+     * @param note обновленная записка.
+     * @return обновленного пользователя.
+     * @throws ElementNotFoundException если пользователя с таким ID не существует.
      */
     @Override
     @Transactional
-    public Person noteUpdate(int id, String note) throws ElementNotFoundException {
+    public Person noteUpdate(int id, String note) {
         Person user = entityFetcher.getLoggedInUser();
 
         if (user.getId() != id) {
@@ -137,14 +137,14 @@ public class PersonService implements PersonCrudService {
     }
 
     /**
-     * Метод, отвечающий за удаление пользователя по его ID
+     * Метод, отвечающий за удаление пользователя по его ID.
      *
-     * @param id ID пользователя
-     * @throws ElementNotFoundException если пользователя с таким ID не существует
+     * @param id ID пользователя.
+     * @throws ElementNotFoundException если пользователя с таким ID не существует.
      */
     @Override
     @Transactional
-    public void delete(int id) throws ElementNotFoundException {
+    public void delete(int id) {
         Person user = entityFetcher.getLoggedInUser();
 
         if (user.getId() != id) {

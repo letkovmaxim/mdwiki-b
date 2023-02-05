@@ -1,37 +1,37 @@
 package org.sbtitcourses.mdwiki.dto.file;
 
 /**
- * DTO с информацией о загруженном файле для ответа
+ * DTO с информацией о загруженном файле для ответа.
  */
 public class FileUploadResponse {
 
     /**
-     * Оригинальное название файла
+     * Оригинальное название файла.
      */
     private String fileName;
 
     /**
-     * Уникальный идентификатор файла
+     * Уникальный идентификатор файла.
      */
     private String fileGUID;
 
     /**
-     * MIME-тип файла
+     * MIME-тип файла.
      */
     private String fileType;
 
     /**
-     * Размер файла в битах
+     * Размер файла в битах.
      */
     private long size;
 
     /**
-     * Конструктор для создания объекта исключения
+     * Конструктор для создания объекта исключения.
      *
-     * @param fileName оригинальное название файла
-     * @param fileGUID уникальный идентификатор файла
-     * @param fileType MIME-тип файла
-     * @param size     размер файла в битах
+     * @param fileName оригинальное название файла.
+     * @param fileGUID уникальный идентификатор файла.
+     * @param fileType MIME-тип файла.
+     * @param size     размер файла в битах.
      */
     public FileUploadResponse(String fileName, String fileGUID, String fileType, long size) {
         this.fileName = fileName;

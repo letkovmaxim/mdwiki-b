@@ -10,19 +10,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 /**
- * Сервис с логикой загрузки данных пользователя
+ * Сервис с логикой загрузки данных пользователя.
  */
 @Service
 public class PersonDetailsService implements UserDetailsService {
 
     /**
-     * Репозиторий для взаимодействия с сущностью Person
+     * Репозиторий для взаимодействия с сущностью Person.
      */
     private final PersonRepository personRepository;
 
     /**
-     * Конструктор для автоматичекого внедрения зависимостей
-     * @param personRepository репозиторий для взаимодействия с сущностью Person
+     * Конструктор для автоматичекого внедрения зависимостей.
+     *
+     * @param personRepository репозиторий для взаимодействия с сущностью Person.
      */
     @Autowired
     public PersonDetailsService(PersonRepository personRepository) {
@@ -30,13 +31,14 @@ public class PersonDetailsService implements UserDetailsService {
     }
 
     /**
-     * Метод, отвечающий за загрузку данных пользователя
-     * @param usernameOrEmail логин или эл. почта пользователя
-     * @return объект PersonDetails с данными о пользователе
-     * @throws ElementNotFoundException если пользователь не найден
+     * Метод, отвечающий за загрузку данных пользователя.
+     *
+     * @param usernameOrEmail логин или эл. почта пользователя.
+     * @return объект PersonDetails с данными о пользователе.
+     * @throws ElementNotFoundException если пользователь не найден.
      */
     @Override
-    public UserDetails loadUserByUsername(String usernameOrEmail) throws ElementNotFoundException {
+    public UserDetails loadUserByUsername(String usernameOrEmail) {
         Person person = personRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new ElementNotFoundException("Пользователь не найден"));
 

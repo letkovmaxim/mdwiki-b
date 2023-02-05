@@ -5,40 +5,40 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 /**
- * DTO сущности Person для запроса
+ * DTO сущности Person для запроса.
  */
 public class PersonRequest {
 
     /**
-     * Логин пользователя
+     * Логин пользователя.
      */
     @NotEmpty
     @Size(min = 4, max = 50)
     private String username;
 
     /**
-     * Пароль пользователя
+     * Пароль пользователя.
      */
     @NotEmpty
     @Size(min = 6)
     private String password;
 
     /**
-     * Имя пользователя
+     * Имя пользователя.
      */
     @NotEmpty
     @Size(max = 128)
     private String name;
 
     /**
-     * Email пользователя
+     * Эл. почта пользователя.
      */
     @NotEmpty
     @Email
     private String email;
 
     /**
-     * Статус активности аккаунта
+     * Статус активности аккаунта.
      */
     private boolean enabled;
 

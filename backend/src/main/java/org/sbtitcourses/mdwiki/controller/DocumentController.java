@@ -20,7 +20,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 /**
- * REST контроллер для CRUD операций над сущностью Document
+ * REST контроллер для CRUD операций над сущностью Document.
  */
 @RestController
 @RequestMapping("/spaces/{spaceId}/pages/{pageId}/document")
@@ -28,20 +28,20 @@ import javax.validation.constraints.Min;
 public class DocumentController {
 
     /**
-     * Сервис с логикой CRUD операций над сущностью Document
+     * Сервис с логикой CRUD операций над сущностью Document.
      */
     private final DocumentService documentService;
 
     /**
-     * Маппер для конвертации сущностей
+     * Маппер для конвертации сущностей.
      */
     private final ModelMapper modelMapper;
 
     /**
-     * Конструктор для автоматичекого внедрения зависимостей
+     * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param documentService сервис с логикой CRUD операций над сущностью Document
-     * @param modelMapper     маппер для конвертации сущностей
+     * @param documentService сервис с логикой CRUD операций над сущностью Document.
+     * @param modelMapper     маппер для конвертации сущностей.
      */
     @Autowired
     public DocumentController(DocumentService documentService, ModelMapper modelMapper) {
@@ -50,12 +50,12 @@ public class DocumentController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на создание нового документа
+     * Метод, обрабатывающий запрос на создание нового документа.
      *
-     * @param spaceId         ID пространства, в котором нужно создать документ
-     * @param pageId          ID страницы, в которой нужно создать дорумент
-     * @param documentRequest информация о новом документе
-     * @return HTTP ответ с информацией о новом документе и статусом 201
+     * @param spaceId         ID пространства, в котором нужно создать документ.
+     * @param pageId          ID страницы, в которой нужно создать дорумент.
+     * @param documentRequest информация о новом документе.
+     * @return HTTP ответ с информацией о новом документе и статусом 201.
      */
     @PostMapping
     public ResponseEntity<DocumentResponse> create(@PathVariable("spaceId") int spaceId,
@@ -70,11 +70,11 @@ public class DocumentController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на получение страницы по его ID для данной страницы и пространства
+     * Метод, обрабатывающий запрос на получение страницы по его ID для данной страницы и пространства.
      *
-     * @param spaceId ID пространства
-     * @param pageId  ID страницы
-     * @return HTTP ответ с информацией о документе и статусом 200
+     * @param spaceId ID пространства.
+     * @param pageId  ID страницы.
+     * @return HTTP ответ с информацией о документе и статусом 200.
      */
     @GetMapping
     public ResponseEntity<DocumentResponse> get(@PathVariable("spaceId") int spaceId,
@@ -86,12 +86,12 @@ public class DocumentController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на обновление документа по его ID для данной страницы и пространства
+     * Метод, обрабатывающий запрос на обновление документа по его ID для данной страницы и пространства.
      *
-     * @param spaceId         ID пространства
-     * @param pageId          ID страницы
-     * @param documentRequest информация о документе, которую нужно обновить
-     * @return HTTP ответ с информацией об обновленном документе и статусом 200
+     * @param spaceId         ID пространства.
+     * @param pageId          ID страницы.
+     * @param documentRequest информация о документе, которую нужно обновить.
+     * @return HTTP ответ с информацией об обновленном документе и статусом 200.
      */
     @PutMapping
     public ResponseEntity<DocumentResponse> update(@PathVariable("spaceId") int spaceId,
@@ -106,11 +106,11 @@ public class DocumentController {
     }
 
     /**
-     * Метод, обрабатывающий запрос на удаление документа по его ID для данной страницы и пространтсва
+     * Метод, обрабатывающий запрос на удаление документа по его ID для данной страницы и пространтсва.
      *
-     * @param spaceId ID пространтсва
-     * @param pageId  ID страницы
-     * @return HTTP ответ со статусом 204
+     * @param spaceId ID пространтсва.
+     * @param pageId  ID страницы.
+     * @return HTTP ответ со статусом 204.
      */
     @DeleteMapping
     public ResponseEntity<HttpStatus> delete(@PathVariable("spaceId") int spaceId,
@@ -121,11 +121,11 @@ public class DocumentController {
     }
 
     /**
-     * Метод, обрабатывающий запросы на скачку документа в PDF формате
+     * Метод, обрабатывающий запросы на скачку документа в PDF формате.
      *
-     * @param spaceId ID пространтсва
-     * @param pageId  ID страницы
-     * @return HTTP ответ с PDF файлом и статусом 200
+     * @param spaceId ID пространтсва.
+     * @param pageId  ID страницы.
+     * @return HTTP ответ с PDF файлом и статусом 200.
      */
     @GetMapping("/pdf")
     public ResponseEntity<InputStreamResource>

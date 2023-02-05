@@ -4,18 +4,18 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 /**
- * DTO сущности Person для логина
+ * DTO сущности Person для логина.
  */
 public class PersonLogin {
 
     /**
-     * Логин или email пользователя
+     * Логин или эл. почта пользователя.
      */
     @NotEmpty
     private String usernameOrEmail;
 
     /**
-     * Пароль пользователя
+     * Пароль пользователя.
      */
     @NotEmpty
     @Size(min = 6)

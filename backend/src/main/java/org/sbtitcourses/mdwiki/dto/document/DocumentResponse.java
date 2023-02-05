@@ -1,12 +1,12 @@
 package org.sbtitcourses.mdwiki.dto.document;
 
 /**
- * DTO сущности Document для ответа
+ * DTO сущности Document для ответа.
  */
 public class DocumentResponse {
 
     /**
-     * Текст markdown-документа
+     * Текст markdown-документа.
      */
     private String text;
 

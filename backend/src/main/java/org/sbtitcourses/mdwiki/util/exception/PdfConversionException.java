@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import static org.springframework.http.HttpStatus.CONFLICT;
 
 /**
- * Исключение "ошибка конвертации PDF"
+ * Исключение "ошибка конвертации PDF".
  */
 @ResponseStatus(CONFLICT)
 public class PdfConversionException extends RuntimeException {

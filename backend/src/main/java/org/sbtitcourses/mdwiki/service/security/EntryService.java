@@ -19,32 +19,33 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Сервис с логикой входа и регистрации пользователя
+ * Сервис с логикой входа и регистрации пользователя.
  */
 @Service
 @Transactional(readOnly = true)
 public class EntryService {
 
     /**
-     * Репозиторий для взаимодействия с сущностью Person
+     * Репозиторий для взаимодействия с сущностью Person.
      */
     private final PersonRepository personRepository;
 
     /**
-     * Сервис с логикой загрузки данных пользователя
+     * Сервис с логикой загрузки данных пользователя.
      */
     private final PersonDetailsService personDetailsService;
 
     /**
-     * Компонент для шифрования пароля
+     * Компонент для шифрования пароля.
      */
     private final PasswordEncoder passwordEncoder;
 
     /**
-     * Конструктор для автоматичекого внедрения зависимостей
-     * @param personRepository репозиторий для взаимодействия с сущностью Person
-     * @param personDetailsService сервис с логикой загрузки данных пользователя
-     * @param passwordEncoder компонент для шифрования пароля
+     * Конструктор для автоматичекого внедрения зависимостей.
+     *
+     * @param personRepository     репозиторий для взаимодействия с сущностью Person.
+     * @param personDetailsService сервис с логикой загрузки данных пользователя.
+     * @param passwordEncoder      компонент для шифрования пароля.
      */
     @Autowired
     public EntryService(PersonRepository personRepository,
@@ -56,13 +57,14 @@ public class EntryService {
     }
 
     /**
-     * Метод, отвечающий за регистрацию пользователя
-     * @param person пользователь, которого нужно зарегистрировать
-     * @return зарегистрированного пользователя
-     * @throws RegistrationFailedException если регистрация не удалась
+     * Метод, отвечающий за регистрацию пользователя.
+     *
+     * @param person пользователь, которого нужно зарегистрировать.
+     * @return зарегистрированного пользователя.
+     * @throws RegistrationFailedException если регистрация не удалась.
      */
     @Transactional
-    public Person register(Person person) throws RegistrationFailedException {
+    public Person register(Person person) {
         List<String> errors = new ArrayList<>();
 
         if (personRepository.findByUsername(person.getUsername()).isPresent()) {
@@ -90,8 +92,9 @@ public class EntryService {
     }
 
     /**
-     * Метод, отвечающий за вход пользователя
-     * @param personLogin DTO сущности Person для логина
+     * Метод, отвечающий за вход пользователя.
+     *
+     * @param personLogin DTO сущности Person для логина.
      */
     public void login(PersonLogin personLogin) {
         UserDetails userDetails = personDetailsService.loadUserByUsername(personLogin.getUsernameOrEmail());
@@ -109,7 +112,7 @@ public class EntryService {
     }
 
     /**
-     * Метод, отвечаюзий за выход пользователя
+     * Метод, отвечаюзий за выход пользователя.
      */
     public void logout() {
         SecurityContextHolder.getContext().setAuthentication(null);

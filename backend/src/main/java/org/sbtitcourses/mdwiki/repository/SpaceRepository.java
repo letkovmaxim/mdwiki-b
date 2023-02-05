@@ -9,41 +9,41 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Репозиторий для взаимодействия с сущностью Space
+ * Репозиторий для взаимодействия с сущностью Space.
  */
 public interface SpaceRepository extends JpaRepository<Space, Integer> {
 
     /**
-     * Поиск пространства по названию
+     * Поиск пространства по названию.
      *
-     * @param name название пространства
-     * @return найденое пространтсво
+     * @param name название пространства.
+     * @return найденое пространтсво.
      */
     Optional<Space> findByName(String name);
 
     /**
-     * Поиск публичных пространств
+     * Поиск публичных пространств.
      *
-     * @param pageable объект, определяющий нужное колличество страниц
-     * @return список найденых пространтсв
+     * @param pageable объект, определяющий нужное колличество страниц.
+     * @return список найденых пространтсв.
      */
     List<Space> findBySharedTrue(Pageable pageable);
 
     /**
-     * Поиск пространств по владельцу
+     * Поиск пространств по владельцу.
      *
-     * @param owner    владелец пространства
-     * @param pageable объект, определяющий нужное колличество страниц
-     * @return возвращает список найденых пространтсв
+     * @param owner    владелец пространства.
+     * @param pageable объект, определяющий нужное колличество страниц.
+     * @return возвращает список найденых пространтсв.
      */
     List<Space> findByOwner(Person owner, Pageable pageable);
 
     /**
-     * Поиск пространства по владельцу и названию
+     * Поиск пространства по владельцу и названию.
      *
-     * @param owner владелец пространства
-     * @param name  название пространства
-     * @return возвращает найденое пространтсво
+     * @param owner владелец пространства.
+     * @param name  название пространства.
+     * @return возвращает найденое пространтсво.
      */
     Optional<Space> findByOwnerAndName(Person owner, String name);
 }

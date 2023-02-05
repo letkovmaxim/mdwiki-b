@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 /**
- * Исключение "элемент не найден"
+ * Исключение "элемент не найден".
  */
-@ResponseStatus(value = NOT_FOUND)
+@ResponseStatus(NOT_FOUND)
 public class ElementNotFoundException extends RuntimeException {
 
     public ElementNotFoundException(String message) {

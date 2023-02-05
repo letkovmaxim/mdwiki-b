@@ -9,7 +9,7 @@ import java.io.IOException;
 import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 
 /**
- * Фильтр, отвечающий за проверку аутентифицированного пользователя
+ * Фильтр, отвечающий за проверку аутентифицированного пользователя.
  */
 public class AuthFilter implements Filter {
 

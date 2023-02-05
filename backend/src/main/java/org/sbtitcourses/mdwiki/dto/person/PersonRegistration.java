@@ -5,33 +5,33 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 /**
- * DTO сущности Person для регистрации
+ * DTO сущности Person для регистрации.
  */
 public class PersonRegistration {
 
     /**
-     * Логин пользователя
+     * Логин пользователя.
      */
     @NotEmpty
     @Size(min = 4, max = 50)
     private String username;
 
     /**
-     * Пароль пользователя
+     * Пароль пользователя.
      */
     @NotEmpty
     @Size(min = 6)
     private String password;
 
     /**
-     * Имя пользователя
+     * Имя пользователя.
      */
     @NotEmpty
     @Size(max = 128)
     private String name;
 
     /**
-     * Email пользователя
+     * Эл. почта пользователя.
      */
     @NotEmpty
     @Email

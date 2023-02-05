@@ -3,33 +3,33 @@ package org.sbtitcourses.mdwiki.dto.page;
 import java.util.Date;
 
 /**
- * DTO сущности Page для ответа без списка подстраниц
+ * DTO сущности Page для ответа без списка подстраниц.
  */
 public class PlainPageResponse {
 
     /**
-     * ID записи
+     * ID записи.
      */
     private int id;
 
     /**
-     * Название записи
+     * Название записи.
      */
     private String name;
 
 
     /**
-     * Точное время создания записи
+     * Точное время создания записи.
      */
     private Date createdAt;
 
     /**
-     * Точное время обновления записи
+     * Точное время обновления записи.
      */
     private Date updatedAt;
 
     /**
-     * Статус публичности записи
+     * Статус публичности записи.
      */
     private boolean shared;
 
