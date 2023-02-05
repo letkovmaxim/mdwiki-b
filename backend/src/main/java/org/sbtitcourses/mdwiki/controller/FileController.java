@@ -1,7 +1,7 @@
 package org.sbtitcourses.mdwiki.controller;
 
 import org.sbtitcourses.mdwiki.dto.file.FileUploadResponse;
-import org.sbtitcourses.mdwiki.model.LoadedFile;
+import org.sbtitcourses.mdwiki.util.LoadedFile;
 import org.sbtitcourses.mdwiki.model.StoredFile;
 import org.sbtitcourses.mdwiki.service.ImageStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,8 @@ import java.util.List;
 /**
  * REST контроллер для загрузки и скачивания файлов
  */
-@Validated
 @RestController
+@Validated
 public class FileController {
 
     /**
@@ -113,10 +113,8 @@ public class FileController {
      */
     @GetMapping("/user/uploads")
     public ResponseEntity<List<FileUploadResponse>>
-    getUserStoredFiles(@RequestParam(name = "bunch")
-                       @Min(value = 0, message = "Номер запрашиваемой страницы не может быть меньше 0") int bunch,
-                       @RequestParam(name = "size")
-                       @Min(value = 1, message = "Количество элементов на странице не должно быть меньше 1") int size) {
+    getUserStoredFiles(@RequestParam("bunch") @Min(0) int bunch,
+                       @RequestParam("size") @Min(1) int size) {
         List<StoredFile> storedFiles = imageStorageService.getUserStoredFiles(bunch, size);
         List<FileUploadResponse> response = new ArrayList<>();
 

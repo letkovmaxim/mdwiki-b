@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * Компонент для получения ресурсов
  */
 @Component
-public class ResourceFetcher {
+public class EntityFetcher {
 
     /**
      * Репозиторий для взаимодействия с сущностью Person
@@ -48,10 +48,10 @@ public class ResourceFetcher {
      * @param documentRepository репозиторий для взаимодействия с сущностью Document
      */
     @Autowired
-    public ResourceFetcher(PersonRepository personRepository,
-                           SpaceRepository spaceRepository,
-                           PageRepository pageRepository,
-                           DocumentRepository documentRepository) {
+    public EntityFetcher(PersonRepository personRepository,
+                         SpaceRepository spaceRepository,
+                         PageRepository pageRepository,
+                         DocumentRepository documentRepository) {
         this.personRepository = personRepository;
         this.spaceRepository = spaceRepository;
         this.pageRepository = pageRepository;

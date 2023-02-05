@@ -1,4 +1,4 @@
-package org.sbtitcourses.mdwiki.model;
+package org.sbtitcourses.mdwiki.util;
 
 import org.springframework.core.io.InputStreamResource;
 
@@ -19,8 +19,9 @@ public class ConvertedDocument {
 
     /**
      * Конструктор
+     *
      * @param inputStreamResource объект, представляющий PDF файл в виде ресурса
-     * @param documentName название документа
+     * @param documentName        название документа
      */
     public ConvertedDocument(InputStreamResource inputStreamResource, String documentName) {
         this.inputStreamResource = inputStreamResource;

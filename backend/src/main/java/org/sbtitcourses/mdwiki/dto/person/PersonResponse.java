@@ -38,8 +38,7 @@ public class PersonResponse {
     private Date updatedAt;
 
     /**
-     * Тип аккаунта
-     * Активный (true) или заблокированный (false)
+     * Статус активности аккаунта
      */
     private boolean enabled;
 

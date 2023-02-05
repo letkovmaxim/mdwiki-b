@@ -25,6 +25,14 @@ public class FileUploadResponse {
      */
     private long size;
 
+    /**
+     * Конструктор для создания объекта исключения
+     *
+     * @param fileName оригинальное название файла
+     * @param fileGUID уникальный идентификатор файла
+     * @param fileType MIME-тип файла
+     * @param size     размер файла в битах
+     */
     public FileUploadResponse(String fileName, String fileGUID, String fileType, long size) {
         this.fileName = fileName;
         this.fileGUID = fileGUID;

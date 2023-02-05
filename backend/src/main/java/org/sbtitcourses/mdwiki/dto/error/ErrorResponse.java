@@ -25,9 +25,10 @@ public class ErrorResponse {
 
     /**
      * Конструктор для создания объекта исключения
-     * @param message сообщение об ошибке
+     *
+     * @param message   сообщение об ошибке
      * @param timestamp время отправки сообщения об ошибке
-     * @param errors список ошибок
+     * @param errors    список ошибок
      */
     public ErrorResponse(String message, Date timestamp, List<String> errors) {
         this.message = message;

@@ -1,10 +1,7 @@
 package org.sbtitcourses.mdwiki.service;
 
-import org.sbtitcourses.mdwiki.model.ConvertedDocument;
+import org.sbtitcourses.mdwiki.util.ConvertedDocument;
 import org.sbtitcourses.mdwiki.model.Document;
-import org.springframework.core.io.InputStreamResource;
-
-import java.io.InputStream;
 
 /**
  * Интерфейс сервиса CRUD операций над сущностью Document

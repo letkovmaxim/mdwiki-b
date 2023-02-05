@@ -10,7 +10,7 @@ public class DocumentRequest {
     /**
      * Текст markdown-документа
      */
-    @NotEmpty(message = "Текст документа не должен быть пустым")
+    @NotEmpty
     private String text;
 
     public String getText() {

@@ -9,9 +9,11 @@ import org.sbtitcourses.mdwiki.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/people")
+@Validated
 public class PersonController {
 
     /**
@@ -34,8 +37,9 @@ public class PersonController {
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
+     *
      * @param personService сервис с логикой CRUD операций над сущностью Person
-     * @param modelMapper маппер для конвертации сущностей
+     * @param modelMapper   маппер для конвертации сущностей
      */
     @Autowired
     public PersonController(PersonService personService, ModelMapper modelMapper) {
@@ -44,90 +48,83 @@ public class PersonController {
     }
 
     /**
-     * Метод, отвечающий за создание нового пользователя
-     * @param personRequest DTO сущности Person для запроса
-     * @return DTO сущности Person для ответа с кодом 201
-     */
-    @PostMapping
-    public ResponseEntity<PersonResponse> create(@RequestBody @Valid PersonRequest personRequest) {
-        Person personToCreate = modelMapper.map(personRequest, Person.class);
-
-        Person createdPerson = personService.create(personToCreate);
-
-        PersonResponse response = modelMapper.map(createdPerson, PersonResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
-
-    /**
-     * Метод, отвечающий за получение всех пользователей
-     * @return список DTO сущности Person для ответа с кодом 200
+     * Метод, обрабатывающий запрос на получение всех пользователей
+     *
+     * @param bunch номер страницы при пагинации
+     * @param size  количество элементов на странице при пагинации
+     * @return HTTP ответ со списком пользователей и статусом 200
      */
     @GetMapping
-    public ResponseEntity<List<PersonResponse>> getAll() {
+    public ResponseEntity<List<PersonResponse>> get(@RequestParam("bunch") @Min(0) int bunch,
+                                                    @RequestParam("size") @Min(1) int size) {
         List<PersonResponse> people = new LinkedList<>();
 
-        for (Person person: personService.getAll()) {
+        for (Person person : personService.get(bunch, size)) {
             PersonResponse response = modelMapper.map(person, PersonResponse.class);
             people.add(response);
         }
 
-        return new ResponseEntity<>(people, HttpStatus.OK);
+        return ResponseEntity.ok().body(people);
     }
 
     /**
-     * Метод, отвечающий за получение польвателя по его ID
+     * Метод, обрабатывающий запрос на получение польвателя по его ID
+     *
      * @param id ID пользователя
-     * @return DTO сущности Person для ответа с кодом 200
+     * @return HTTP ответ с информацией о пользователе и статусом 200
      */
     @GetMapping("/{id}")
-    public ResponseEntity<PersonResponse> get(@PathVariable(name = "id") int id) {
+    public ResponseEntity<PersonResponse> get(@PathVariable("id") int id) {
         Person person = personService.get(id);
 
         PersonResponse response = modelMapper.map(person, PersonResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok().body(response);
     }
 
     /**
-     * Метод, отвечающий за обновление пользователя по его ID
-     * @param id ID пользователя
-     * @param personRequest DTO сущности Person для запроса
-     * @return DTO сущности Person для ответа с кодом 200
+     * Метод, обрабатывающий запрос на обновление пользователя по его ID
+     *
+     * @param id            ID пользователя
+     * @param personRequest информация о пользователе, которую нужно обновить
+     * @return HTTP ответ с информацией об обновленном пользователе и статусом 200
      */
     @PutMapping("/{id}")
-    public ResponseEntity<PersonResponse> update(@PathVariable(name = "id") int id,
+    public ResponseEntity<PersonResponse> update(@PathVariable("id") int id,
                                                  @RequestBody @Valid PersonRequest personRequest) {
         Person personToUpdateWith = modelMapper.map(personRequest, Person.class);
 
         Person updatedPerson = personService.update(id, personToUpdateWith);
 
         PersonResponse response = modelMapper.map(updatedPerson, PersonResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok().body(response);
     }
 
     /**
-     * Метод, отвечающий за обновление заметки пользователя
-     * @param id ID пользователя
-     * @param personNoteRequest DTO сущности запроса с новой заметкой
-     * @return DTO сущности Person для ответа с кодом 200
+     * Метод, обрабатывающий запрос на обновление заметки пользователя
+     *
+     * @param id                ID пользователя
+     * @param personNoteRequest информация о пользователе, которую нужно обновить
+     * @return HTTP ответ с информацией об обновленном пользователе и статусом 200
      */
     @PutMapping("/{id}/note")
-    public ResponseEntity<PersonResponse> noteUpdate(@PathVariable(name = "id") int id,
+    public ResponseEntity<PersonResponse> noteUpdate(@PathVariable("id") int id,
                                                      @RequestBody @Valid PersonNoteRequest personNoteRequest) {
         Person updatedPerson = personService.noteUpdate(id, personNoteRequest.getText());
 
         PersonResponse response = modelMapper.map(updatedPerson, PersonResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok().body(response);
     }
 
     /**
-     * Метод, отвечающий за удаление пользователя по его ID
+     * Метод, обрабатывающий запрос на удаление пользователя по его ID
+     *
      * @param id ID пользователя
-     * @return пустой ответ с кодом 204
+     * @return HTTP ответ со статусом 204
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable(name = "id") int id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
         personService.delete(id);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

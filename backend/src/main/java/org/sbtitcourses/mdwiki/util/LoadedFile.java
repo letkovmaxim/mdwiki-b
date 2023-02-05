@@ -1,5 +1,6 @@
-package org.sbtitcourses.mdwiki.model;
+package org.sbtitcourses.mdwiki.util;
 
+import org.sbtitcourses.mdwiki.model.StoredFile;
 import org.springframework.core.io.Resource;
 
 /**
@@ -21,9 +22,10 @@ public class LoadedFile {
 
     /**
      * Конструктор для автоматического внедрения зависимостей
+     *
      * @param storedFile сущность записанных в системе файлов
-     * для хранения информации о них в базе данных
-     * @param resource интерфейс, представляющий внешние ресурсы
+     *                   для хранения информации о них в базе данных
+     * @param resource   интерфейс, представляющий внешние ресурсы
      */
     public LoadedFile(StoredFile storedFile, Resource resource) {
         this.storedFile = storedFile;

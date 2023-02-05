@@ -5,7 +5,7 @@ import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.repository.PageRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
-import org.sbtitcourses.mdwiki.util.ResourceFetcher;
+import org.sbtitcourses.mdwiki.util.EntityFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementAlreadyExistsException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
@@ -32,19 +32,19 @@ public class PageService implements PageCrudService {
     private final PageRepository pageRepository;
 
     /**
-     * Компонент для получения ресурсов
+     * Компонент для получения сущностей
      */
-    private final ResourceFetcher resourceFetcher;
+    private final EntityFetcher entityFetcher;
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
      * @param pageRepository  репозиторий для взаимодействия с сущностью Page
-     * @param resourceFetcher компонент для получения ресурсов
+     * @param entityFetcher компонент для получения ресурсов
      */
     @Autowired
-    public PageService(PageRepository pageRepository, ResourceFetcher resourceFetcher) {
+    public PageService(PageRepository pageRepository, EntityFetcher entityFetcher) {
         this.pageRepository = pageRepository;
-        this.resourceFetcher = resourceFetcher;
+        this.entityFetcher = entityFetcher;
     }
 
     /**
@@ -58,8 +58,8 @@ public class PageService implements PageCrudService {
     @Override
     @Transactional
     public Page create(Page page, int spaceId) throws AccessDeniedException {
-        Space space = resourceFetcher.fetchSpace(spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Space space = entityFetcher.fetchSpace(spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToCreatePageDenied(space, user)) {
             throw new AccessDeniedException("Отказано в доступе");
@@ -91,8 +91,8 @@ public class PageService implements PageCrudService {
     @Override
     @Transactional
     public Page createSubpage(Page subpage, int parentId, int spaceId) throws AccessDeniedException {
-        Page parent = resourceFetcher.fetchPage(parentId, spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Page parent = entityFetcher.fetchPage(parentId, spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         Space space = parent.getSpace();
 
@@ -124,8 +124,8 @@ public class PageService implements PageCrudService {
      */
     @Override
     public List<Page> get(int spaceId, int bunch, int size) throws AccessDeniedException {
-        Space space = resourceFetcher.fetchSpace(spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Space space = entityFetcher.fetchSpace(spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToReadAllPagesDenied(space, user)) {
             throw new AccessDeniedException("Отказано в доступе");
@@ -145,8 +145,8 @@ public class PageService implements PageCrudService {
      */
     @Override
     public Page get(int pageId, int spaceId) throws AccessDeniedException {
-        Page page = resourceFetcher.fetchPage(pageId, spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Page page = entityFetcher.fetchPage(pageId, spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToReadPageDenied(page, user)) {
             throw new AccessDeniedException("Отказано в доступе");
@@ -165,8 +165,8 @@ public class PageService implements PageCrudService {
      */
     @Override
     public Page getParent(int pageId, int spaceId) {
-        Page page = resourceFetcher.fetchPage(pageId, spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Page page = entityFetcher.fetchPage(pageId, spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         Page parent = page.getParent();
         if (parent == null) {
@@ -192,8 +192,8 @@ public class PageService implements PageCrudService {
     @Override
     @Transactional
     public Page update(int pageId, int spaceId, Page pageToUpdateWith) throws AccessDeniedException {
-        Page page = resourceFetcher.fetchPage(pageId, spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Page page = entityFetcher.fetchPage(pageId, spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         Space space = page.getSpace();
 
@@ -222,8 +222,8 @@ public class PageService implements PageCrudService {
     @Override
     @Transactional
     public void delete(int pageId, int spaceId) throws AccessDeniedException {
-        Page page = resourceFetcher.fetchPage(pageId, spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Page page = entityFetcher.fetchPage(pageId, spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToDeletePageDenied(page, user)) {
             throw new AccessDeniedException("Отказано в доступе");

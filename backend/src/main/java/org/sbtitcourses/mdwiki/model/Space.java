@@ -12,7 +12,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
- * Сущность пользовательских пространств.
+ * Сущность, описывающая пространство пользователя
  */
 @Entity
 @Table(name = "spaces")

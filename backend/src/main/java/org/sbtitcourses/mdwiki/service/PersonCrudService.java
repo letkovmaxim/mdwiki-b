@@ -13,7 +13,7 @@ public interface PersonCrudService {
      * Получение всех пользователей
      * @return список всех пользователей
      */
-    List<Person> getAll();
+    List<Person> get(int bunch, int size);
 
     /**
      * Получение пользователя по его ID

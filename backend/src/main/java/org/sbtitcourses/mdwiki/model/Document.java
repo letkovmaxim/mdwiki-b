@@ -5,9 +5,8 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
-
 /**
- * Сущность markdown-документа
+ * Сущность, описывающая markdown-документ пользователя
  */
 @Entity
 @Table(name = "documents")

@@ -12,7 +12,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
- * Сущность, описывающая зарегестрированных пользователей
+ * Сущность, описывающая зарегестрированного пользователя
  */
 @Entity
 @Table(name = "persons")
@@ -71,8 +71,7 @@ public class Person {
     private Date updatedAt;
 
     /**
-     * Тип аккаунта
-     * Активный (true) или заблокированный (false)
+     * Статус активности аккаунта
      */
     @Column(name = "enabled", nullable = false)
     private boolean enabled;

@@ -11,8 +11,8 @@ public class SpaceRequest {
     /**
      * Название пространства
      */
-    @NotEmpty(message = "Название не должно быть пустым")
-    @Size(max = 128, message = "Название не должно быть длиннее 128 символов")
+    @NotEmpty
+    @Size(max = 128)
     private String name;
 
     /**

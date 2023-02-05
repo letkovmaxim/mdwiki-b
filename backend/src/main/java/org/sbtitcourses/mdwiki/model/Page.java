@@ -13,7 +13,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
- * Сущность пользовательских записей.
+ * Сущность, описывающая запись пользователя
  */
 @Entity
 @Table(name = "pages")

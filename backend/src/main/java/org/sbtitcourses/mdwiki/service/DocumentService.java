@@ -1,13 +1,13 @@
 package org.sbtitcourses.mdwiki.service;
 
-import org.sbtitcourses.mdwiki.model.ConvertedDocument;
+import org.sbtitcourses.mdwiki.util.ConvertedDocument;
 import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.model.Page;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.DocumentRepository;
 import org.sbtitcourses.mdwiki.util.PdfConverter;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
-import org.sbtitcourses.mdwiki.util.ResourceFetcher;
+import org.sbtitcourses.mdwiki.util.EntityFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.PdfConversionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +29,20 @@ public class DocumentService implements DocumentCrudService {
     private final DocumentRepository documentRepository;
 
     /**
-     * Компонент для получения ресурсов
+     * Компонент для получения сущностей
      */
-    private final ResourceFetcher resourceFetcher;
+    private final EntityFetcher entityFetcher;
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
      * @param documentRepository репозиторий для взаимодействия с сущностью Document
-     * @param resourceFetcher компонент для получения ресурсов
+     * @param entityFetcher компонент для получения ресурсов
      */
     @Autowired
     public DocumentService(DocumentRepository documentRepository,
-                           ResourceFetcher resourceFetcher) {
+                           EntityFetcher entityFetcher) {
         this.documentRepository = documentRepository;
-        this.resourceFetcher = resourceFetcher;
+        this.entityFetcher = entityFetcher;
     }
 
     /**
@@ -56,8 +56,8 @@ public class DocumentService implements DocumentCrudService {
     @Override
     @Transactional
     public Document create(Document document, int pageId, int spaceId) throws AccessDeniedException{
-        Page page = resourceFetcher.fetchPage(pageId, spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Page page = entityFetcher.fetchPage(pageId, spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToCreateDocumentDenied(page, user)) {
             throw new AccessDeniedException("Доступ запрещен");
@@ -79,8 +79,8 @@ public class DocumentService implements DocumentCrudService {
     @Override
     @Transactional
     public Document get(int pageId, int spaceId) throws AccessDeniedException {
-        Document document = resourceFetcher.fetchDocument(pageId, spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Document document = entityFetcher.fetchDocument(pageId, spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToReadDocumentDenied(document, user)) {
             throw new AccessDeniedException("Доступ запрещен");
@@ -100,8 +100,8 @@ public class DocumentService implements DocumentCrudService {
     @Override
     @Transactional
     public Document update(int pageId, int spaceId, Document documentToUpdateWith) throws AccessDeniedException {
-        Document document = resourceFetcher.fetchDocument(pageId, spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Document document = entityFetcher.fetchDocument(pageId, spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToUpdateDocumentDenied(document, user)) {
             throw new AccessDeniedException("Доступ запрещен");
@@ -123,8 +123,8 @@ public class DocumentService implements DocumentCrudService {
     @Override
     @Transactional
     public void delete(int pageId, int spaceId) throws AccessDeniedException {
-        Document document = resourceFetcher.fetchDocument(pageId, spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Document document = entityFetcher.fetchDocument(pageId, spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToDeleteDocumentDenied(document, user)) {
             throw new AccessDeniedException("Доступ запрещен");
@@ -147,9 +147,9 @@ public class DocumentService implements DocumentCrudService {
      */
     @Override
     public ConvertedDocument convertToPdf(int spaceId, int pageId, String font, int size, boolean tree) {
-        Page page = resourceFetcher.fetchPage(pageId, spaceId);
+        Page page = entityFetcher.fetchPage(pageId, spaceId);
         Document document = page.getDocument();
-        Person user = resourceFetcher.getLoggedInUser();
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToReadDocumentDenied(document, user)) {
             throw new AccessDeniedException("Доступ запрещен");

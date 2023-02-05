@@ -1,13 +1,13 @@
 package org.sbtitcourses.mdwiki.service;
 
 import net.coobird.thumbnailator.Thumbnails;
-import org.sbtitcourses.mdwiki.model.LoadedFile;
+import org.sbtitcourses.mdwiki.util.LoadedFile;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.model.StoredFile;
 import org.sbtitcourses.mdwiki.repository.StoredFileRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
-import org.sbtitcourses.mdwiki.util.ResourceFetcher;
+import org.sbtitcourses.mdwiki.util.EntityFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.sbtitcourses.mdwiki.util.exception.FileStorageException;
@@ -42,9 +42,9 @@ public class ImageStorageService implements StorageService {
     private final StoredFileRepository storedFileRepository;
 
     /**
-     * Компонент для получения ресурсов
+     * Компонент для получения сущностей
      */
-    private final ResourceFetcher resourceFetcher;
+    private final EntityFetcher entityFetcher;
 
     /**
      * Директория для хранения загруженных изображений
@@ -60,17 +60,17 @@ public class ImageStorageService implements StorageService {
      * Конструктор для автоматического внедрения зависимостей
      *
      * @param storedFileRepository репозиторий для взаимодействия с сущностью StoredFile
-     * @param resourceFetcher      компонент для получения ресурсов
+     * @param entityFetcher      компонент для получения ресурсов
      * @param uploadsDirectory     директория для хранения загруженных изображений
      * @param thumbnailsDirectory  директория для хранения превью загруженных изображений
      */
     @Autowired
     public ImageStorageService(StoredFileRepository storedFileRepository,
-                               ResourceFetcher resourceFetcher,
+                               EntityFetcher entityFetcher,
                                @Value("${file.uploads-directory}") String uploadsDirectory,
                                @Value("${file.thumbnails-directory}") String thumbnailsDirectory) {
         this.storedFileRepository = storedFileRepository;
-        this.resourceFetcher = resourceFetcher;
+        this.entityFetcher = entityFetcher;
         this.uploadsDirectory = uploadsDirectory;
         this.thumbnailsDirectory = thumbnailsDirectory;
     }
@@ -99,8 +99,8 @@ public class ImageStorageService implements StorageService {
             throw new FileStorageException("Недопустимое имя файла");
         }
 
-        Space space = resourceFetcher.fetchSpace(spaceId);
-        Person user = resourceFetcher.getLoggedInUser();
+        Space space = entityFetcher.fetchSpace(spaceId);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToUpdateSpaceDenied(space, user)) {
             throw new AccessDeniedException("Доступ запрещен");
@@ -151,7 +151,7 @@ public class ImageStorageService implements StorageService {
      */
     @Override
     public LoadedFile loadImage(String GUID) {
-        Person user = resourceFetcher.getLoggedInUser();
+        Person user = entityFetcher.getLoggedInUser();
         StoredFile storedFile = storedFileRepository.findByGUID(GUID)
                 .orElseThrow(() -> new ElementNotFoundException("Файл не найден"));
 
@@ -177,7 +177,7 @@ public class ImageStorageService implements StorageService {
      */
     @Override
     public LoadedFile loadThumbnail(String GUID) {
-        Person user = resourceFetcher.getLoggedInUser();
+        Person user = entityFetcher.getLoggedInUser();
         StoredFile storedFile = storedFileRepository.findByGUID(GUID)
                 .orElseThrow(() -> new ElementNotFoundException("Файл не найден"));
 
@@ -203,7 +203,7 @@ public class ImageStorageService implements StorageService {
      */
     @Override
     public void deleteImage(String GUID) {
-        Person user = resourceFetcher.getLoggedInUser();
+        Person user = entityFetcher.getLoggedInUser();
         StoredFile storedFile = storedFileRepository.findByGUID(GUID)
                 .orElseThrow(() -> new ElementNotFoundException("Файл не найден"));
 
@@ -237,7 +237,7 @@ public class ImageStorageService implements StorageService {
      */
     @Override
     public List<StoredFile> getUserStoredFiles(int bunch, int size) {
-        Person user = resourceFetcher.getLoggedInUser();
+        Person user = entityFetcher.getLoggedInUser();
         Pageable pageable = PageRequest.of(bunch, size);
 
         return storedFileRepository.findByOwner(user, pageable);

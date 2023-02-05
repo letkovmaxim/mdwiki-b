@@ -4,7 +4,7 @@ import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.repository.SpaceRepository;
 import org.sbtitcourses.mdwiki.util.ResourceAccessHelper;
-import org.sbtitcourses.mdwiki.util.ResourceFetcher;
+import org.sbtitcourses.mdwiki.util.EntityFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +29,19 @@ public class SpaceService implements SpaceCrudService {
     private final SpaceRepository spaceRepository;
 
     /**
-     * Компонент для получения ресурсов
+     * Компонент для получения сущностей
      */
-    private final ResourceFetcher resourceFetcher;
+    private final EntityFetcher entityFetcher;
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
      * @param spaceRepository репозиторий для взаимодействия с сущностью Space
-     * @param resourceFetcher компонент для получения ресурсов
+     * @param entityFetcher компонент для получения ресурсов
      */
     @Autowired
-    public SpaceService(SpaceRepository spaceRepository, ResourceFetcher resourceFetcher) {
+    public SpaceService(SpaceRepository spaceRepository, EntityFetcher entityFetcher) {
         this.spaceRepository = spaceRepository;
-        this.resourceFetcher = resourceFetcher;
+        this.entityFetcher = entityFetcher;
     }
 
     /**
@@ -53,7 +53,7 @@ public class SpaceService implements SpaceCrudService {
     @Override
     @Transactional
     public Space create(Space space) {
-        Person user = resourceFetcher.getLoggedInUser();
+        Person user = entityFetcher.getLoggedInUser();
 
         if (spaceRepository.findByOwnerAndName(user, space.getName()).isPresent()){
             throw new ElementAlreadyExistsException("Пространство с таким именем уже существует");
@@ -76,7 +76,7 @@ public class SpaceService implements SpaceCrudService {
      */
     @Override
     public List<Space> get(int bunch, int size) {
-        Person user = resourceFetcher.getLoggedInUser();
+        Person user = entityFetcher.getLoggedInUser();
 
         Pageable pageable = PageRequest.of(bunch, size);
 
@@ -104,8 +104,8 @@ public class SpaceService implements SpaceCrudService {
      */
     @Override
     public Space get(int id) throws AccessDeniedException {
-        Space space = resourceFetcher.fetchSpace(id);
-        Person user = resourceFetcher.getLoggedInUser();
+        Space space = entityFetcher.fetchSpace(id);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToReadSpaceDenied(space, user)) {
             throw new AccessDeniedException("Отказано в доступе");
@@ -125,8 +125,8 @@ public class SpaceService implements SpaceCrudService {
     @Override
     @Transactional
     public Space update(int id, Space spaceToUpdateWith) throws AccessDeniedException {
-        Space space = resourceFetcher.fetchSpace(id);
-        Person user = resourceFetcher.getLoggedInUser();
+        Space space = entityFetcher.fetchSpace(id);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToUpdateSpaceDenied(space, user)) {
             throw new AccessDeniedException("Отказано в доступе");
@@ -152,8 +152,8 @@ public class SpaceService implements SpaceCrudService {
     @Override
     @Transactional
     public void delete(int id) throws AccessDeniedException {
-        Space space = resourceFetcher.fetchSpace(id);
-        Person user = resourceFetcher.getLoggedInUser();
+        Space space = entityFetcher.fetchSpace(id);
+        Person user = entityFetcher.getLoggedInUser();
 
         if (ResourceAccessHelper.isAccessToDeleteSpaceDenied(space, user)) {
             throw new AccessDeniedException("Отказано в доступе");

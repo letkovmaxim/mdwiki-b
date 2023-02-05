@@ -8,6 +8,7 @@ import org.sbtitcourses.mdwiki.service.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/spaces")
+@Validated
 public class SpaceController {
 
     /**
@@ -34,8 +36,9 @@ public class SpaceController {
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
+     *
      * @param spaceService сервис с логикой CRUD операций над сущностью Space
-     * @param modelMapper маппер для конвертации сущностей
+     * @param modelMapper  маппер для конвертации сущностей
      */
     @Autowired
     public SpaceController(SpaceService spaceService, ModelMapper modelMapper) {
@@ -44,9 +47,10 @@ public class SpaceController {
     }
 
     /**
-     * Метод, отвечающий за создание нового пространства
-     * @param spaceRequest DTO сущности Space для запроса
-     * @return DTO сущности Space для ответа с кодом 201
+     * Метод, обрабатывающий запрос на создание нового пространства
+     *
+     * @param spaceRequest информация о новом пространстве
+     * @return HTTP ответ с информацией о новом пространстве и статусом 201
      */
     @PostMapping
     public ResponseEntity<SpaceResponse> create(@RequestBody @Valid SpaceRequest spaceRequest) {
@@ -59,88 +63,87 @@ public class SpaceController {
     }
 
     /**
-     * Метод, отвечающий за получение всех пространств пользователя
+     * Метод, обрабатывающий запрос на получение всех пространств пользователя
+     *
      * @param bunch номер страницы при пагинации
-     * @param size количество элементов в странице при пагинации
-     * @return список DTO сущности Space для ответа с кодом 200
+     * @param size  количество элементов на странице при пагинации
+     * @return HTTP ответ со списком пространств и статусом 200
      */
     @GetMapping
-    public ResponseEntity<List<SpaceResponse>>
-    get(@RequestParam(name = "bunch")
-        @Min(value = 0, message = "Номер запрашиваемой страницы не может быть меньше 0") int bunch,
-        @RequestParam(name = "size")
-        @Min(value = 1, message = "Количество элементов на странице не должно быть меньше 1") int size) {
+    public ResponseEntity<List<SpaceResponse>> get(@RequestParam("bunch") @Min(0) int bunch,
+                                                   @RequestParam("size") @Min(1) int size) {
         List<SpaceResponse> spaces = new LinkedList<>();
 
-        for (Space space: spaceService.get(bunch, size)) {
+        for (Space space : spaceService.get(bunch, size)) {
             SpaceResponse spaceResponse = modelMapper.map(space, SpaceResponse.class);
             spaces.add(spaceResponse);
         }
 
-        return new ResponseEntity<>(spaces, HttpStatus.OK);
+        return ResponseEntity.ok().body(spaces);
     }
 
     /**
-     * Метод, отвечающий за получение всех публичных пространств
+     * Метод, обрабатывающий запрос на получение всех публичных пространств
+     *
      * @param bunch номер страницы при пагинации
-     * @param size количество элементов в странице при пагинации
-     * @return список DTO сущности Space для ответа с кодом 200
+     * @param size  количество элементов на странице при пагинации
+     * @return HTTP ответ со списком пространств и статусом 200
      */
     @GetMapping("/shared")
-    public ResponseEntity<List<SpaceResponse>>
-    getShared(@RequestParam(name = "bunch")
-              @Min(value = 0, message = "Номер запрашиваемой страницы не может быть меньше 0") int bunch,
-              @RequestParam(name = "size")
-              @Min(value = 1, message = "Количество элементов на странице не должно быть меньше 1") int size) {
+    public ResponseEntity<List<SpaceResponse>> getShared(@RequestParam("bunch") @Min(0) int bunch,
+                                                         @RequestParam("size") @Min(1) int size) {
         List<SpaceResponse> spaces = new LinkedList<>();
 
-        for (Space space: spaceService.getShared(bunch, size)) {
+        for (Space space : spaceService.getShared(bunch, size)) {
             SpaceResponse spaceResponse = modelMapper.map(space, SpaceResponse.class);
             spaces.add(spaceResponse);
         }
 
-        return new ResponseEntity<>(spaces, HttpStatus.OK);
+        return ResponseEntity.ok().body(spaces);
     }
 
     /**
-     * Метод, отвечающий за получение пространства по его ID
+     * Метод, обрабатывающий запрос на получение пространства по его ID
+     *
      * @param id ID пространства
-     * @return DTO сущности Space для ответа с кодом 200
+     * @return HTTP ответ с информацией о пространстве и статусом 200
      */
     @GetMapping("/{id}")
-    public ResponseEntity<SpaceResponse> get(@PathVariable(name = "id") int id) {
+    public ResponseEntity<SpaceResponse> get(@PathVariable("id") int id) {
         Space space = spaceService.get(id);
 
         SpaceResponse response = modelMapper.map(space, SpaceResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok().body(response);
     }
 
     /**
-     * Метод, отвечающий за обновление пространства с заданым ID
-     * @param id ID пространства
-     * @param spaceRequest DTO сущности Space для запроса
-     * @return DTO сущности Space для ответа с кодом 200
+     * Метод, обрабатывающий запрос на обновление пространства по его ID
+     *
+     * @param id           ID пространства
+     * @param spaceRequest информация о пространстве, которую нужно обновить
+     * @return HTTP ответ с информацией об обновленном пространстве и статусом 200
      */
     @PutMapping("/{id}")
-    public ResponseEntity<SpaceResponse> update(@PathVariable(name = "id") int id,
+    public ResponseEntity<SpaceResponse> update(@PathVariable("id") int id,
                                                 @RequestBody @Valid SpaceRequest spaceRequest) {
         Space spaceToUpdateWith = modelMapper.map(spaceRequest, Space.class);
 
         Space updatedSpace = spaceService.update(id, spaceToUpdateWith);
 
         SpaceResponse response = modelMapper.map(updatedSpace, SpaceResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK) ;
+        return ResponseEntity.ok().body(response);
     }
 
     /**
-     * Метод, отвечающий за удаление пространтсва с заданым ID
+     * Метод, обрабатывающий запрос на удаление пространтсва по его ID
+     *
      * @param id ID пространства
-     * @return пустой ответ с кодом 204
+     * @return HTTP ответ со статусом 204
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable int id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
         spaceService.delete(id);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

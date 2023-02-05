@@ -5,8 +5,8 @@ import javax.persistence.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
 /**
- * Сущность записанных в системе файлов
- * для хранения информации о них в базе данных
+ * Сущность, описывающая записанный в системе файл
+ * для хранения информации о нём в базе данных
  */
 @Entity
 @Table(name = "files")

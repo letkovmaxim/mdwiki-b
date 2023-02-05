@@ -2,11 +2,13 @@ package org.sbtitcourses.mdwiki.service;
 
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
-import org.sbtitcourses.mdwiki.util.ResourceFetcher;
+import org.sbtitcourses.mdwiki.util.EntityFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementAlreadyExistsException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,26 +23,25 @@ import java.util.List;
 public class PersonService implements PersonCrudService {
 
     /**
-     * Компонент для получения ресурсов
+     * Компонент для получения сущностей
      */
-    private final ResourceFetcher resourceFetcher;
+    private final EntityFetcher entityFetcher;
 
     /**
      * Репозиторий для взаимодействия с сущностью Person
      */
     private final PersonRepository personRepository;
 
-
     /**
      * Конструктор для автоматичекого внедрения зависимостей
      *
-     * @param resourceFetcher  компонент для получения ресурсов
+     * @param entityFetcher  компонент для получения ресурсов
      * @param personRepository репозиторий для взаимодействия с сущностью Person
      */
     @Autowired
-    public PersonService(ResourceFetcher resourceFetcher,
+    public PersonService(EntityFetcher entityFetcher,
                          PersonRepository personRepository) {
-        this.resourceFetcher = resourceFetcher;
+        this.entityFetcher = entityFetcher;
         this.personRepository = personRepository;
     }
 
@@ -50,8 +51,10 @@ public class PersonService implements PersonCrudService {
      * @return список всех пользователей
      */
     @Override
-    public List<Person> getAll() {
-        return personRepository.findAll();
+    public List<Person> get(int bunch, int size) {
+        Pageable pageable = PageRequest.of(bunch, size);
+
+        return personRepository.findAll(pageable).getContent();
     }
 
     /**
@@ -63,7 +66,7 @@ public class PersonService implements PersonCrudService {
      */
     @Override
     public Person get(int id) throws ElementNotFoundException {
-        Person user = resourceFetcher.getLoggedInUser();
+        Person user = entityFetcher.getLoggedInUser();
 
         if (user.getId() != id) {
             throw new AccessDeniedException("Отказано в доступе");
@@ -84,7 +87,7 @@ public class PersonService implements PersonCrudService {
     @Override
     @Transactional
     public Person update(int id, Person updatedPerson) throws ElementNotFoundException {
-        Person user = resourceFetcher.getLoggedInUser();
+        Person user = entityFetcher.getLoggedInUser();
 
         if (user.getId() != id) {
             throw new AccessDeniedException("Отказано в доступе");
@@ -118,7 +121,7 @@ public class PersonService implements PersonCrudService {
     @Override
     @Transactional
     public Person noteUpdate(int id, String note) throws ElementNotFoundException {
-        Person user = resourceFetcher.getLoggedInUser();
+        Person user = entityFetcher.getLoggedInUser();
 
         if (user.getId() != id) {
             throw new AccessDeniedException("Отказано в доступе");
@@ -142,7 +145,7 @@ public class PersonService implements PersonCrudService {
     @Override
     @Transactional
     public void delete(int id) throws ElementNotFoundException {
-        Person user = resourceFetcher.getLoggedInUser();
+        Person user = entityFetcher.getLoggedInUser();
 
         if (user.getId() != id) {
             throw new AccessDeniedException("Отказано в доступе");
