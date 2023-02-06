@@ -13,6 +13,8 @@ import java.util.Collections;
  */
 public class PersonDetails implements UserDetails {
 
+    private static final long serialVersionUID = 8595142225241536052L;
+
     /**
      * Объект сущности пользователя.
      */
