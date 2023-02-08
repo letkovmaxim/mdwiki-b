@@ -4,13 +4,12 @@ import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.StoredFile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Репозиторий для взаимодействия с сущностью StoredFile.
+ * Репозиторий для взаимодействия с сущностью {@link StoredFile}.
  */
 public interface StoredFileRepository extends JpaRepository<StoredFile, Integer> {
 

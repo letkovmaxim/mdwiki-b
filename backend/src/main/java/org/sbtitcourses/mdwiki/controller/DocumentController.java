@@ -3,9 +3,9 @@ package org.sbtitcourses.mdwiki.controller;
 import org.modelmapper.ModelMapper;
 import org.sbtitcourses.mdwiki.dto.document.DocumentRequest;
 import org.sbtitcourses.mdwiki.dto.document.DocumentResponse;
-import org.sbtitcourses.mdwiki.util.ConvertedDocument;
 import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.service.DocumentService;
+import org.sbtitcourses.mdwiki.util.ConvertedDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +20,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 /**
- * REST контроллер для CRUD операций над сущностью Document.
+ * REST контроллер, обрабатывающий запросы на взаимодействие с сущностью {@link Document}.
  */
 @RestController
 @RequestMapping("/spaces/{spaceId}/pages/{pageId}/document")
@@ -28,7 +28,7 @@ import javax.validation.constraints.Min;
 public class DocumentController {
 
     /**
-     * Сервис с логикой CRUD операций над сущностью Document.
+     * Сервис с логикой взаимодействия с сущностью {@link Document}.
      */
     private final DocumentService documentService;
 
@@ -40,7 +40,7 @@ public class DocumentController {
     /**
      * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param documentService сервис с логикой CRUD операций над сущностью Document.
+     * @param documentService сервис с логикой взаимодействия с сущностью {@link Document}.
      * @param modelMapper     маппер для конвертации сущностей.
      */
     @Autowired

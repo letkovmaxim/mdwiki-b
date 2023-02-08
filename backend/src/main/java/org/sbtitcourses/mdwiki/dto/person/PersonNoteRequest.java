@@ -3,7 +3,7 @@ package org.sbtitcourses.mdwiki.dto.person;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * DTO с полем заметки сущности Person для запроса.
+ * DTO с полем заметки сущности {@link org.sbtitcourses.mdwiki.model.Person} для запроса.
  */
 public class PersonNoteRequest {
 

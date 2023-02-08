@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Instant;
 import java.util.Date;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -69,8 +70,8 @@ class PageControllerTests {
         Page page = new Page();
         PageResponse pageResponse = new PageResponse();
         pageResponse.setName("testName");
-        pageResponse.setCreatedAt(new Date());
-        pageResponse.setUpdatedAt(new Date());
+        pageResponse.setCreatedAt(Instant.now());
+        pageResponse.setUpdatedAt(Instant.now());
         pageResponse.setShared(false);
 
         when(pageService.get(1, 1)).thenReturn(page);

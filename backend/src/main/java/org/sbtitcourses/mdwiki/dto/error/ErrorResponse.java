@@ -1,5 +1,6 @@
 package org.sbtitcourses.mdwiki.dto.error;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class ErrorResponse {
     /**
      * Время отправки сообщения об ошибке.
      */
-    private final Date timestamp;
+    private final Instant timestamp;
 
     /**
      * Список ошибок.
@@ -30,7 +31,7 @@ public class ErrorResponse {
      * @param timestamp время отправки сообщения об ошибке.
      * @param errors    список ошибок.
      */
-    public ErrorResponse(String message, Date timestamp, List<String> errors) {
+    public ErrorResponse(String message, Instant timestamp, List<String> errors) {
         this.message = message;
         this.timestamp = timestamp;
         this.errors = errors;
@@ -40,7 +41,7 @@ public class ErrorResponse {
         return message;
     }
 
-    public Date getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 

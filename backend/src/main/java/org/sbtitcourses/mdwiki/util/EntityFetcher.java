@@ -21,32 +21,32 @@ import org.springframework.stereotype.Component;
 public class EntityFetcher {
 
     /**
-     * Репозиторий для взаимодействия с сущностью Person.
+     * Репозиторий для взаимодействия с сущностью {@link Person}.
      */
     private final PersonRepository personRepository;
 
     /**
-     * Репозиторий для взаимодействия с сущностью Space.
+     * Репозиторий для взаимодействия с сущностью {@link Space}.
      */
     private final SpaceRepository spaceRepository;
 
     /**
-     * Репозиторий для взаимодействия с сущностью Page.
+     * Репозиторий для взаимодействия с сущностью {@link Page}.
      */
     private final PageRepository pageRepository;
 
     /**
-     * Репозиторий для взаимодействия с сущностью Document.
+     * Репозиторий для взаимодействия с сущностью {@link Document}.
      */
     private final DocumentRepository documentRepository;
 
     /**
      * Конструктор для автоматического внедрения зависимостей.
      *
-     * @param personRepository   репозиторий для взаимодействия с сущностью Person.
-     * @param spaceRepository    репозиторий для взаимодействия с сущностью Space.
-     * @param pageRepository     репозиторий для взаимодействия с сущностью Page.
-     * @param documentRepository репозиторий для взаимодействия с сущностью Document.
+     * @param personRepository   репозиторий для взаимодействия с сущностью {@link Person}.
+     * @param spaceRepository    репозиторий для взаимодействия с сущностью {@link Space}.
+     * @param pageRepository     репозиторий для взаимодействия с сущностью {@link Page}.
+     * @param documentRepository репозиторий для взаимодействия с сущностью {@link Document}.
      */
     @Autowired
     public EntityFetcher(PersonRepository personRepository,
@@ -104,7 +104,8 @@ public class EntityFetcher {
     /**
      * Метод, отвечающий за получение объекта пользователя.
      *
-     * @return optional с объектом пользователя, если он прошел аутентифицию, пустой optional в противном случае.
+     * @return {@link java.util.Optional} с объектом пользователя внутри, если он прошел аутентифицию,
+     * пустой {@link java.util.Optional} в противном случае.
      * @throws ElementNotFoundException если пользователь не найден.
      */
     public Person getLoggedInUser() {

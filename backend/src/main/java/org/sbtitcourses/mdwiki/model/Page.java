@@ -3,6 +3,7 @@ package org.sbtitcourses.mdwiki.model;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -59,14 +60,14 @@ public class Page {
      */
     @Temporal(TIMESTAMP)
     @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    private Instant createdAt;
 
     /**
      * Точное время обновления записи.
      */
     @Temporal(TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    private Instant updatedAt;
 
     /**
      * Статус публичности записи.
@@ -85,31 +86,11 @@ public class Page {
         return space.getOwner();
     }
 
+    public static PageBuilder builder() {
+        return new PageBuilder();
+    }
+
     public Page() {
-    }
-
-    public Page(boolean shared) {
-        this.shared = shared;
-    }
-
-    public Page(Space space) {
-        this.space = space;
-    }
-
-    public Page(int id, Space space) {
-        this.id = id;
-        this.space = space;
-    }
-
-    public Page(String name, boolean shared) {
-        this.name = name;
-        this.shared = shared;
-    }
-
-    public Page(String name, Space space, boolean shared) {
-        this.name = name;
-        this.space = space;
-        this.shared = shared;
     }
 
     public int getId() {
@@ -152,19 +133,19 @@ public class Page {
         this.space = space;
     }
 
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -182,5 +163,62 @@ public class Page {
 
     public void setDocument(Document document) {
         this.document = document;
+    }
+
+    public static final class PageBuilder {
+        private final Page page;
+
+        private PageBuilder() {
+            page = new Page();
+        }
+
+        public PageBuilder id(int id) {
+            page.setId(id);
+            return this;
+        }
+
+        public PageBuilder name(String name) {
+            page.setName(name);
+            return this;
+        }
+
+        public PageBuilder subpages(List<Page> subpages) {
+            page.setSubpages(subpages);
+            return this;
+        }
+
+        public PageBuilder parent(Page parent) {
+            page.setParent(parent);
+            return this;
+        }
+
+        public PageBuilder space(Space space) {
+            page.setSpace(space);
+            return this;
+        }
+
+        public PageBuilder createdAt(Instant createdAt) {
+            page.setCreatedAt(createdAt);
+            return this;
+        }
+
+        public PageBuilder updatedAt(Instant updatedAt) {
+            page.setUpdatedAt(updatedAt);
+            return this;
+        }
+
+        public PageBuilder shared(boolean shared) {
+            page.setShared(shared);
+            return this;
+        }
+
+        public PageBuilder document(Document document) {
+            page.setDocument(document);
+            return this;
+        }
+
+        public Page build() {
+            return page;
+        }
     }
 }

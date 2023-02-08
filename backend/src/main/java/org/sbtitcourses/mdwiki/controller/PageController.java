@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * REST контроллер для CRUD операций над сущностью Page.
+ * REST контроллер, обрабатывающий запросы на взаимодействие с сущностью {@link Page}.
  */
 @RestController
 @RequestMapping("/spaces/{spaceId}/pages")
@@ -26,7 +26,7 @@ import java.util.List;
 public class PageController {
 
     /**
-     * Сервис с логикой CRUD операций над сущностью Page.
+     * Сервис с логикой взаимодействия с сущностью {@link Page}.
      */
     private final PageService pageService;
 
@@ -38,7 +38,7 @@ public class PageController {
     /**
      * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param pageService сервис с логикой CRUD операций над сущностью Page.
+     * @param pageService сервис с логикой взаимодействия с сущностью {@link Page}.
      * @param modelMapper маппер для конвертации сущностей.
      */
     @Autowired

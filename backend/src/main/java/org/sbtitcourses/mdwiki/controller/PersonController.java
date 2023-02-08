@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * REST контроллер для CRUD операций над сущностью Person.
+ * REST контроллер, обрабатывающий запросы на взаимодействие с сущностью {@link Person}.
  */
 @RestController
 @RequestMapping("/people")
@@ -26,7 +26,7 @@ import java.util.List;
 public class PersonController {
 
     /**
-     * Сервис с логикой CRUD операций над сущностью Person.
+     * Сервис с логикой взаимодействия с сущностью {@link Person}.
      */
     private final PersonService personService;
 
@@ -38,7 +38,7 @@ public class PersonController {
     /**
      * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param personService сервис с логикой CRUD операций над сущностью Person.
+     * @param personService сервис с логикой взаимодействия с сущностью {@link Person}.
      * @param modelMapper   маппер для конвертации сущностей.
      */
     @Autowired

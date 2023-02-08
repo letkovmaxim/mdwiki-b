@@ -1,7 +1,7 @@
 package org.sbtitcourses.mdwiki.service;
 
-import org.sbtitcourses.mdwiki.util.LoadedFile;
 import org.sbtitcourses.mdwiki.model.StoredFile;
+import org.sbtitcourses.mdwiki.util.LoadedFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

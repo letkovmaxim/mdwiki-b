@@ -1,7 +1,7 @@
 package org.sbtitcourses.mdwiki.dto.document;
 
 /**
- * DTO сущности Document для ответа.
+ * DTO сущности {@link org.sbtitcourses.mdwiki.model.Document} для ответа.
  */
 public class DocumentResponse {
 

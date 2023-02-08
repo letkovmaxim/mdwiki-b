@@ -3,7 +3,7 @@ package org.sbtitcourses.mdwiki.dto.document;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * DTO сущности Document для запроса.
+ * DTO сущности {@link org.sbtitcourses.mdwiki.model.Document} для запроса.
  */
 public class DocumentRequest {
 

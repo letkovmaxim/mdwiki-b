@@ -8,15 +8,18 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
+/**
+ * Обработчик ошибок, возникающик в контроллерах.
+ */
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(RegistrationFailedException.class)
     private ResponseEntity<ErrorResponse> handleRegistrationFailedException(RegistrationFailedException e) {
-        ErrorResponse response = new ErrorResponse("Ошибка при регистрации", new Date(), e.getErrors());
+        ErrorResponse response = new ErrorResponse("Ошибка при регистрации", Instant.now(), e.getErrors());
 
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
@@ -25,7 +28,7 @@ public class ControllerExceptionHandler {
     ResponseEntity<ErrorResponse> handleException(ConstraintViolationException cve) {
         ErrorResponse response = new ErrorResponse(
                 "Ошибка валидации",
-                new Date(),
+                Instant.now(),
                 List.of(cve.getMessage())
         );
 

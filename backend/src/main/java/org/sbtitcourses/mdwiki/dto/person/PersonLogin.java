@@ -4,7 +4,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 /**
- * DTO сущности Person для логина.
+ * DTO сущности {@link org.sbtitcourses.mdwiki.model.Person} для логина.
  */
 public class PersonLogin {
 

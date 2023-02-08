@@ -5,7 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 /**
- * DTO сущности Page для запроса.
+ * DTO сущности {@link org.sbtitcourses.mdwiki.model.Page} для запроса.
  */
 public class PageRequest {
 

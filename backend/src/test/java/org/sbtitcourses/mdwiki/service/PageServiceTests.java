@@ -33,13 +33,22 @@ class PageServiceTests {
     private EntityFetcher entityFetcher;
     @InjectMocks
     private PageService pageService;
-    private final Person owner = new Person(1);
-    private final Person notOwner = new Person(2);
-    private final Space space = new Space(owner);
+    private final Person owner = Person.builder().id(1).build();
+    private final Person notOwner = Person.builder().id(2).build();
+    private final Space space = Space.builder().owner(owner).build();
     private final Page pageToCreate = new Page();
-    private final Page pageWithId = new Page(1, space);
-    private final Page parentPage = new Page(2, space);
-    private final Page pageToUpdateWith = new Page("testName", true);
+    private final Page pageWithId = Page.builder()
+            .id(1)
+            .space(space)
+            .build();
+    private final Page parentPage = Page.builder()
+            .id(2)
+            .space(space)
+            .build();
+    private final Page pageToUpdateWith = Page.builder()
+            .name("testName")
+            .shared(true)
+            .build();
 
     @Test
     public void createShouldReturnPage() {

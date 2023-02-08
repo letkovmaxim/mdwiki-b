@@ -21,10 +21,13 @@ import java.util.Map;
 
 /**
  * Вспомогательный класс, содержащий методы
- * для конвертации документа в формат PDF.
+ * для конвертации markdown-документа в формат PDF.
  */
 public final class PdfConverter {
 
+    /**
+     * Доступные шрифты.
+     */
     private static final Map<String, String> fonts = new HashMap<>() {{
         put("arial", "Arial Unicode MS");
         put("liberation", "Liberation Sans");
@@ -36,17 +39,21 @@ public final class PdfConverter {
         put("times", "Times New Roman");
     }};
 
-    private final String font;
-    private final int size;
+    /**
+     * Метод, конвертирующий текст markdown-документа в PDF формат.
+     *
+     * @param markdown текст markdown-документа.
+     * @param font     шрифт.
+     * @param size     размер шрифта.
+     * @return поток ввода с текстом документа в виде ресурса.
+     * @throws PdfConversionException если произошла ошибка при конвертации.
+     */
+    public static InputStreamResource convert(String markdown, String font, int size) {
+        if (size < 6 || size > 66) {
+            size = 16;
+        }
 
-    private PdfConverter(Builder builder) {
-        this.font = builder.font;
-        this.size = builder.size;
-    }
-
-    public InputStreamResource convert(String markdown) {
-
-        String fontFamily = fonts.get(font);
+        String fontFamily = fonts.getOrDefault(font, "Times New Roman");
         String style = String.format("font-family: '%s'; font-size: %dpx", fontFamily, size);
 
         Parser parser = Parser.builder().build();
@@ -82,39 +89,6 @@ public final class PdfConverter {
 
         } catch (IOException e) {
             throw new PdfConversionException("Ошибка конвертации документа");
-        }
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-
-        private String font;
-        private int size;
-
-        private Builder() {
-            this.font = "times";
-            this.size = 16;
-        }
-
-        public Builder font(String font) {
-            if (fonts.containsKey(font)) {
-                this.font = font;
-            }
-            return this;
-        }
-
-        public Builder size(int size) {
-            if (size >= 6 && size <= 66) {
-                this.size = size;
-            }
-            return this;
-        }
-
-        public PdfConverter build() {
-            return new PdfConverter(this);
         }
     }
 }

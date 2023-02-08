@@ -22,7 +22,7 @@ class DocumentRepositoryTests {
     private final TestEntityManager entityManager;
     private final DocumentRepository documentRepository;
     private final Page page = new Page();
-    private final Document document = new Document(page);
+    private final Document document = Document.builder().page(page).build();
 
     @Autowired
     DocumentRepositoryTests(TestEntityManager entityManager, DocumentRepository documentRepository) {

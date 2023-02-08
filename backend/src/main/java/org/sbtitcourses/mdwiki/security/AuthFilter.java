@@ -13,6 +13,13 @@ import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
  */
 public class AuthFilter implements Filter {
 
+    /**
+     * Метод проверяет аутентифицирован ли пользователь.
+     * Если пользователь прошел аутентификацию, то в контексте
+     * находится объект типа {@link PersonDetails},
+     * если нет - строка "Anonymous user".
+     * В последнем случае фильтр отправляет сообщение об ошибке.
+     */
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,

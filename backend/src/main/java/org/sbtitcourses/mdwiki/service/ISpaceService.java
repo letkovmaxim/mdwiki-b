@@ -5,7 +5,7 @@ import org.sbtitcourses.mdwiki.model.Space;
 import java.util.List;
 
 /**
- * Интерфейс сервиса CRUD операций над сущностью Space.
+ * Интерфейс сервиса взаимодействия с сущностью {@link Space}.
  */
 public interface ISpaceService {
 

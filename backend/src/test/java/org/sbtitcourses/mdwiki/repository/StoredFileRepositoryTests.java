@@ -23,10 +23,12 @@ class StoredFileRepositoryTests {
     private final TestEntityManager entityManager;
     private final StoredFileRepository storedFileRepository;
     private final StoredFile storedFile = new StoredFile();
-    private final Person owner = new Person("testUsername",
-            "testPassword",
-            "testName",
-            "testEmail@test.test");
+    private final Person owner = Person.builder()
+            .username("testUsername")
+            .password("testPassword")
+            .name("testName")
+            .email("testEmail@test.test")
+            .build();
 
 
     @Autowired

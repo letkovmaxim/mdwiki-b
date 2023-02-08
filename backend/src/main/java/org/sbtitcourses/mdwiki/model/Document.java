@@ -33,20 +33,11 @@ public class Document {
     @JoinColumn(name = "page_id", referencedColumnName = "id", nullable = false)
     private Page page;
 
+    public static DocumentBuilder builder() {
+        return new DocumentBuilder();
+    }
+
     public Document() {
-    }
-
-    public Document(Page page) {
-        this.page = page;
-    }
-
-    public Document(String text) {
-        this.text = text;
-    }
-
-    public Document(int id, Page page) {
-        this.id = id;
-        this.page = page;
     }
 
     public int getId() {
@@ -71,5 +62,32 @@ public class Document {
 
     public void setPage(Page page) {
         this.page = page;
+    }
+
+    public static final class DocumentBuilder {
+        private final Document document;
+
+        private DocumentBuilder() {
+            document = new Document();
+        }
+
+        public DocumentBuilder id(int id) {
+            document.setId(id);
+            return this;
+        }
+
+        public DocumentBuilder text(String text) {
+            document.setText(text);
+            return this;
+        }
+
+        public DocumentBuilder page(Page page) {
+            document.setPage(page);
+            return this;
+        }
+
+        public Document build() {
+            return document;
+        }
     }
 }
