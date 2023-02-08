@@ -58,14 +58,12 @@ public class Page {
     /**
      * Точное время создания записи.
      */
-    @Temporal(TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     /**
      * Точное время обновления записи.
      */
-    @Temporal(TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 

@@ -60,14 +60,12 @@ public class Person {
     /**
      * Точное время создания пользователя.
      */
-    @Temporal(TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     /**
      * Точное время обновления пользователя.
      */
-    @Temporal(TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 

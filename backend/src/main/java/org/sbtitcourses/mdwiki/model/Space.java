@@ -43,14 +43,12 @@ public class Space {
     /**
      * Точное время создания пространства.
      */
-    @Temporal(TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     /**
      * Точное время обновления пространства.
      */
-    @Temporal(TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
