@@ -62,7 +62,6 @@ export const MarkdownDocument = ({save, edit, CloseEdit, OpenEdit, document, new
         ),
         execute: () => {
             handleOpen()
-            console.log(commands.getCommands())
         }
     };
 

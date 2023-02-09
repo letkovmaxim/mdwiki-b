@@ -24,9 +24,9 @@ function App() {
                 <Route path="/" element={<Redirect />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/registration" element={<Registration />}/>
-                <Route path="/wiki/:login" element={checkLogin()}/>
-                <Route path="/wiki/:login/space/:spaceId" element={checkLogin()}/>
-                <Route path="/wiki/:login/space/:spaceId/page/:pageId" element={checkLogin()}/>
+                <Route path="/wiki" element={checkLogin()}/>
+                <Route path="/wiki/space/:spaceId" element={checkLogin()}/>
+                <Route path="/wiki/space/:spaceId/page/:pageId" element={checkLogin()}/>
                 <Route path="/*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
