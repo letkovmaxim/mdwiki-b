@@ -5,15 +5,15 @@ import javax.persistence.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
 /**
- * Сущность записанных в системе файлов
- * для хранения информации о них в базе данных
+ * Сущность, описывающая записанный в системе файл
+ * для хранения информации о нём в базе данных.
  */
 @Entity
 @Table(name = "files")
 public class StoredFile {
 
     /**
-     * ID файла в базе данных
+     * ID файла в базе данных.
      */
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -21,38 +21,38 @@ public class StoredFile {
     private int id;
 
     /**
-     * Уникальный идентификатор файла
+     * Уникальный идентификатор файла.
      */
     @Column(name = "guid", nullable = false)
     private String GUID;
 
     /**
-     * Оригинальное название файла
+     * Оригинальное название файла.
      */
     @Column(name = "name", nullable = false)
     private String originalName;
 
     /**
-     * MIME-тип файла
+     * MIME-тип файла.
      */
     @Column(name = "type", nullable = false)
     private String MimeType;
 
     /**
-     * Размер файла в битах
+     * Размер файла в битах.
      */
     @Column(name = "size", nullable = false)
     private long size;
 
     /**
-     * Пользователь-владелец файла
+     * Пользователь-владелец файла.
      */
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private Person owner;
 
     /**
-     * Пространство, с которым связан файл
+     * Пространство, с которым связан файл.
      */
     @ManyToOne
     @JoinColumn(name = "space_id", referencedColumnName = "id", nullable = false)

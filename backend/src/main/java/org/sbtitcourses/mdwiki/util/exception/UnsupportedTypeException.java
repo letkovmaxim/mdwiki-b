@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
 
 /**
- * Исключение "недопустимый тип файла"
+ * Исключение "недопустимый тип файла".
  */
 @ResponseStatus(UNSUPPORTED_MEDIA_TYPE)
 public class UnsupportedTypeException extends RuntimeException {

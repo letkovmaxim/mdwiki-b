@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.repository.SpaceRepository;
-import org.sbtitcourses.mdwiki.util.ResourceFetcher;
+import org.sbtitcourses.mdwiki.util.EntityFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +29,7 @@ class SpaceServiceTests {
     @Mock
     private SpaceRepository spaceRepository;
     @Mock
-    private ResourceFetcher resourceFetcher;
+    private EntityFetcher entityFetcher;
     @InjectMocks
     private SpaceService spaceService;
     private final Person owner = new Person(1);
@@ -40,14 +40,14 @@ class SpaceServiceTests {
 
     @Test
     public void createShouldReturnSpace() {
-        when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
+        when(entityFetcher.getLoggedInUser()).thenReturn(owner);
         when(spaceRepository.save(spaceToCreate)).thenReturn(spaceWithId);
 
         Space createdSpace = spaceService.create(spaceToCreate);
 
         assertEquals(1, createdSpace.getId());
 
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).getLoggedInUser();
         verify(spaceRepository).save(spaceToCreate);
     }
 
@@ -57,7 +57,7 @@ class SpaceServiceTests {
         spaces.add(spaceWithId);
         Pageable pageable = PageRequest.of(0, 1);
 
-        when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
+        when(entityFetcher.getLoggedInUser()).thenReturn(owner);
         when(spaceRepository.findByOwner(owner, pageable)).thenReturn(spaces);
 
         List<Space> gottenSpaces = spaceService.get(0, 1);
@@ -65,7 +65,7 @@ class SpaceServiceTests {
         assertEquals(1, gottenSpaces.size());
         assertEquals(1, gottenSpaces.get(0).getId());
 
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).getLoggedInUser();
         verify(spaceRepository).findByOwner(owner, pageable);
     }
 
@@ -87,32 +87,32 @@ class SpaceServiceTests {
 
     @Test
     public void getShouldReturnSpace() {
-        when(resourceFetcher.fetchSpace(1)).thenReturn(spaceWithId);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
+        when(entityFetcher.fetchSpace(1)).thenReturn(spaceWithId);
+        when(entityFetcher.getLoggedInUser()).thenReturn(owner);
 
         Space gottenSpace = spaceService.get(1);
 
         assertEquals(1, gottenSpace.getId());
 
-        verify(resourceFetcher).fetchSpace(1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchSpace(1);
+        verify(entityFetcher).getLoggedInUser();
     }
 
     @Test
     public void getWithAccessDeniedShouldThrowException() {
-        when(resourceFetcher.fetchSpace(1)).thenReturn(spaceWithId);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(notOwner);
+        when(entityFetcher.fetchSpace(1)).thenReturn(spaceWithId);
+        when(entityFetcher.getLoggedInUser()).thenReturn(notOwner);
 
         assertThrows(AccessDeniedException.class, () -> spaceService.get(1));
 
-        verify(resourceFetcher).fetchSpace(1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchSpace(1);
+        verify(entityFetcher).getLoggedInUser();
     }
 
     @Test
     public void updateShouldReturnSpace() {
-        when(resourceFetcher.fetchSpace(1)).thenReturn(spaceWithId);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
+        when(entityFetcher.fetchSpace(1)).thenReturn(spaceWithId);
+        when(entityFetcher.getLoggedInUser()).thenReturn(owner);
 
         Space updatedSpace = spaceService.update(1, spaceToUpdateWith);
 
@@ -120,43 +120,43 @@ class SpaceServiceTests {
         assertEquals(spaceToUpdateWith.getName(), updatedSpace.getName());
         assertEquals(spaceToUpdateWith.isShared(), updatedSpace.isShared());
 
-        verify(resourceFetcher).fetchSpace(1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchSpace(1);
+        verify(entityFetcher).getLoggedInUser();
     }
 
     @Test
     public void updateWithAccessDeniedShouldThrowException() {
-        when(resourceFetcher.fetchSpace(1)).thenReturn(spaceWithId);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(notOwner);
+        when(entityFetcher.fetchSpace(1)).thenReturn(spaceWithId);
+        when(entityFetcher.getLoggedInUser()).thenReturn(notOwner);
 
         assertThrows(AccessDeniedException.class, () -> spaceService.update(1, spaceToUpdateWith));
 
-        verify(resourceFetcher).fetchSpace(1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchSpace(1);
+        verify(entityFetcher).getLoggedInUser();
     }
 
     @Test
     public void deleteShouldRemoveSpace() {
-        when(resourceFetcher.fetchSpace(1))
+        when(entityFetcher.fetchSpace(1))
                 .thenReturn(spaceWithId)
                 .thenThrow(ElementNotFoundException.class);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
+        when(entityFetcher.getLoggedInUser()).thenReturn(owner);
 
         assertDoesNotThrow(() -> spaceService.delete(1));
         assertThrows(ElementNotFoundException.class, () -> spaceService.delete(1));
 
-        verify(resourceFetcher, times(2)).fetchSpace(1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher, times(2)).fetchSpace(1);
+        verify(entityFetcher).getLoggedInUser();
     }
 
     @Test
     public void deleteWithAccessDeniedShouldThrowException() {
-        when(resourceFetcher.fetchSpace(1)).thenReturn(spaceWithId);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(notOwner);
+        when(entityFetcher.fetchSpace(1)).thenReturn(spaceWithId);
+        when(entityFetcher.getLoggedInUser()).thenReturn(notOwner);
 
         assertThrows(AccessDeniedException.class, () -> spaceService.delete(1));
 
-        verify(resourceFetcher).fetchSpace(1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchSpace(1);
+        verify(entityFetcher).getLoggedInUser();
     }
 }

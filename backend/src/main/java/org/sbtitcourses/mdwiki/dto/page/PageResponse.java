@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * DTO сущности Page для ответа
+ * DTO сущности Page для ответа.
  */
 public class PageResponse {
 
@@ -14,27 +14,27 @@ public class PageResponse {
     private int id;
 
     /**
-     * Название записи
+     * Название записи.
      */
     private String name;
 
     /**
-     * Список подстраниц данной страницы
+     * Список подстраниц данной страницы.
      */
     private List<PageResponse> subpages;
 
     /**
-     * Точное время создания записи
+     * Точное время создания записи.
      */
     private Date createdAt;
 
     /**
-     * Точное время обновления записи
+     * Точное время обновления записи.
      */
     private Date updatedAt;
 
     /**
-     * Статус публичности записи
+     * Статус публичности записи.
      */
     private boolean shared;
 

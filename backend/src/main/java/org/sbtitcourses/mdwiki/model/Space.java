@@ -12,14 +12,14 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
- * Сущность пользовательских пространств.
+ * Сущность, описывающая пространство пользователя.
  */
 @Entity
 @Table(name = "spaces")
 public class Space {
 
     /**
-     * ID пространства
+     * ID пространства.
      */
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -27,27 +27,27 @@ public class Space {
     private int id;
 
     /**
-     * Название пространства
+     * Название пространства.
      */
     @Column(name = "name", nullable = false)
     private String name;
 
     /**
-     * Владелец данного пространства
+     * Владелец данного пространства.
      */
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private Person owner;
 
     /**
-     * Точное время создания пространства
+     * Точное время создания пространства.
      */
     @Temporal(TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
     /**
-     * Точное время обновления пространства
+     * Точное время обновления пространства.
      */
     @Temporal(TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
@@ -60,14 +60,14 @@ public class Space {
     private boolean shared;
 
     /**
-     * Список записей, принадлежащих данному пространству
+     * Список записей, принадлежащих данному пространству.
      */
     @OneToMany(mappedBy = "space", fetch = LAZY)
     @Cascade(ALL)
     private List<Page> pages;
 
     /**
-     * Список хранимых файлов, связанных с данным пространством
+     * Список хранимых файлов, связанных с данным пространством.
      **/
     @OneToMany(mappedBy = "space", fetch = LAZY)
     @Cascade(ALL)

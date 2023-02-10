@@ -3,6 +3,7 @@ package org.sbtitcourses.mdwiki.model;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,14 +13,16 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
- * Сущность, описывающая зарегестрированных пользователей
+ * Сущность, описывающая зарегестрированного пользователя.
  */
 @Entity
 @Table(name = "persons")
-public class Person {
+public class Person implements Serializable {
+
+    private static final long serialVersionUID = 8080395540442381101L;
 
     /**
-     * ID пользователя в базе данных
+     * ID пользователя в базе данных.
      */
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -27,71 +30,70 @@ public class Person {
     private int id;
 
     /**
-     * Логин пользователя
+     * Логин пользователя.
      */
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     /**
-     * Пароль пользователя
+     * Пароль пользователя.
      */
     @Column(name = "password", nullable = false)
     private String password;
 
     /**
-     * Роль пользователя
+     * Роль пользователя.
      */
     @Column(name = "role", nullable = false)
     private String role;
 
     /**
-     * Имя пользователя
+     * Имя пользователя.
      */
     @Column(name = "name")
     private String name;
 
     /**
-     * Email пользователя
+     * Эл. почта пользователя.
      */
     @Column(name = "email")
     private String email;
 
     /**
-     * Точное время создания пользователя
+     * Точное время создания пользователя.
      */
     @Temporal(TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
     /**
-     * Точное время обновления пользователя
+     * Точное время обновления пользователя.
      */
     @Temporal(TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
     /**
-     * Тип аккаунта
-     * Активный (true) или заблокированный (false)
+     * Статус активности аккаунта.
      */
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
     /**
-     * Текст заметки markdown-документа
+     * Текст заметки markdown-документа.
      */
     @Column(name = "note")
     private String note;
 
     /**
-     * Список пространств, принадлежащих пользователю
+     * Список пространств, принадлежащих пользователю.
      */
     @OneToMany(mappedBy = "owner", fetch = LAZY)
     @Cascade(ALL)
     private List<Space> spaces;
 
     /**
-     * Список хранимых файлов, принадлежащих пользователю
+     * Список хранимых файлов, принадлежащих пользователю.
      */
     @OneToMany(mappedBy = "owner", fetch = LAZY)
     @Cascade(ALL)

@@ -1,88 +1,88 @@
 package org.sbtitcourses.mdwiki.controller;
 
 import org.modelmapper.ModelMapper;
-import org.sbtitcourses.mdwiki.dto.error.ErrorResponse;
 import org.sbtitcourses.mdwiki.dto.person.PersonLogin;
 import org.sbtitcourses.mdwiki.dto.person.PersonRegistration;
 import org.sbtitcourses.mdwiki.dto.person.PersonResponse;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.service.security.EntryService;
-import org.sbtitcourses.mdwiki.util.ResourceFetcher;
-import org.sbtitcourses.mdwiki.util.exception.RegistrationFailedException;
+import org.sbtitcourses.mdwiki.util.EntityFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
 
 /**
- * Контроллер для страниц login и registration
+ * REST контроллер для входа и регистрации пользователя.
  */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     /**
-     * Сервис с логикой входа и регистрации пользователя
+     * Сервис с логикой входа и регистрации пользователя.
      */
     private final EntryService entryService;
 
     /**
-     * Компонент для получения ресурсов
+     * Компонент для получения ресурсов.
      */
-    private final ResourceFetcher resourceFetcher;
+    private final EntityFetcher entityFetcher;
 
     /**
-     * Маппер для конвертации сущностей
+     * Маппер для конвертации сущностей.
      */
     private final ModelMapper modelMapper;
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей
-     * @param entryService сервис с логикой входа и регистрации пользователя
-     * @param resourceFetcher компонент для получения ресурсов
-     * @param modelMapper маппер для конвертации сущностей
+     *
+     * @param entryService  сервис с логикой входа и регистрации пользователя.
+     * @param entityFetcher компонент для получения ресурсов.
+     * @param modelMapper   маппер для конвертации сущностей.
      */
     @Autowired
     public AuthController(EntryService entryService,
-                          ResourceFetcher resourceFetcher,
+                          EntityFetcher entityFetcher,
                           ModelMapper modelMapper) {
         this.entryService = entryService;
-        this.resourceFetcher = resourceFetcher;
+        this.entityFetcher = entityFetcher;
         this.modelMapper = modelMapper;
     }
 
     /**
-     * Метод для авторизации пользователя
-     * @param personLogin DTO сущности Person для логина
-     * @return если пользователь успешно авторизирован статус 200, в противном случае 403
+     * Метод, обрабатывающий запрос на авторизацию пользователя.
+     *
+     * @param personLogin DTO сущности Person для логина.
+     * @return HTTP ответ со статусом 200.
      */
     @PostMapping("/login")
     public ResponseEntity<HttpStatus> performLogin(@RequestBody @Valid PersonLogin personLogin) {
         entryService.login(personLogin);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     /**
-     * Метод для получения авторизированного пользователя
-     * @return авторизированного пользователя
+     * Метод, обрабатывающий запрос на получение авторизированного пользователя.
+     *
+     * @return HTTP ответ с информацией об авторизованном пользователе и статусом 200.
      */
     @GetMapping("/whoami")
     public ResponseEntity<PersonResponse> whoAmI() {
-        Person person = resourceFetcher.getLoggedInUser();
+        Person person = entityFetcher.getLoggedInUser();
 
         PersonResponse response = modelMapper.map(person, PersonResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok().body(response);
     }
 
     /**
-     * Метод, отвечающий за регистрацию нового пользователя
-     * @param personRegistration DTO сущности Person для регистрации
-     * @return DTO сущности Person для ответа с кодом 201
+     * Метод, обрабатывающий запрос на регистрацию нового пользователя.
+     *
+     * @param personRegistration DTO сущности Person для регистрации.
+     * @return HTTP ответ с информацией о новом пользователе и статусом 201.
      */
     @PostMapping("/registration")
     public ResponseEntity<Object> performRegistration(@RequestBody @Valid PersonRegistration personRegistration) {
@@ -95,17 +95,10 @@ public class AuthController {
     }
 
     /**
-     * Метод, отвечающий за выход пользователя
+     * Метод, обрабатывающий запрос на выход пользователя.
      */
     @PostMapping("/logout")
     public void logout() {
         entryService.logout();
-    }
-
-    @ExceptionHandler(RegistrationFailedException.class)
-    private ResponseEntity<ErrorResponse> handleRegistrationFailedException(RegistrationFailedException e) {
-        ErrorResponse response = new ErrorResponse("Ошибка при регистрации", new Date(), e.getErrors());
-
-        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 }

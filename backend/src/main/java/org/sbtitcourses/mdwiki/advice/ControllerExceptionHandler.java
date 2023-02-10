@@ -1,6 +1,7 @@
 package org.sbtitcourses.mdwiki.advice;
 
 import org.sbtitcourses.mdwiki.dto.error.ErrorResponse;
+import org.sbtitcourses.mdwiki.util.exception.RegistrationFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,7 +14,14 @@ import java.util.List;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler(RegistrationFailedException.class)
+    private ResponseEntity<ErrorResponse> handleRegistrationFailedException(RegistrationFailedException e) {
+        ErrorResponse response = new ErrorResponse("Ошибка при регистрации", new Date(), e.getErrors());
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
     ResponseEntity<ErrorResponse> handleException(ConstraintViolationException cve) {
         ErrorResponse response = new ErrorResponse(
                 "Ошибка валидации",

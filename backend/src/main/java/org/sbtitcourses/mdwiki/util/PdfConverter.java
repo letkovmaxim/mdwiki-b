@@ -19,6 +19,10 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Вспомогательный класс, содержащий методы
+ * для конвертации документа в формат PDF.
+ */
 public final class PdfConverter {
 
     private static final Map<String, String> fonts = new HashMap<>() {{

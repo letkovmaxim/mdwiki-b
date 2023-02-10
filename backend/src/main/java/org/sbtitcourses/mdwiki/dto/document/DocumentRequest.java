@@ -3,14 +3,14 @@ package org.sbtitcourses.mdwiki.dto.document;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * DTO сущности Document для запроса
+ * DTO сущности Document для запроса.
  */
 public class DocumentRequest {
 
     /**
-     * Текст markdown-документа
+     * Текст markdown-документа.
      */
-    @NotEmpty(message = "Текст документа не должен быть пустым")
+    @NotEmpty
     private String text;
 
     public String getText() {

@@ -10,45 +10,49 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Репозиторий для взаимодействия с сущностью Page
+ * Репозиторий для взаимодействия с сущностью Page.
  */
-@Repository
 public interface PageRepository extends JpaRepository<Page, Integer> {
 
     /**
-     * Поиск записи по названию
-     * @param name имя записи
-     * @return возвращает найденую запись
+     * Поиск записи по названию.
+     *
+     * @param name имя записи.
+     * @return найденую запись.
      */
     Optional<Page> findByName(String name);
 
     /**
-     * Поиск публичных записей
-     * @return возвращает список найденых записнй
+     * Поиск публичных записей.
+     *
+     * @return список найденых записей.
      */
     List<Page> findBySharedTrue();
 
     /**
-     * Поиск записи данного пространства
-     * @param id ID записи
-     * @param space пространство, в котором ищутся записи
-     * @return возвращает найденую запись
+     * Поиск записи данного пространства.
+     *
+     * @param id    ID записи.
+     * @param space пространство, в котором ищутся записи.
+     * @return найденую запись.
      */
     Optional<Page> findByIdAndSpace(int id, Space space);
 
     /**
-     * Поиск корневых записей данного пространства
-     * @param space пространство, в котором ищутся записи
-     * @param pageable объект, определяющий нужное колличество страниц
-     * @return возвращает список найденых записней
+     * Поиск корневых записей данного пространства.
+     *
+     * @param space    пространство, в котором ищутся записи.
+     * @param pageable объект, определяющий нужное колличество страниц.
+     * @return список найденых записней.
      */
     List<Page> findBySpaceAndParentIsNull(Space space, Pageable pageable);
 
     /**
-     * Поиск записи данного пространства по названию
-     * @param space пространство, в котором ищутся записи
-     * @param name имя записи
-     * @return возвращает найденую запись
+     * Поиск записи данного пространства по названию.
+     *
+     * @param space пространство, в котором ищутся записи.
+     * @param name  имя записи.
+     * @return найденую запись.
      */
     Optional<Page> findBySpaceAndName(Space space, String name);
 }

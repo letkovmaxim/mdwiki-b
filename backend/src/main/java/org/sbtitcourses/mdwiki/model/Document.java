@@ -5,16 +5,15 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
-
 /**
- * Сущность markdown-документа
+ * Сущность, описывающая markdown-документ пользователя.
  */
 @Entity
 @Table(name = "documents")
 public class Document {
 
     /**
-     * ID документа
+     * ID документа.
      */
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -22,13 +21,13 @@ public class Document {
     private int id;
 
     /**
-     * Текст markdown-документа
+     * Текст markdown-документа.
      */
     @Column(name = "text")
     private String text;
 
     /**
-     * Запись, содержащая этот докумет
+     * Запись, содержащая этот докумет.
      */
     @OneToOne(fetch = EAGER)
     @JoinColumn(name = "page_id", referencedColumnName = "id", nullable = false)

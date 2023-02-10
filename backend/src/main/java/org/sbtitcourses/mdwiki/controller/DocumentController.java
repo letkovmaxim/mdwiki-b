@@ -3,7 +3,7 @@ package org.sbtitcourses.mdwiki.controller;
 import org.modelmapper.ModelMapper;
 import org.sbtitcourses.mdwiki.dto.document.DocumentRequest;
 import org.sbtitcourses.mdwiki.dto.document.DocumentResponse;
-import org.sbtitcourses.mdwiki.model.ConvertedDocument;
+import org.sbtitcourses.mdwiki.util.ConvertedDocument;
 import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 /**
- * REST контроллер для CRUD операций над сущностью Document
+ * REST контроллер для CRUD операций над сущностью Document.
  */
 @RestController
 @RequestMapping("/spaces/{spaceId}/pages/{pageId}/document")
@@ -29,18 +28,20 @@ import javax.validation.constraints.Min;
 public class DocumentController {
 
     /**
-     * Сервис с логикой CRUD операций над сущностью Document
+     * Сервис с логикой CRUD операций над сущностью Document.
      */
     private final DocumentService documentService;
+
     /**
-     * Маппер для конвертации сущностей
+     * Маппер для конвертации сущностей.
      */
     private final ModelMapper modelMapper;
 
     /**
-     * Конструктор для автоматичекого внедрения зависимостей
-     * @param documentService сервис с логикой CRUD операций над сущностью Document
-     * @param modelMapper маппер для конвертации сущностей
+     * Конструктор для автоматичекого внедрения зависимостей.
+     *
+     * @param documentService сервис с логикой CRUD операций над сущностью Document.
+     * @param modelMapper     маппер для конвертации сущностей.
      */
     @Autowired
     public DocumentController(DocumentService documentService, ModelMapper modelMapper) {
@@ -49,15 +50,16 @@ public class DocumentController {
     }
 
     /**
-     * Метод, отвечающий за создание нового документа
-     * @param spaceId ID пространства, в котором нужно создать документ
-     * @param pageId ID страницы, в которой нужно создать дорумент
-     * @param documentRequest DTO сущности Document для запроса
-     * @return DTO сущности Document для ответа с кодом 201
+     * Метод, обрабатывающий запрос на создание нового документа.
+     *
+     * @param spaceId         ID пространства, в котором нужно создать документ.
+     * @param pageId          ID страницы, в которой нужно создать дорумент.
+     * @param documentRequest информация о новом документе.
+     * @return HTTP ответ с информацией о новом документе и статусом 201.
      */
     @PostMapping
-    public ResponseEntity<DocumentResponse> create(@PathVariable(name = "spaceId") int spaceId,
-                                                   @PathVariable(name = "pageId") int pageId,
+    public ResponseEntity<DocumentResponse> create(@PathVariable("spaceId") int spaceId,
+                                                   @PathVariable("pageId") int pageId,
                                                    @RequestBody @Valid DocumentRequest documentRequest) {
         Document document = modelMapper.map(documentRequest, Document.class);
 
@@ -68,67 +70,69 @@ public class DocumentController {
     }
 
     /**
-     * Метод, отвечающий за получение страницы по его ID для данной страницы и пространства
-     * @param spaceId ID пространства
-     * @param pageId ID страницы
-     * @return DTO сущности Page для ответа с кодом 200
+     * Метод, обрабатывающий запрос на получение страницы по его ID для данной страницы и пространства.
+     *
+     * @param spaceId ID пространства.
+     * @param pageId  ID страницы.
+     * @return HTTP ответ с информацией о документе и статусом 200.
      */
     @GetMapping
-    public ResponseEntity<DocumentResponse> get(@PathVariable(name = "spaceId") int spaceId,
-                                                @PathVariable(name = "pageId") int pageId) {
+    public ResponseEntity<DocumentResponse> get(@PathVariable("spaceId") int spaceId,
+                                                @PathVariable("pageId") int pageId) {
         Document document = documentService.get(pageId, spaceId);
 
         DocumentResponse response = modelMapper.map(document, DocumentResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok().body(response);
     }
 
     /**
-     *  Метод, отвечающий за обновление документа с заданым ID для данной страницы и пространства
-     * @param spaceId ID пространства
-     * @param pageId ID страницы
-     * @param documentRequest DTO сущности Document для запроса
-     * @return DTO сущности Document для ответа с кодом 200
+     * Метод, обрабатывающий запрос на обновление документа по его ID для данной страницы и пространства.
+     *
+     * @param spaceId         ID пространства.
+     * @param pageId          ID страницы.
+     * @param documentRequest информация о документе, которую нужно обновить.
+     * @return HTTP ответ с информацией об обновленном документе и статусом 200.
      */
     @PutMapping
-    public ResponseEntity<DocumentResponse> update(@PathVariable(name = "spaceId") int spaceId,
-                                                   @PathVariable(name = "pageId") int pageId,
+    public ResponseEntity<DocumentResponse> update(@PathVariable("spaceId") int spaceId,
+                                                   @PathVariable("pageId") int pageId,
                                                    @RequestBody @Valid DocumentRequest documentRequest) {
         Document documentToUpdateWith = modelMapper.map(documentRequest, Document.class);
 
         Document updatedDocument = documentService.update(pageId, spaceId, documentToUpdateWith);
 
         DocumentResponse response = modelMapper.map(updatedDocument, DocumentResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok().body(response);
     }
 
     /**
-     * Метод, отвечающий за удаление документа с заданым ID данной страницы и пространтсва
-     * @param spaceId ID пространтсва
-     * @param pageId ID страницы
-     * @return пустой ответ с кодом 204
+     * Метод, обрабатывающий запрос на удаление документа по его ID для данной страницы и пространтсва.
+     *
+     * @param spaceId ID пространтсва.
+     * @param pageId  ID страницы.
+     * @return HTTP ответ со статусом 204.
      */
     @DeleteMapping
-    public ResponseEntity<HttpStatus> delete(@PathVariable(name = "spaceId") int spaceId,
-                                             @PathVariable(name = "pageId") int pageId) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("spaceId") int spaceId,
+                                             @PathVariable("pageId") int pageId) {
         documentService.delete(pageId, spaceId);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     /**
-     * Метод, обрабатывающий запросы на скачку документа в PDF формате
-     * @param spaceId ID пространтсва
-     * @param pageId ID страницы
-     * @return HTTP ответ с PDF файлом и статусом 200
+     * Метод, обрабатывающий запросы на скачку документа в PDF формате.
+     *
+     * @param spaceId ID пространтсва.
+     * @param pageId  ID страницы.
+     * @return HTTP ответ с PDF файлом и статусом 200.
      */
     @GetMapping("/pdf")
     public ResponseEntity<InputStreamResource>
-    convertToPdf(@PathVariable(name = "spaceId") int spaceId,
-                 @PathVariable(name = "pageId") int pageId,
+    convertToPdf(@PathVariable("spaceId") int spaceId,
+                 @PathVariable("pageId") int pageId,
                  @RequestParam(name = "font", required = false, defaultValue = "times") String font,
-                 @RequestParam(name = "fontSize", required = false, defaultValue = "16")
-                 @Min(value = 6, message = "Мин. размер шрифта - 6")
-                 @Max(value = 66, message = "Макс. размер шрифта - 66") int fontSize,
+                 @RequestParam(name = "fontSize", required = false, defaultValue = "16") @Min(6) @Max(66) int fontSize,
                  @RequestParam(name = "tree", required = false, defaultValue = "false") boolean tree) {
         ConvertedDocument convertedDocument = documentService
                 .convertToPdf(spaceId, pageId, font, fontSize, tree);

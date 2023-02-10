@@ -9,7 +9,7 @@ import org.sbtitcourses.mdwiki.model.Page;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.model.Space;
 import org.sbtitcourses.mdwiki.repository.PageRepository;
-import org.sbtitcourses.mdwiki.util.ResourceFetcher;
+import org.sbtitcourses.mdwiki.util.EntityFetcher;
 import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +30,7 @@ class PageServiceTests {
     @Mock
     private PageRepository pageRepository;
     @Mock
-    private ResourceFetcher resourceFetcher;
+    private EntityFetcher entityFetcher;
     @InjectMocks
     private PageService pageService;
     private final Person owner = new Person(1);
@@ -43,54 +43,54 @@ class PageServiceTests {
 
     @Test
     public void createShouldReturnPage() {
-        when(resourceFetcher.fetchSpace(1)).thenReturn(space);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
+        when(entityFetcher.fetchSpace(1)).thenReturn(space);
+        when(entityFetcher.getLoggedInUser()).thenReturn(owner);
         when(pageRepository.save(pageToCreate)).thenReturn(pageWithId);
 
         Page createdPage = pageService.create(pageToCreate, 1);
 
         assertEquals(1, createdPage.getId());
 
-        verify(resourceFetcher).fetchSpace(1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchSpace(1);
+        verify(entityFetcher).getLoggedInUser();
         verify(pageRepository).save(pageToCreate);
     }
 
     @Test
     public void createWithAccessDeniedShouldThrowException() {
-        when(resourceFetcher.fetchSpace(1)).thenReturn(space);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(notOwner);
+        when(entityFetcher.fetchSpace(1)).thenReturn(space);
+        when(entityFetcher.getLoggedInUser()).thenReturn(notOwner);
 
         assertThrows(AccessDeniedException.class, () -> pageService.create(pageToCreate, 1));
 
-        verify(resourceFetcher).fetchSpace(1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchSpace(1);
+        verify(entityFetcher).getLoggedInUser();
     }
 
     @Test
     public void createSubpageShouldReturnPage() {
-        when(resourceFetcher.fetchPage(2, 1)).thenReturn(parentPage);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
+        when(entityFetcher.fetchPage(2, 1)).thenReturn(parentPage);
+        when(entityFetcher.getLoggedInUser()).thenReturn(owner);
         when(pageRepository.save(pageToCreate)).thenReturn(pageWithId);
 
         Page createdSubpage = pageService.createSubpage(pageToCreate, 2, 1);
 
         assertEquals(1, createdSubpage.getId());
 
-        verify(resourceFetcher).fetchPage(2, 1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchPage(2, 1);
+        verify(entityFetcher).getLoggedInUser();
         verify(pageRepository).save(pageToCreate);
     }
 
     @Test
     public void createSubpageWithAccessDeniedShouldThrowException() {
-        when(resourceFetcher.fetchPage(2, 1)).thenReturn(parentPage);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(notOwner);
+        when(entityFetcher.fetchPage(2, 1)).thenReturn(parentPage);
+        when(entityFetcher.getLoggedInUser()).thenReturn(notOwner);
 
         assertThrows(AccessDeniedException.class, () -> pageService.createSubpage(pageToCreate, 2, 1));
 
-        verify(resourceFetcher).fetchPage(2, 1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchPage(2, 1);
+        verify(entityFetcher).getLoggedInUser();
     }
 
     @Test
@@ -100,8 +100,8 @@ class PageServiceTests {
         pages.add(new Page());
         Pageable pageable = PageRequest.of(0,1);
 
-        when(resourceFetcher.fetchSpace(1)).thenReturn(space);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
+        when(entityFetcher.fetchSpace(1)).thenReturn(space);
+        when(entityFetcher.getLoggedInUser()).thenReturn(owner);
         when(pageRepository.findBySpaceAndParentIsNull(space, pageable)).thenReturn(pages);
 
         List<Page> gottenPages = pageService.get(1, 0, 1);
@@ -109,50 +109,50 @@ class PageServiceTests {
         assertEquals(2, gottenPages.size());
         assertEquals(1, gottenPages.get(0).getId());
 
-        verify(resourceFetcher).fetchSpace(1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchSpace(1);
+        verify(entityFetcher).getLoggedInUser();
         verify(pageRepository).findBySpaceAndParentIsNull(space, pageable);
     }
 
     @Test
     public void getAllWithAccessDeniedShouldThrowException() {
-        when(resourceFetcher.fetchSpace(1)).thenReturn(space);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(notOwner);
+        when(entityFetcher.fetchSpace(1)).thenReturn(space);
+        when(entityFetcher.getLoggedInUser()).thenReturn(notOwner);
 
         assertThrows(AccessDeniedException.class, () -> pageService.get(1, 0, 1));
 
-        verify(resourceFetcher).fetchSpace(1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchSpace(1);
+        verify(entityFetcher).getLoggedInUser();
     }
 
     @Test
     public void getShouldReturnPage() {
-        when(resourceFetcher.fetchPage(1, 1)).thenReturn(pageWithId);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
+        when(entityFetcher.fetchPage(1, 1)).thenReturn(pageWithId);
+        when(entityFetcher.getLoggedInUser()).thenReturn(owner);
 
         Page gottenPage = pageService.get(1, 1);
 
         assertEquals(1, gottenPage.getId());
 
-        verify(resourceFetcher).fetchPage(1, 1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchPage(1, 1);
+        verify(entityFetcher).getLoggedInUser();
     }
 
     @Test
     public void getWithAccessDeniedShouldThrowException() {
-        when(resourceFetcher.fetchPage(1, 1)).thenReturn(pageWithId);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(notOwner);
+        when(entityFetcher.fetchPage(1, 1)).thenReturn(pageWithId);
+        when(entityFetcher.getLoggedInUser()).thenReturn(notOwner);
 
         assertThrows(AccessDeniedException.class, () -> pageService.get(1, 1));
 
-        verify(resourceFetcher).fetchPage(1, 1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchPage(1, 1);
+        verify(entityFetcher).getLoggedInUser();
     }
 
     @Test
     public void updateShouldReturnPage() {
-        when(resourceFetcher.fetchPage(1, 1)).thenReturn(pageWithId);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
+        when(entityFetcher.fetchPage(1, 1)).thenReturn(pageWithId);
+        when(entityFetcher.getLoggedInUser()).thenReturn(owner);
 
         Page updatedPage = pageService.update(1, 1, pageToUpdateWith);
 
@@ -160,45 +160,45 @@ class PageServiceTests {
         assertEquals(pageToUpdateWith.getName(), updatedPage.getName());
         assertEquals(pageToUpdateWith.isShared(), updatedPage.isShared());
 
-        verify(resourceFetcher).fetchPage(1, 1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchPage(1, 1);
+        verify(entityFetcher).getLoggedInUser();
         verify(pageRepository).save(pageWithId);
     }
 
     @Test
     public void updateWithAccessDeniedShouldThrowException() {
-        when(resourceFetcher.fetchPage(1, 1)).thenReturn(pageWithId);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(notOwner);
+        when(entityFetcher.fetchPage(1, 1)).thenReturn(pageWithId);
+        when(entityFetcher.getLoggedInUser()).thenReturn(notOwner);
 
         assertThrows(AccessDeniedException.class, () -> pageService.update(1, 1, pageToUpdateWith));
 
-        verify(resourceFetcher).fetchPage(1, 1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchPage(1, 1);
+        verify(entityFetcher).getLoggedInUser();
     }
 
     @Test
     public void deleteShouldRemovePage() {
-        when(resourceFetcher.fetchPage(1, 1))
+        when(entityFetcher.fetchPage(1, 1))
                 .thenReturn(pageWithId)
                 .thenThrow(ElementNotFoundException.class);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(owner);
+        when(entityFetcher.getLoggedInUser()).thenReturn(owner);
 
         assertDoesNotThrow(() -> pageService.delete(1, 1));
         assertThrows(ElementNotFoundException.class, () -> pageService.delete(1, 1));
 
-        verify(resourceFetcher, times(2)).fetchPage(1, 1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher, times(2)).fetchPage(1, 1);
+        verify(entityFetcher).getLoggedInUser();
         verify(pageRepository).delete(pageWithId);
     }
 
     @Test
     public void deleteWithAccessDeniedShouldThrowException() {
-        when(resourceFetcher.fetchPage(1, 1)).thenReturn(pageWithId);
-        when(resourceFetcher.getLoggedInUser()).thenReturn(notOwner);
+        when(entityFetcher.fetchPage(1, 1)).thenReturn(pageWithId);
+        when(entityFetcher.getLoggedInUser()).thenReturn(notOwner);
 
         assertThrows(AccessDeniedException.class, () -> pageService.delete(1, 1));
 
-        verify(resourceFetcher).fetchPage(1, 1);
-        verify(resourceFetcher).getLoggedInUser();
+        verify(entityFetcher).fetchPage(1, 1);
+        verify(entityFetcher).getLoggedInUser();
     }
 }

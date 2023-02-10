@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 /**
- * Исключение "элемент уже существует"
+ * Исключение "элемент уже существует".
  */
 @ResponseStatus(BAD_REQUEST)
 public class ElementAlreadyExistsException extends RuntimeException {

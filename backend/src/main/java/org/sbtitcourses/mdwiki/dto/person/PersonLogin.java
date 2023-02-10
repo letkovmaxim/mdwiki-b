@@ -4,21 +4,21 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 /**
- * DTO сущности Person для логина
+ * DTO сущности Person для логина.
  */
 public class PersonLogin {
 
     /**
-     * Логин или email пользователя
+     * Логин или эл. почта пользователя.
      */
-    @NotEmpty(message = "Логин или email не должен быть пустым")
+    @NotEmpty
     private String usernameOrEmail;
 
     /**
-     * Пароль пользователя
+     * Пароль пользователя.
      */
-    @NotEmpty(message = "Пароль не должен быть пустым")
-    @Size(min = 6, message = "Пароль не должен быть короче 6 символов")
+    @NotEmpty
+    @Size(min = 6)
     private String password;
 
     public String getUsernameOrEmail() {

@@ -13,14 +13,14 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
- * Сущность пользовательских записей.
+ * Сущность, описывающая запись пользователя.
  */
 @Entity
 @Table(name = "pages")
 public class Page {
 
     /**
-     * ID записи
+     * ID записи.
      */
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -28,54 +28,54 @@ public class Page {
     private int id;
 
     /**
-     * Название записи
+     * Название записи.
      */
     @Column(name = "name", nullable = false)
     private String name;
 
     /**
-     * Список подстраниц данной страницы
+     * Список подстраниц данной страницы.
      */
     @OneToMany(mappedBy = "parent", fetch = LAZY)
     @Cascade(ALL)
     private List<Page> subpages;
 
     /**
-     * Запись-родитель, которая содержит эту запись
+     * Запись-родитель, которая содержит эту запись.
      */
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     private Page parent;
 
     /**
-     * Пространство, которое содержит эту запись
+     * Пространство, которое содержит эту запись.
      */
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "space_id", referencedColumnName = "id", nullable = false)
     private Space space;
 
     /**
-     * Точное время создания записи
+     * Точное время создания записи.
      */
     @Temporal(TIMESTAMP)
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
 
     /**
-     * Точное время обновления записи
+     * Точное время обновления записи.
      */
     @Temporal(TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
 
     /**
-     * Статус публичности записи
+     * Статус публичности записи.
      */
     @Column(name = "shared", nullable = false)
     private boolean shared;
 
     /**
-     * Список документов, принадлжащих данной записи
+     * Список документов, принадлжащих данной записи.
      */
     @OneToOne(mappedBy = "page", fetch = LAZY)
     @Cascade(ALL)
