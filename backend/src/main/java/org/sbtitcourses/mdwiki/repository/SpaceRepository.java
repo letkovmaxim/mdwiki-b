@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Репозиторий для взаимодействия с сущностью Space.
+ * Репозиторий для взаимодействия с сущностью {@link Space}.
  */
 public interface SpaceRepository extends JpaRepository<Space, Integer> {
 

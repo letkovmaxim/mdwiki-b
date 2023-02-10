@@ -13,18 +13,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Настройка Spring Security
+ * Конфигурация для Spring Security.
  */
 @EnableWebSecurity
 public class SecurityConfig {
 
     /**
-     * Сервис загрузки пользователя
+     * Сервис с логикой загрузки данных пользователя.
      */
     private final PersonDetailsService personDetailsService;
 
     /**
-     * Инициализация поля
+     * Конструктор для автоматического внедрения зависимостей.
+     *
+     * @param personDetailsService сервис с логикой загрузки данных пользователя.
      */
     @Autowired
     public SecurityConfig(PersonDetailsService personDetailsService) {
@@ -32,11 +34,7 @@ public class SecurityConfig {
     }
 
     /**
-     * Данный метод выполняет следующие функции
-     * Настройка аутентификации
-     * Настройка авторизации
-     * Настройка формы для входа
-     * Удаляет сессии и куки
+     * Бин с настройками фильтров Spring Security.
      */
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -64,7 +62,7 @@ public class SecurityConfig {
     }
 
     /**
-     * Фильтр, отвечающий за проверку аутентифицированного пользователя
+     * Фильтр, отвечающий за проверку аутентифицированного пользователя.
      */
     @Bean
     public FilterRegistrationBean<AuthFilter> authFilter() {
@@ -77,7 +75,7 @@ public class SecurityConfig {
     }
 
     /**
-     * Шифровальщик паролей
+     * Шифровальщик паролей.
      */
     @Bean
     public PasswordEncoder passwordEncoder() {

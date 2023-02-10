@@ -3,12 +3,11 @@ package org.sbtitcourses.mdwiki.model;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
-import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
@@ -42,16 +41,14 @@ public class Space {
     /**
      * Точное время создания пространства.
      */
-    @Temporal(TIMESTAMP)
     @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    private Instant createdAt;
 
     /**
      * Точное время обновления пространства.
      */
-    @Temporal(TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    private Instant updatedAt;
 
     /**
      * Статус публичности пространства
@@ -76,37 +73,8 @@ public class Space {
     public Space() {
     }
 
-    public Space(String name, Person owner, boolean shared) {
-        this.name = name;
-        this.owner = owner;
-        this.shared = shared;
-    }
-
-    public Space(int id) {
-        this.id = id;
-    }
-
-    public Space(boolean shared) {
-        this.shared = shared;
-    }
-
-    public Space(int id, boolean shared) {
-        this.id = id;
-        this.shared = shared;
-    }
-
-    public Space(String name, boolean shared) {
-        this.name = name;
-        this.shared = shared;
-    }
-
-    public Space(Person owner) {
-        this.owner = owner;
-    }
-
-    public Space(int id, Person owner) {
-        this.id = id;
-        this.owner = owner;
+    public static SpaceBuilder builder() {
+        return new SpaceBuilder();
     }
 
     public int getId() {
@@ -133,19 +101,19 @@ public class Space {
         this.owner = owner;
     }
 
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -171,5 +139,57 @@ public class Space {
 
     public void setStoredFiles(List<StoredFile> storedFiles) {
         this.storedFiles = storedFiles;
+    }
+
+    public static final class SpaceBuilder {
+        private final Space space;
+
+        private SpaceBuilder() {
+            space = new Space();
+        }
+
+        public SpaceBuilder id(int id) {
+            space.setId(id);
+            return this;
+        }
+
+        public SpaceBuilder name(String name) {
+            space.setName(name);
+            return this;
+        }
+
+        public SpaceBuilder owner(Person owner) {
+            space.setOwner(owner);
+            return this;
+        }
+
+        public SpaceBuilder createdAt(Instant createdAt) {
+            space.setCreatedAt(createdAt);
+            return this;
+        }
+
+        public SpaceBuilder updatedAt(Instant updatedAt) {
+            space.setUpdatedAt(updatedAt);
+            return this;
+        }
+
+        public SpaceBuilder shared(boolean shared) {
+            space.setShared(shared);
+            return this;
+        }
+
+        public SpaceBuilder pages(List<Page> pages) {
+            space.setPages(pages);
+            return this;
+        }
+
+        public SpaceBuilder storedFiles(List<StoredFile> storedFiles) {
+            space.setStoredFiles(storedFiles);
+            return this;
+        }
+
+        public Space build() {
+            return space;
+        }
     }
 }

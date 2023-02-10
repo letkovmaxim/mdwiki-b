@@ -4,12 +4,11 @@ import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
-import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
@@ -62,16 +61,14 @@ public class Person implements Serializable {
     /**
      * Точное время создания пользователя.
      */
-    @Temporal(TIMESTAMP)
     @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    private Instant createdAt;
 
     /**
      * Точное время обновления пользователя.
      */
-    @Temporal(TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    private Instant updatedAt;
 
     /**
      * Статус активности аккаунта.
@@ -102,27 +99,8 @@ public class Person implements Serializable {
     public Person() {
     }
 
-    public Person(int id) {
-        this.id = id;
-    }
-
-    public Person(String password) {
-        this.password = password;
-    }
-
-    public Person(int id, String username, String name, String email, boolean enabled) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.email = email;
-        this.enabled = enabled;
-    }
-
-    public Person(String username, String password, String name, String email) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.email = email;
+    public static PersonBuilder builder() {
+        return new PersonBuilder();
     }
 
     public int getId() {
@@ -173,19 +151,19 @@ public class Person implements Serializable {
         this.email = email;
     }
 
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -219,5 +197,77 @@ public class Person implements Serializable {
 
     public void setStoredFiles(List<StoredFile> storedFiles) {
         this.storedFiles = storedFiles;
+    }
+
+    public static final class PersonBuilder {
+        private final Person person;
+
+        private PersonBuilder() {
+            person = new Person();
+        }
+
+        public PersonBuilder id(int id) {
+            person.setId(id);
+            return this;
+        }
+
+        public PersonBuilder username(String username) {
+            person.setUsername(username);
+            return this;
+        }
+
+        public PersonBuilder password(String password) {
+            person.setPassword(password);
+            return this;
+        }
+
+        public PersonBuilder role(String role) {
+            person.setRole(role);
+            return this;
+        }
+
+        public PersonBuilder name(String name) {
+            person.setName(name);
+            return this;
+        }
+
+        public PersonBuilder email(String email) {
+            person.setEmail(email);
+            return this;
+        }
+
+        public PersonBuilder createdAt(Instant createdAt) {
+            person.setCreatedAt(createdAt);
+            return this;
+        }
+
+        public PersonBuilder updatedAt(Instant updatedAt) {
+            person.setUpdatedAt(updatedAt);
+            return this;
+        }
+
+        public PersonBuilder enabled(boolean enabled) {
+            person.setEnabled(enabled);
+            return this;
+        }
+
+        public PersonBuilder note(String note) {
+            person.setNote(note);
+            return this;
+        }
+
+        public PersonBuilder spaces(List<Space> spaces) {
+            person.setSpaces(spaces);
+            return this;
+        }
+
+        public PersonBuilder storedFiles(List<StoredFile> storedFiles) {
+            person.setStoredFiles(storedFiles);
+            return this;
+        }
+
+        public Person build() {
+            return person;
+        }
     }
 }

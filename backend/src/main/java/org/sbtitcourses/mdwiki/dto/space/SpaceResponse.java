@@ -3,7 +3,7 @@ package org.sbtitcourses.mdwiki.dto.space;
 import java.util.Date;
 
 /**
- * DTO сущности Space для ответа.
+ * DTO сущности {@link org.sbtitcourses.mdwiki.model.Space} для ответа.
  */
 public class SpaceResponse {
 

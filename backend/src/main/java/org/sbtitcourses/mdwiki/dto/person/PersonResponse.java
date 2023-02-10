@@ -1,9 +1,9 @@
 package org.sbtitcourses.mdwiki.dto.person;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
- * DTO сущности Person для ответа.
+ * DTO сущности {@link org.sbtitcourses.mdwiki.model.Person} для ответа.
  */
 public class PersonResponse {
 
@@ -30,12 +30,12 @@ public class PersonResponse {
     /**
      * Точное время создания пользователя.
      */
-    private Date createdAt;
+    private Instant createdAt;
 
     /**
      * Точное время обновления пользователя.
      */
-    private Date updatedAt;
+    private Instant updatedAt;
 
     /**
      * Статус активности аккаунта.
@@ -79,19 +79,19 @@ public class PersonResponse {
         this.email = email;
     }
 
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
 

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 /**
- * Репозиторий для взаимодействия с сущностью Document.
+ * Репозиторий для взаимодействия с сущностью {@link Document}.
  */
 public interface DocumentRepository extends JpaRepository<Document, Integer> {
 

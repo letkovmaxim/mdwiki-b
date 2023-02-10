@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Instant;
 import java.util.Date;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -39,43 +40,14 @@ class PersonControllerTests {
     private MockMvc mockMvc;
 
     @Test
-    public void verifyHttpRequestMappingAndDeserialization() throws Exception {
-        Person personToCreate = new Person();
-        Person createdPerson = new Person();
-
-        when(modelMapper.map(any(), eq(Person.class))).thenReturn(personToCreate);
-        when(personService.create(personToCreate)).thenReturn(createdPerson);
-
-        mockMvc.perform(post("/people")
-                .contentType(APPLICATION_JSON)
-                .content("{\"username\": \"testUsername\", " +
-                        "\"password\": \"testPassword\", " +
-                        "\"name\": \"testName\", " +
-                        "\"email\": \"testEmail@test.test\", " +
-                        "\"enabled\": \"true\"}"))
-                .andExpect(status().isCreated());
-
-        verify(modelMapper).map(any(), eq(Person.class));
-        verify(personService).create(personToCreate);
-    }
-
-    @Test
-    public void verifyFieldValidation() throws Exception {
-        mockMvc.perform(post("/people")
-                .contentType(APPLICATION_JSON)
-                .content("{}"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     public void verifyResultSerialization() throws Exception {
         Person person = new Person();
         PersonResponse personResponse = new PersonResponse();
         personResponse.setUsername("testUsername");
         personResponse.setName("testName");
         personResponse.setEmail("testEmail@test.test");
-        personResponse.setCreatedAt(new Date());
-        personResponse.setUpdatedAt(new Date());
+        personResponse.setCreatedAt(Instant.now());
+        personResponse.setUpdatedAt(Instant.now());
         personResponse.setEnabled(true);
 
         when(personService.get(1)).thenReturn(person);

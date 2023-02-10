@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * REST контроллер для CRUD операций над сущностью Space.
+ * REST контроллер, обрабатывающий запросы на взаимодействие сущностью {@link Space}.
  */
 @RestController
 @RequestMapping("/spaces")
@@ -25,7 +25,7 @@ import java.util.List;
 public class SpaceController {
 
     /**
-     * Сервис с логикой CRUD операций над сущностью Space.
+     * Сервис с логикой взаимодействия с сущностью {@link Space}.
      */
     private final SpaceService spaceService;
 
@@ -37,7 +37,7 @@ public class SpaceController {
     /**
      * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param spaceService сервис с логикой CRUD операций над сущностью Space.
+     * @param spaceService сервис с логикой взаимодействия с сущностью {@link Space}.
      * @param modelMapper  маппер для конвертации сущностей.
      */
     @Autowired

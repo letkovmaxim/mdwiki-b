@@ -13,18 +13,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 /**
- * Сервис с логикой CRUD операций над сущностью Space.
+ * Сервис с логикой взаимодействия с сущностью {@link Space}.
  */
 @Service
 @Transactional(readOnly = true)
 public class SpaceService implements ISpaceService {
 
     /**
-     * Репозиторий для взаимодействия с сущностью Space.
+     * Репозиторий для взаимодействия с сущностью {@link Space}.
      */
     private final SpaceRepository spaceRepository;
 
@@ -36,7 +36,7 @@ public class SpaceService implements ISpaceService {
     /**
      * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param spaceRepository репозиторий для взаимодействия с сущностью Space.
+     * @param spaceRepository репозиторий для взаимодействия с сущностью {@link Space}.
      * @param entityFetcher   компонент для получения ресурсов.
      */
     @Autowired
@@ -62,7 +62,7 @@ public class SpaceService implements ISpaceService {
         }
 
         space.setOwner(user);
-        Date now = new Date();
+        Instant now = Instant.now();
         space.setCreatedAt(now);
         space.setUpdatedAt(now);
         space.setId(spaceRepository.save(space).getId());
@@ -123,7 +123,7 @@ public class SpaceService implements ISpaceService {
      * Метод, отвечающий за обновление пространства.
      *
      * @param id                ID пространства.
-     * @param spaceToUpdateWith пространство, значениями полей которого нужно обновить требуемое пространство.
+     * @param spaceToUpdateWith информация о пространстве, которую нужно обновить.
      * @return обновленное пространство.
      * @throws AccessDeniedException         если не удалось определить пользователя.
      * @throws ElementAlreadyExistsException если пространство уже существует.

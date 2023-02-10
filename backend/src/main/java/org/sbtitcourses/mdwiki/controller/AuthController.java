@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- * REST контроллер для входа и регистрации пользователя.
+ * REST контроллер, обрабатывающий запросы на вход и регистрацию пользователя.
  */
 @RestController
 @RequestMapping("/auth")
@@ -55,7 +55,7 @@ public class AuthController {
     /**
      * Метод, обрабатывающий запрос на авторизацию пользователя.
      *
-     * @param personLogin DTO сущности Person для логина.
+     * @param personLogin DTO сущности {@link Person} для логина.
      * @return HTTP ответ со статусом 200.
      */
     @PostMapping("/login")
@@ -81,7 +81,7 @@ public class AuthController {
     /**
      * Метод, обрабатывающий запрос на регистрацию нового пользователя.
      *
-     * @param personRegistration DTO сущности Person для регистрации.
+     * @param personRegistration DTO сущности {@link Person} для регистрации.
      * @return HTTP ответ с информацией о новом пользователе и статусом 201.
      */
     @PostMapping("/registration")

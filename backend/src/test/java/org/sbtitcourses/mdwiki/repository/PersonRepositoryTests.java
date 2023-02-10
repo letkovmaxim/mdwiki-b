@@ -20,10 +20,12 @@ class PersonRepositoryTests {
     
     private final TestEntityManager entityManager;
     private final PersonRepository personRepository;
-    private final Person person = new Person("testUsername",
-            "testPassword",
-            "testName",
-            "testEmail@test.test");
+    private final Person person = Person.builder()
+            .username("testUsername")
+            .password("testPassword")
+            .name("testName")
+            .email("testEmail@test.test")
+            .build();
 
     @Autowired
     PersonRepositoryTests(TestEntityManager entityManager, PersonRepository personRepository) {

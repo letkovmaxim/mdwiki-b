@@ -1,5 +1,7 @@
 package org.sbtitcourses.mdwiki.service;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -7,7 +9,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sbtitcourses.mdwiki.model.Person;
 import org.sbtitcourses.mdwiki.repository.PersonRepository;
+import org.sbtitcourses.mdwiki.util.EntityFetcher;
+import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.LinkedList;
@@ -26,62 +34,52 @@ class PersonServiceTests {
     @Mock
     private PersonRepository personRepository;
     @Mock
-    private PasswordEncoder passwordEncoder;
+    private EntityFetcher entityFetcher;
     @InjectMocks
     private PersonService personService;
-    private final Person personToCreate = new Person("rawPassword");
-    private final Person personWithId = new Person(1);
-    private final Person personToUpdateWith = new Person(1,
-            "newUsername",
-            "newName",
-            "newEmail@mail.com",
-            false);
+    private final Person personWithId = Person.builder().id(1).build();
+    private final Person personToUpdateWith = Person.builder()
+            .id(1)
+            .username("newUsername")
+            .name("newName")
+            .email("newEmail@mail.com")
+            .enabled(false)
+            .build();
 
-    @Test
-    public void createShouldReturnPerson() {
-        when(personRepository.save(personToCreate)).thenReturn(personWithId);
-        when(passwordEncoder.encode("rawPassword")).thenReturn("encodedPassword");
-
-        Person createdPerson = personService.create(personToCreate);
-
-        assertEquals(1, createdPerson.getId());
-        assertEquals("encodedPassword", createdPerson.getPassword());
-        assertTrue(createdPerson.isEnabled());
-        verify(personRepository).save(personToCreate);
-        verify(passwordEncoder).encode("rawPassword");
+    @BeforeEach
+    public void setUp() {
+        when(entityFetcher.getLoggedInUser()).thenReturn(personWithId);
     }
 
     @Test
     public void getAllShouldReturnPersonList() {
         List<Person> people = new LinkedList<>();
         people.add(personWithId);
+        Page<Person> page = new PageImpl<>(people);
 
-        when(personRepository.findAll()).thenReturn(people);
+        when(personRepository.findAll(any(Pageable.class))).thenReturn(page);
 
-        List<Person> gottenPeople = personService.getAll();
+        List<Person> gottenPeople = personService.get(0, 1);
 
         assertEquals(people.size(), gottenPeople.size());
         assertEquals(personWithId.getId(), gottenPeople.get(0).getId());
-        verify(personRepository).findAll();
+        verify(personRepository).findAll(any(Pageable.class));
     }
 
     @Test
     public void getShouldReturnPerson() {
         when(personRepository.findById(1)).thenReturn(Optional.of(personWithId));
-        when(personRepository.findById(2)).thenReturn(Optional.empty());
 
         Person gottenPerson = personService.get(1);
 
         assertEquals(1, gottenPerson.getId());
-        assertThrows(ElementNotFoundException.class, () -> personService.get(2));
+        assertThrows(AccessDeniedException.class, () -> personService.get(2));
         verify(personRepository).findById(1);
-        verify(personRepository).findById(2);
     }
 
     @Test
     public void updateShouldReturnPerson() {
         when(personRepository.findById(1)).thenReturn(Optional.of(personWithId));
-        when(personRepository.findById(2)).thenReturn(Optional.empty());
 
         Person updatedPerson = assertDoesNotThrow(() -> personService.update(1, personToUpdateWith));
 
@@ -90,10 +88,9 @@ class PersonServiceTests {
         assertEquals(personToUpdateWith.getName(), updatedPerson.getName());
         assertEquals(personToUpdateWith.getEmail(), updatedPerson.getEmail());
         assertEquals(personToUpdateWith.isEnabled(), updatedPerson.isEnabled());
-        assertThrows(ElementNotFoundException.class, () -> personService.update(2, personToUpdateWith));
+        assertThrows(AccessDeniedException.class, () -> personService.update(2, personToUpdateWith));
         verify(personRepository).findById(1);
         verify(personRepository).save(personWithId);
-        verify(personRepository).findById(2);
     }
 
     @Test

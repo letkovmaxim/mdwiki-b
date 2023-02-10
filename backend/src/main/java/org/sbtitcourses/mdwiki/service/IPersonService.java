@@ -5,7 +5,7 @@ import org.sbtitcourses.mdwiki.model.Person;
 import java.util.List;
 
 /**
- * Интерфейс сервиса CRUD операций над сущностью Person.
+ * Интерфейс сервиса взаимодействия с сущностью {@link Person}.
  */
 public interface IPersonService {
 

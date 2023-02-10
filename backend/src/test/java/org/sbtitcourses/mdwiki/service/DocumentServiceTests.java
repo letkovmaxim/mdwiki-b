@@ -30,13 +30,13 @@ class DocumentServiceTests {
     @InjectMocks
     private DocumentService documentService;
 
-    private final Person owner = new Person(1);
-    private final Person notOwner = new Person(2);
-    private final Space space = new Space(owner);
-    private final Page page = new Page(space);
+    private final Person owner = Person.builder().id(1).build();
+    private final Person notOwner = Person.builder().id(2).build();
+    private final Space space = Space.builder().owner(owner).build();
+    private final Page page = Page.builder().space(space).build();
     private final Document document = new Document();
-    private final Document documentWithId = new Document(1, page);
-    private final Document documentToUpdateWith = new Document("testText");
+    private final Document documentWithId = Document.builder().id(1).page(page).build();
+    private final Document documentToUpdateWith = Document.builder().text("testText").build();
 
     @Test
     public void createShouldReturnDocument() {

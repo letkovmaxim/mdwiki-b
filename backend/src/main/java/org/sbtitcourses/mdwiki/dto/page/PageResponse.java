@@ -1,10 +1,10 @@
 package org.sbtitcourses.mdwiki.dto.page;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 /**
- * DTO сущности Page для ответа.
+ * DTO сущности {@link org.sbtitcourses.mdwiki.model.Page} для ответа.
  */
 public class PageResponse {
 
@@ -26,12 +26,12 @@ public class PageResponse {
     /**
      * Точное время создания записи.
      */
-    private Date createdAt;
+    private Instant createdAt;
 
     /**
      * Точное время обновления записи.
      */
-    private Date updatedAt;
+    private Instant updatedAt;
 
     /**
      * Статус публичности записи.
@@ -62,19 +62,19 @@ public class PageResponse {
         this.subpages = subpages;
     }
 
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
 

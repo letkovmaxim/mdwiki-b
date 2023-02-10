@@ -15,19 +15,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
- * Сервис с логикой CRUD операций над сущностью Page.
+ * Сервис с логикой взаимодействия с сущностью {@link Page}.
  */
 @Service
 @Transactional(readOnly = true)
 public class PageService implements IPageService {
 
     /**
-     * Репозиторий для взаимодействия с сущностью Page.
+     * Репозиторий для взаимодействия с сущностью {@link Page}.
      */
     private final PageRepository pageRepository;
 
@@ -39,7 +39,7 @@ public class PageService implements IPageService {
     /**
      * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param pageRepository репозиторий для взаимодействия с сущностью Page.
+     * @param pageRepository репозиторий для взаимодействия с сущностью {@link Page}.
      * @param entityFetcher  компонент для получения ресурсов.
      */
     @Autowired
@@ -72,7 +72,7 @@ public class PageService implements IPageService {
         }
 
         page.setSpace(space);
-        Date now = new Date();
+        Instant now = Instant.now();
         page.setCreatedAt(now);
         page.setUpdatedAt(now);
         page.setSubpages(Collections.emptyList());
@@ -109,7 +109,7 @@ public class PageService implements IPageService {
 
         subpage.setSpace(parent.getSpace());
         subpage.setParent(parent);
-        Date now = new Date();
+        Instant now = Instant.now();
         subpage.setCreatedAt(now);
         subpage.setUpdatedAt(now);
         subpage.setId(pageRepository.save(subpage).getId());
@@ -191,7 +191,7 @@ public class PageService implements IPageService {
      *
      * @param pageId           ID страницы.
      * @param spaceId          ID пространтсва, в котором нужно обновить страницу.
-     * @param pageToUpdateWith страница, значениями полей которой нужно обновить требуемую страницу.
+     * @param pageToUpdateWith информация о странице, которую нужно обновить.
      * @return обновленную страницу.
      * @throws AccessDeniedException         если не удалось определить пользователя.
      * @throws ElementAlreadyExistsException если страница уже существует.

@@ -32,11 +32,17 @@ class SpaceServiceTests {
     private EntityFetcher entityFetcher;
     @InjectMocks
     private SpaceService spaceService;
-    private final Person owner = new Person(1);
-    private final Person notOwner = new Person(2);
+    private final Person owner = Person.builder().id(1).build();
+    private final Person notOwner = Person.builder().id(2).build();
     private final Space spaceToCreate = new Space();
-    private final Space spaceWithId = new Space(1, owner);
-    private final Space spaceToUpdateWith = new Space("testName", true);
+    private final Space spaceWithId = Space.builder()
+            .id(1)
+            .owner(owner)
+            .build();
+    private final Space spaceToUpdateWith = Space.builder()
+            .name("testName")
+            .shared(true)
+            .build();
 
     @Test
     public void createShouldReturnSpace() {

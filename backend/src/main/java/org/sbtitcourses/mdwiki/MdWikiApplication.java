@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 /**
- * Главный класс с точкой входа приложения
+ * Главный класс с точкой входа приложения.
  */
 @SpringBootApplication
 public class MdWikiApplication {

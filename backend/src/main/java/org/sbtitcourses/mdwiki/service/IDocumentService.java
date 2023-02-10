@@ -4,7 +4,7 @@ import org.sbtitcourses.mdwiki.model.Document;
 import org.sbtitcourses.mdwiki.util.ConvertedDocument;
 
 /**
- * Интерфейс сервиса CRUD операций над сущностью Document.
+ * Интерфейс сервиса взаимодействия с сущностью {@link Document}.
  */
 public interface IDocumentService {
 
@@ -32,7 +32,7 @@ public interface IDocumentService {
      *
      * @param pageId               ID страницы, в которой нужно обновить документ.
      * @param spaceId              ID пространства, в котором нужно обновить документ.
-     * @param documentToUpdateWith объект класса Document, значениями полей которого нужно обновить документ.
+     * @param documentToUpdateWith информация о документе, которую нужно обновить.
      * @return обновленный документ.
      */
     Document update(int pageId, int spaceId, Document documentToUpdateWith);

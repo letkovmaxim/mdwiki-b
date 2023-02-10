@@ -14,8 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,7 +26,7 @@ import java.util.List;
 public class EntryService {
 
     /**
-     * Репозиторий для взаимодействия с сущностью Person.
+     * Репозиторий для взаимодействия с сущностью {@link Person}.
      */
     private final PersonRepository personRepository;
 
@@ -43,7 +43,7 @@ public class EntryService {
     /**
      * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param personRepository     репозиторий для взаимодействия с сущностью Person.
+     * @param personRepository     репозиторий для взаимодействия с сущностью {@link Person}.
      * @param personDetailsService сервис с логикой загрузки данных пользователя.
      * @param passwordEncoder      компонент для шифрования пароля.
      */
@@ -81,7 +81,7 @@ public class EntryService {
 
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         person.setRole("ROLE_USER");
-        Date now = new Date();
+        Instant now = Instant.now();
         person.setCreatedAt(now);
         person.setUpdatedAt(now);
         person.setEnabled(true);
@@ -94,7 +94,7 @@ public class EntryService {
     /**
      * Метод, отвечающий за вход пользователя.
      *
-     * @param personLogin DTO сущности Person для логина.
+     * @param personLogin DTO сущности {@link Person} для логина.
      */
     public void login(PersonLogin personLogin) {
         UserDetails userDetails = personDetailsService.loadUserByUsername(personLogin.getUsernameOrEmail());

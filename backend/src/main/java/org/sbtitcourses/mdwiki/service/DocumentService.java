@@ -16,14 +16,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Сервис с логикой CRUD операций над сущностью Document.
+ * Сервис с логикой взаимодействия с сущностью {@link Document}.
  */
 @Service
 @Transactional(readOnly = true)
 public class DocumentService implements IDocumentService {
 
     /**
-     * Репозиторий для взаимодействия с сущностью Document.
+     * Репозиторий для взаимодействия с сущностью {@link Document}.
      */
     private final DocumentRepository documentRepository;
 
@@ -35,7 +35,7 @@ public class DocumentService implements IDocumentService {
     /**
      * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param documentRepository репозиторий для взаимодействия с сущностью Document.
+     * @param documentRepository репозиторий для взаимодействия с сущностью {@link Document}.
      * @param entityFetcher      компонент для получения ресурсов.
      */
     @Autowired
@@ -96,7 +96,7 @@ public class DocumentService implements IDocumentService {
      *
      * @param pageId               ID страницы, в которой нужно обновить документ.
      * @param spaceId              ID пространства, в котором нужно обновить документ.
-     * @param documentToUpdateWith документ, значениями полей которого нужно обновить требуемый документ.
+     * @param documentToUpdateWith информация о документе, которую нужно обновить.
      * @return обновленный документ.
      * @throws AccessDeniedException если не удалось определить пользователя.
      */
@@ -160,17 +160,11 @@ public class DocumentService implements IDocumentService {
             throw new AccessDeniedException("Доступ запрещен");
         }
 
-        PdfConverter converter = PdfConverter
-                .builder()
-                .font(font)
-                .size(size)
-                .build();
-
         String markdown = tree ? treeOf(page) : document.getText();
         String documentName = document.getPage().getName();
 
-        InputStreamResource inputStreamResource = converter
-                .convert(markdown);
+        InputStreamResource inputStreamResource = PdfConverter
+                .convert(markdown, font, size);
 
         return new ConvertedDocument(inputStreamResource, documentName);
     }

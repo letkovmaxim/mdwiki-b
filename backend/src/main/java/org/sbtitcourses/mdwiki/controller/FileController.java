@@ -1,9 +1,9 @@
 package org.sbtitcourses.mdwiki.controller;
 
 import org.sbtitcourses.mdwiki.dto.file.FileUploadResponse;
-import org.sbtitcourses.mdwiki.util.LoadedFile;
 import org.sbtitcourses.mdwiki.model.StoredFile;
 import org.sbtitcourses.mdwiki.service.ImageStorageService;
+import org.sbtitcourses.mdwiki.util.LoadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * REST контроллер для загрузки и скачивания файлов.
+ * REST контроллер, обрабатывающий запросы на загрузку и скачивание файлов.
  */
 @RestController
 @Validated

@@ -5,7 +5,7 @@ import org.springframework.core.io.Resource;
 
 /**
  * Вспомогательный класс для хранения файла в виде ресурса
- * и информации о нем в виде объекта класса StoredFile.
+ * и информации о нем в виде объекта класса {@link StoredFile}.
  */
 public class LoadedFile {
 

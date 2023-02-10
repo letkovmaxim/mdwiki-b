@@ -16,14 +16,14 @@ import org.springframework.stereotype.Service;
 public class PersonDetailsService implements UserDetailsService {
 
     /**
-     * Репозиторий для взаимодействия с сущностью Person.
+     * Репозиторий для взаимодействия с сущностью {@link Person}.
      */
     private final PersonRepository personRepository;
 
     /**
      * Конструктор для автоматичекого внедрения зависимостей.
      *
-     * @param personRepository репозиторий для взаимодействия с сущностью Person.
+     * @param personRepository репозиторий для взаимодействия с сущностью {@link Person}.
      */
     @Autowired
     public PersonDetailsService(PersonRepository personRepository) {
@@ -34,7 +34,7 @@ public class PersonDetailsService implements UserDetailsService {
      * Метод, отвечающий за загрузку данных пользователя.
      *
      * @param usernameOrEmail логин или эл. почта пользователя.
-     * @return объект PersonDetails с данными о пользователе.
+     * @return объект {@link PersonDetails} с данными о пользователе.
      * @throws ElementNotFoundException если пользователь не найден.
      */
     @Override

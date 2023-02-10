@@ -24,7 +24,11 @@ class PageRepositoryTests {
     private final TestEntityManager entityManager;
     private final PageRepository pageRepository;
     private final Space space = new Space();
-    private final Page page = new Page("testName", space, true);
+    private final Page page = Page.builder()
+            .name("testName")
+            .space(space)
+            .shared(true)
+            .build();
 
     @Autowired
     PageRepositoryTests(TestEntityManager entityManager, PageRepository pageRepository) {

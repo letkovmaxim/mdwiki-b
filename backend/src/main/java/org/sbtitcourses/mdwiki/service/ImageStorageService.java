@@ -39,7 +39,7 @@ import java.util.UUID;
 public class ImageStorageService implements IImageStorageService {
 
     /**
-     * Репозиторий для взаимодействия с сущностью StoredFile.
+     * Репозиторий для взаимодействия с сущностью {@link StoredFile}.
      */
     private final StoredFileRepository storedFileRepository;
 
@@ -61,7 +61,7 @@ public class ImageStorageService implements IImageStorageService {
     /**
      * Конструктор для автоматического внедрения зависимостей.
      *
-     * @param storedFileRepository репозиторий для взаимодействия с сущностью StoredFile.
+     * @param storedFileRepository репозиторий для взаимодействия с сущностью {@link StoredFile}.
      * @param entityFetcher        компонент для получения ресурсов.
      * @param uploadsDirectory     директория для хранения загруженных изображений.
      * @param thumbnailsDirectory  директория для хранения превью загруженных изображений.

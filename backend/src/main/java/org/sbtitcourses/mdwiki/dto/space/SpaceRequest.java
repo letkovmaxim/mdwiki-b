@@ -4,7 +4,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 /**
- * DTO сущности Space для запроса.
+ * DTO сущности {@link org.sbtitcourses.mdwiki.model.Space} для запроса.
  */
 public class SpaceRequest {
 

@@ -5,7 +5,7 @@ import org.sbtitcourses.mdwiki.model.Page;
 import java.util.List;
 
 /**
- * Интерфейс сервиса CRUD операций над сущностью Page.
+ * Интерфейс сервиса взаимодействия с сущностью {@link Page}.
  */
 public interface IPageService {
 
@@ -61,7 +61,7 @@ public interface IPageService {
      *
      * @param id               ID страницы.
      * @param spaceId          ID пространства, в котором нужно обновить страницу.
-     * @param pageToUpdateWith объект Page, значениями полей которого нужно обновить страницу.
+     * @param pageToUpdateWith информация о странице, которую нужно обновить.
      * @return обновленную страницу.
      */
     Page update(int id, int spaceId, Page pageToUpdateWith);

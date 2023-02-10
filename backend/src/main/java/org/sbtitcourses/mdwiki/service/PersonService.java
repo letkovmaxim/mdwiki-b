@@ -12,15 +12,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 /**
- * Сервис с логикой CRUD операций над сущностью Person.
+ * Сервис с логикой взаимодействия с сущностью {@link Person}.
  */
 @Service
 @Transactional(readOnly = true)
 public class PersonService implements IPersonService {
+
+    /**
+     * Репозиторий для взаимодействия с сущностью {@link Person}.
+     */
+    private final PersonRepository personRepository;
 
     /**
      * Компонент для получения сущностей.
@@ -28,21 +33,16 @@ public class PersonService implements IPersonService {
     private final EntityFetcher entityFetcher;
 
     /**
-     * Репозиторий для взаимодействия с сущностью Person.
-     */
-    private final PersonRepository personRepository;
-
-    /**
      * Конструктор для автоматичекого внедрения зависимостей.
      *
+     * @param personRepository репозиторий для взаимодействия с сущностью {@link Person}.
      * @param entityFetcher    компонент для получения ресурсов.
-     * @param personRepository репозиторий для взаимодействия с сущностью Person.
      */
     @Autowired
-    public PersonService(EntityFetcher entityFetcher,
-                         PersonRepository personRepository) {
-        this.entityFetcher = entityFetcher;
+    public PersonService(PersonRepository personRepository,
+                         EntityFetcher entityFetcher) {
         this.personRepository = personRepository;
+        this.entityFetcher = entityFetcher;
     }
 
     /**
@@ -80,7 +80,7 @@ public class PersonService implements IPersonService {
      * Метод, отвечающий за обновление пользователя по его ID.
      *
      * @param id            ID пользователя.
-     * @param updatedPerson объект класса Person, значениями полей которого нужно обновить пользователя.
+     * @param updatedPerson информация о пользователе, которую нужно обновить.
      * @return обновленного пользователя.
      * @throws ElementNotFoundException если пользователя с таким ID не существует.
      */
@@ -103,7 +103,7 @@ public class PersonService implements IPersonService {
         person.setName(updatedPerson.getName());
         person.setEmail(updatedPerson.getEmail());
         person.setEnabled(updatedPerson.isEnabled());
-        person.setUpdatedAt(new Date());
+        person.setUpdatedAt(Instant.now());
 
         personRepository.save(person);
 

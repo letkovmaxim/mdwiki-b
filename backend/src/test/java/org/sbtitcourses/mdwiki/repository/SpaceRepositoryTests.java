@@ -23,12 +23,18 @@ class SpaceRepositoryTests {
 
     private final TestEntityManager entityManager;
     private final SpaceRepository spaceRepository;
-    private final Person owner = new Person("testUsername",
-            "testPassword",
-            "testName",
-            "testEmail@test.test");
-    private final Space space = new Space("testName", owner, true);
+    private final Person owner = Person.builder()
+            .username("testUsername")
+            .password("testPassword")
+            .name("testName")
+            .email("testEmail@test.test")
+            .build();
 
+    private final Space space = Space.builder()
+            .name("testName")
+            .owner(owner)
+            .shared(true)
+            .build();
 
     @Autowired
     public SpaceRepositoryTests(TestEntityManager entityManager, SpaceRepository spaceRepository) {
