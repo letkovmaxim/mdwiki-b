@@ -55,7 +55,7 @@ public class PageController {
      * @return HTTP ответ с информацией о новой станице и статусом 201.
      */
     @PostMapping
-    private ResponseEntity<PageResponse> create(@PathVariable("spaceId") int spaceId,
+    public ResponseEntity<PageResponse> create(@PathVariable("spaceId") int spaceId,
                                                 @RequestBody @Valid PageRequest pageRequest) {
         Page page = modelMapper.map(pageRequest, Page.class);
 
