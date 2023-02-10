@@ -5,12 +5,10 @@ import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
-import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
@@ -98,11 +96,11 @@ public class Person implements Serializable {
     @Cascade(ALL)
     private List<StoredFile> storedFiles;
 
-    public static PersonBuilder builder() {
-        return new PersonBuilder();
+    public Person() {
     }
 
-    public Person() {
+    public static PersonBuilder builder() {
+        return new PersonBuilder();
     }
 
     public int getId() {

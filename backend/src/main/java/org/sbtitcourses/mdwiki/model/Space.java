@@ -4,12 +4,10 @@ import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
-import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
@@ -72,11 +70,11 @@ public class Space {
     @Cascade(ALL)
     private List<StoredFile> storedFiles;
 
-    public static SpaceBuilder builder() {
-        return new SpaceBuilder();
+    public Space() {
     }
 
-    public Space() {
+    public static SpaceBuilder builder() {
+        return new SpaceBuilder();
     }
 
     public int getId() {

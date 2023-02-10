@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- *Сервис с логикой взаимодействия с сущностью {@link Document}.
+ * Сервис с логикой взаимодействия с сущностью {@link Document}.
  */
 @Service
 @Transactional(readOnly = true)

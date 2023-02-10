@@ -1,7 +1,6 @@
 package org.sbtitcourses.mdwiki.dto.page;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 /**

@@ -1,7 +1,6 @@
 package org.sbtitcourses.mdwiki.dto.person;
 
 import java.time.Instant;
-import java.util.Date;
 
 /**
  * DTO сущности {@link org.sbtitcourses.mdwiki.model.Person} для ответа.

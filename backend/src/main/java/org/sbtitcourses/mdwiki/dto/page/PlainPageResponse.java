@@ -1,7 +1,6 @@
 package org.sbtitcourses.mdwiki.dto.page;
 
 import java.time.Instant;
-import java.util.Date;
 
 /**
  * DTO сущности {@link org.sbtitcourses.mdwiki.model.Page} для ответа без списка подстраниц.

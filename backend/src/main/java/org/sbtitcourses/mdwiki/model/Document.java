@@ -33,11 +33,11 @@ public class Document {
     @JoinColumn(name = "page_id", referencedColumnName = "id", nullable = false)
     private Page page;
 
-    public static DocumentBuilder builder() {
-        return new DocumentBuilder();
+    public Document() {
     }
 
-    public Document() {
+    public static DocumentBuilder builder() {
+        return new DocumentBuilder();
     }
 
     public int getId() {

@@ -4,13 +4,11 @@ import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
-import static javax.persistence.TemporalType.TIMESTAMP;
 import static org.hibernate.annotations.CascadeType.ALL;
 
 /**
@@ -80,15 +78,15 @@ public class Page {
     @Cascade(ALL)
     private Document document;
 
-    public Person getOwner() {
-        return space.getOwner();
+    public Page() {
     }
 
     public static PageBuilder builder() {
         return new PageBuilder();
     }
 
-    public Page() {
+    public Person getOwner() {
+        return space.getOwner();
     }
 
     public int getId() {
