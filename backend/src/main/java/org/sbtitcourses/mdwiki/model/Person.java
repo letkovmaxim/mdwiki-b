@@ -3,6 +3,7 @@ package org.sbtitcourses.mdwiki.model;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,9 @@ import static org.hibernate.annotations.CascadeType.ALL;
  */
 @Entity
 @Table(name = "persons")
-public class Person {
+public class Person implements Serializable {
+
+    private static final long serialVersionUID = 8080395540442381101L;
 
     /**
      * ID пользователя в базе данных.

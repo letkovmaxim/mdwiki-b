@@ -55,10 +55,8 @@ export class Login extends React.Component<any, any>{
                 window.localStorage.setItem('login', 'yes')
                 localStorage.setItem("space", '0' )
                 localStorage.setItem("spaceName", '' )
-                localStorage.setItem("name", '' )
-                localStorage.setItem("email", '' )
                 localStorage.setItem("tree", JSON.stringify([]))
-                window.location.replace('/wiki/' + person.usernameOrEmail);
+                window.location.replace('/wiki');
             }else {
                 this.setState({
                     message: "Неправильный логин или пароль"

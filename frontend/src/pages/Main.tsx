@@ -9,7 +9,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import "../css/main.css"
 import { useParams } from "react-router-dom";
 import {useState, useEffect} from "react";
-import {Header} from "../component/Header";
+import {Header} from "../component/Main/Header";
 import Contact from "../component/SIdePanel/Contact";
 import {SidePanel} from "../component/SIdePanel/SidePanel";
 import {Document} from "../component/Markdown/Document";
@@ -49,35 +49,12 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function MainPage() {
 
-    const { login } = useParams();
-
     const {pageId} = useParams();
 
     const [checkText, setCheckText] = useState("")
 
     const addText = (text:string) => {
         setCheckText(text)
-    }
-
-    useEffect(() => {
-        if(window.localStorage.getItem('name') === ''){
-            ifLogIn()
-        }else{
-            if (!(login === window.localStorage.getItem('name') || login === window.localStorage.getItem('email'))) {
-                window.location.replace('/404');
-            }
-        }
-    }, [])
-
-    async function ifLogIn() {
-        let response = await fetch("/auth/whoami");
-        let json = await response.json()
-        window.localStorage.setItem('name', json.username)
-        window.localStorage.setItem('email', json.email)
-
-        if (!(login === window.localStorage.getItem('name') || login === window.localStorage.getItem('email'))) {
-            window.location.replace('/404');
-        }
     }
 
     async function handleSubmitToLogout(){
@@ -100,7 +77,7 @@ export default function MainPage() {
     };
 
     const toNote = () => {
-        window.location.replace("/wiki/" + login);
+        window.location.replace("/wiki");
     }
 
     return (

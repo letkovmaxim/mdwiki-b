@@ -70,3 +70,62 @@
     font-size: 15px;
 }
 
+.titleBoxProfile{
+    position: absolute !important;
+    width: 94%;
+    height: 100px;
+    border-bottom: 3px solid #FFFFFF;
+}
+
+.titlePersonIcon{
+    font-size:100px !important;
+    position: absolute !important;
+    color: #FFFFFF !important;
+    margin: 0 auto !important;
+}
+
+.titlePersonName{
+    font-size:32px !important;
+    position: absolute !important;
+    color: #FFFFFF !important;
+    top: 50% !important;
+    transform: translate(0, -50%) !important;
+    left: 100px !important;
+}
+
+.boxEdit{
+    position: absolute !important;
+    top: 132px;
+    width: 94%;
+    height: 130px;
+}
+
+.textField{
+    font-size: 20px;
+    width: 250px;
+    height: 30px ;
+    background: #4FB5D7;
+    border: 3px solid white;
+    border-radius: 5px;
+}
+
+.textField:focus{
+    border-color: #8482FF;
+    outline: none !important;
+}
+
+.textField:valid{
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.textField::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 16px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+

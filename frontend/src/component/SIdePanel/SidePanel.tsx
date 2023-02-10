@@ -25,8 +25,6 @@ export const SidePanel = ({checkText}:Props) => {
 
     const { spaceId } = useParams();
 
-    const { login } = useParams();
-
     const[list, setList] = useState<IComp[]>([])
 
     const[editId, setEditId] = useState<number>()
@@ -151,7 +149,7 @@ export const SidePanel = ({checkText}:Props) => {
             shared: true
         })
         if(spaceId === String(editId)){
-            window.location.replace("/wiki/" + login);
+            window.location.replace("/wiki");
         }
         setEditId(undefined)
     }
