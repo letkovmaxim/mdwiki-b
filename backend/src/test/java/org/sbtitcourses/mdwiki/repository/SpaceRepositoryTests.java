@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,12 +29,16 @@ class SpaceRepositoryTests {
             .password("testPassword")
             .name("testName")
             .email("testEmail@test.test")
+            .role("ROLE_USER")
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
             .build();
-
     private final Space space = Space.builder()
             .name("testName")
             .owner(owner)
             .shared(true)
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
             .build();
 
     @Autowired

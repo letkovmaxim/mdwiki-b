@@ -46,11 +46,6 @@ class PersonServiceTests {
             .enabled(false)
             .build();
 
-    @BeforeEach
-    public void setUp() {
-        when(entityFetcher.getLoggedInUser()).thenReturn(personWithId);
-    }
-
     @Test
     public void getAllShouldReturnPersonList() {
         List<Person> people = new LinkedList<>();
@@ -68,6 +63,7 @@ class PersonServiceTests {
 
     @Test
     public void getShouldReturnPerson() {
+        when(entityFetcher.getLoggedInUser()).thenReturn(personWithId);
         when(personRepository.findById(1)).thenReturn(Optional.of(personWithId));
 
         Person gottenPerson = personService.get(1);
@@ -79,6 +75,7 @@ class PersonServiceTests {
 
     @Test
     public void updateShouldReturnPerson() {
+        when(entityFetcher.getLoggedInUser()).thenReturn(personWithId);
         when(personRepository.findById(1)).thenReturn(Optional.of(personWithId));
 
         Person updatedPerson = assertDoesNotThrow(() -> personService.update(1, personToUpdateWith));
@@ -95,6 +92,7 @@ class PersonServiceTests {
 
     @Test
     public void deleteShouldRemovePerson() {
+        when(entityFetcher.getLoggedInUser()).thenReturn(personWithId);
         when(personRepository.findById(1)).thenReturn(Optional.of(personWithId)).thenReturn(Optional.empty());
 
         assertDoesNotThrow(() -> personService.delete(1));

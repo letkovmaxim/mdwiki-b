@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,6 +26,9 @@ class PersonRepositoryTests {
             .password("testPassword")
             .name("testName")
             .email("testEmail@test.test")
+            .role("ROLE_USER")
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
             .build();
 
     @Autowired
