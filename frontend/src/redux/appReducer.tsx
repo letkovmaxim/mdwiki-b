@@ -2,7 +2,10 @@ import {CLEAN_PAGES, GET_PAGES, GET_SPACES, IS_LOGIN, IS_NOT_LOGIN, OPEN_SPACE, 
 
 const initialState = {
     spaces: [],
-    spaceName: '',
+    space: {
+        name: '',
+        shared: true
+    },
     openSpace: '',
     pages: [],
     login: false,
@@ -11,7 +14,10 @@ const initialState = {
 
 const defaultState = {
     spaces: [],
-    spaceName: '',
+    space: {
+        name: '',
+        shared: true
+    },
     openSpace: '',
     pages: [],
     login: false,
@@ -27,7 +33,7 @@ export const appReducer = (state = initialState, action:any) => {
         case GET_SPACES:
             return {...state, spaces: action.payload}
         case SPACE_NAME:
-            return {...state, spaceName: action.payload}
+            return {...state, space: action.payload}
         case OPEN_SPACE:
             return {...state, openSpace: action.payload}
         case GET_PAGES:

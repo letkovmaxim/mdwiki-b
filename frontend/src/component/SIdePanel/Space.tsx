@@ -18,7 +18,7 @@ type Props = {
     handleCloseMenu: () => void,
     handleCloseMenuForEdit: () => void,
     remove: () => void,
-    toPage:(id:number, name:string) => void,
+    toPage:(id:number, name:string, shared:boolean) => void,
     handleClickMenu:(e:any, name:string, shared:boolean, id:number) => any,
 }
 
@@ -43,7 +43,7 @@ export const Space = ({handleOpen, list, anchorEl, openMenu, handleCloseMenu, ha
                     className="buttonSpace"
                     variant="text"
                     size="small"
-                    onClick={() => toPage(l.id, l.name)}
+                    onClick={() => toPage(l.id, l.name, l.shared)}
                     onContextMenu={(e) => handleClickMenu(e, l.name, l.shared, l.id)}
                 >
                     <FolderOpenOutlinedIcon sx = {{color: '#747A80', height: '18px', width: '18px'}}/>
