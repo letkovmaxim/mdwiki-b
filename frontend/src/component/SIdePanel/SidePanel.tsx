@@ -8,6 +8,9 @@ import {Space} from "./Space";
 import {Page} from "./Page";
 import {ModalWindow} from "./Modal";
 import { useParams } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {cleanPages, getSpace, spaceName} from "../../redux/actions";
+import {AnyAction, Dispatch} from "redux";
 
 interface IComp {
     id: number,
@@ -23,9 +26,11 @@ type Props = {
 
 export const SidePanel = ({checkText}:Props) => {
 
-    const { spaceId } = useParams();
+    const dispatch = useDispatch()
+    const spaceList = useSelector((state:any) => state.app.spaces)
+    const spaceN = useSelector((state:any) => state.app.spaceName)
 
-    const[list, setList] = useState<IComp[]>([])
+    const { spaceId } = useParams();
 
     const[editId, setEditId] = useState<number>()
 
@@ -93,18 +98,16 @@ export const SidePanel = ({checkText}:Props) => {
             getNameSpace()
         }
         getList()
-    }, [setList])
+    }, [])
 
     async function getList() {
-        let response = await fetch('/spaces?bunch=0&size=1000');
-        let json = await response.json()
-        setList(json)
+        dispatch<any>(getSpace())
     }
 
     async function getNameSpace(){
         let response = await fetch('/spaces/' + spaceId);
         let json = await response.json()
-        localStorage.setItem("spaceName", json.name)
+        dispatch(spaceName(json.name))
     }
 
     async function handleSubmit() {
@@ -169,8 +172,8 @@ export const SidePanel = ({checkText}:Props) => {
 
     const toPage = (id:number, name:string) =>{
         setSpaceOpenId(id)
-        localStorage.setItem("spaceName", name)
-        localStorage.setItem("list", JSON.stringify([]))
+        dispatch(spaceName(name))
+        dispatch(cleanPages())
     }
 
     const def = () => {}
@@ -181,7 +184,7 @@ export const SidePanel = ({checkText}:Props) => {
                     <div>
                         <Space
                             handleOpen={handleOpen}
-                            list={list}
+                            list={spaceList}
                             anchorEl={anchorEl}
                             openMenu={openMenu}
                             handleCloseMenu={handleCloseMenu}
@@ -195,7 +198,7 @@ export const SidePanel = ({checkText}:Props) => {
                     <div>
                         <List>
                             <div className="headerText">
-                                {localStorage.getItem("spaceName")}
+                                {spaceN}
                             </div>
                         </List>
                         <Divider />

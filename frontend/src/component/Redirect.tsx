@@ -1,14 +1,19 @@
-import React, { Component } from 'react';
+import React, {useEffect} from 'react';
+import {useSelector} from "react-redux";
 
-export class Redirect extends Component {
+export const Redirect = () => {
 
-    componentDidMount(){
-        window.location.replace('/login');
-    }
+    const isLogin = useSelector((state:any) => state.app.login)
 
-    render() {
-        return (
-            <div/>
-        );
-    }
+    useEffect(() => {
+        if(isLogin){
+            window.location.replace('/wiki');
+        }else {
+            window.location.replace('/login');
+        }
+    })
+
+    return (
+        <></>
+    );
 }

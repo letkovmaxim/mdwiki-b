@@ -16,6 +16,9 @@ import {Document} from "../component/Markdown/Document";
 import List from "@mui/material/List";
 import Button from "@mui/material/Button";
 import {Note} from "../component/Markdown/Note";
+import {useDispatch, useSelector} from "react-redux";
+import {logOut} from "../redux/actions";
+
 
 const drawerWidth = 300;
 
@@ -49,6 +52,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function MainPage() {
 
+    const dispatch = useDispatch()
+    const isLogin = useSelector((state:any) => state.app.login)
+
     const {pageId} = useParams();
 
     const [checkText, setCheckText] = useState("")
@@ -61,9 +67,15 @@ export default function MainPage() {
         await fetch('/auth/logout', {
             method: 'POST',
         });
-        window.localStorage.setItem('login', 'no')
-        window.location.replace('/');
+        dispatch(logOut())
+        window.location.replace('/login');
     }
+
+    useEffect(() => {
+        if(!isLogin){
+            window.location.replace("/login");
+        }
+    })
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);

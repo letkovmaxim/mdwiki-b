@@ -1,8 +1,12 @@
 import React, { useEffect, useState} from "react";
 import "../../css/document.css"
 import { MarkdowNote} from "./MarkdowNote";
+import {useDispatch} from "react-redux";
+import {logOut} from "../../redux/actions";
 
 export const Note = () =>{
+
+    const dispatch = useDispatch()
 
     const[document, setDocument] = useState({
         text: ''
@@ -29,6 +33,8 @@ export const Note = () =>{
             setDocument({
                 text: json.note
             })
+        }else {
+            dispatch(logOut())
         }
     }
 
