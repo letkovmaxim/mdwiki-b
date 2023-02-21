@@ -5,6 +5,8 @@ import Modal from '@mui/material/Modal';
 import Box from "@mui/material/Box";
 import {Input} from "reactstrap";
 import "../../css/main.css"
+import {useDispatch} from "react-redux";
+import {logOut} from "../../redux/actions";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -24,6 +26,8 @@ const style = {
 };
 
 export const Profile = () => {
+
+    const dispatch = useDispatch()
 
     const [person, setPerson] = useState({
         id: 0,
@@ -57,16 +61,20 @@ export const Profile = () => {
     async function  getPerson() {
         let response = await fetch("/auth/whoami");
         let json = await response.json()
-        setPerson({
-            id: json.id,
-            username: json.username,
-            password: 'nonenone',
-            name: json.name,
-            email: json.email,
-            enabled: json.enabled
-        })
-        setName(json.name)
-        setEmail(json.email)
+        if(response.ok){
+            setPerson({
+                id: json.id,
+                username: json.username,
+                password: 'nonenone',
+                name: json.name,
+                email: json.email,
+                enabled: json.enabled
+            })
+            setName(json.name)
+            setEmail(json.email)
+        }else {
+            dispatch(logOut())
+        }
     }
 
     const handleChange = (e:any) => {

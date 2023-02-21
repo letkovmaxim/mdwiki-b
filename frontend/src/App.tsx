@@ -1,17 +1,19 @@
 import React from 'react';
 import { BrowserRouter , Route, Routes } from 'react-router-dom';
 import { Registration } from './pages/Registration';
-import { Login } from './pages/Login';
+import Login from './pages/Login';
 import { Redirect } from './component/Redirect';
 import {NotFound} from "./pages/NotFound";
 import MainPage from "./pages/Main";
+import {useSelector} from "react-redux";
 
 function App() {
 
-    function checkLogin() {
-        const login = window.localStorage.getItem('login')
+    const isLogin = useSelector((state:any) => state.app.login)
 
-        if (login === 'yes') {
+    function checkLogin() {
+
+        if (isLogin) {
            return <MainPage/>
         }else {
             return <Redirect />

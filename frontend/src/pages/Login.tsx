@@ -3,6 +3,8 @@ import { Container, Form, FormGroup, Input} from "reactstrap";
 import "../css/login.css"
 import {Hello} from '../component/Hello'
 import Button from '@mui/material/Button';
+import {personLogIn} from "../redux/actions";
+import {connect} from "react-redux";
 
 const styleButton = {
     backgroundColor: '#70CCF2',
@@ -12,7 +14,7 @@ const styleButton = {
     borderRadius: 20,
 };
 
-export class Login extends React.Component<any, any>{
+class Login extends React.Component<any, any>{
 
     newPerson = {
         usernameOrEmail: '',
@@ -21,6 +23,7 @@ export class Login extends React.Component<any, any>{
 
     constructor(props: any) {
         super(props);
+
         this.state = {
             person: this.newPerson,
             message: '',
@@ -43,27 +46,23 @@ export class Login extends React.Component<any, any>{
         event.preventDefault();
         const {person} = this.state;
 
-        await fetch('/auth/login', {
+        const response = await fetch('/auth/login', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(person),
-        }).then(response => {
-            if (response.status === 200) {
-                window.localStorage.setItem('login', 'yes')
-                localStorage.setItem("space", '0' )
-                localStorage.setItem("spaceName", '' )
-                localStorage.setItem("tree", JSON.stringify([]))
-                window.location.replace('/wiki');
-            }else {
-                this.setState({
-                    message: "Неправильный логин или пароль"
-                })
-            }
-        });
-        console.log(this.state.message);
+        })
+
+        if(response.ok){
+            this.props.personLogIn()
+            window.location.replace('/wiki');
+        }else{
+            this.setState({
+                message: "Неправильный логин или пароль"
+            })
+        }
     }
 
     handleSubmitToRegistration(){
@@ -134,3 +133,15 @@ export class Login extends React.Component<any, any>{
         );
     }
 }
+
+const mapDispatchToProps = {
+    personLogIn
+}
+
+const mapStateToProps = (state:any) =>{
+    return {
+        isLogin: state.app.loading
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

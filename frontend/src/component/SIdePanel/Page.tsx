@@ -13,6 +13,8 @@ import {ModalWindow} from "./Modal";
 import { useParams } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
+import {useDispatch, useSelector} from "react-redux";
+import {getPages, openSpace, treePages} from "../../redux/actions";
 
 type Props = {
     idSpace: number,
@@ -46,13 +48,16 @@ const style = {
 
 export const Page = ({idSpace, checkText}:Props) =>{
 
+    const dispatch = useDispatch()
+    const pageList = useSelector((state:any) => state.app.pages)
+    const treeP = useSelector((state:any) => state.app.tree)
+    const spaceOp = useSelector((state:any) => state.app.openSpace)
+
     const { pageId } = useParams();
     const { spaceId } = useParams();
 
     const[idTree, setIdTree] = useState<string[]>([])
     const [lastId, setLastId] = useState(0)
-
-    const[list, setList] = useState<IComp[]>(JSON.parse(localStorage.getItem("list")!))
 
     const[editId, setEditId] = useState<number>()
 
@@ -135,27 +140,20 @@ export const Page = ({idSpace, checkText}:Props) =>{
 
     useEffect(() => {
         treeOpen()
-    }, [setList])
+    }, [])
 
     const treeOpen = () => {
-        if(localStorage.getItem('space') !== String(idSpace)){
-            localStorage.setItem("tree", JSON.stringify([]))
-            localStorage.setItem('space', String(idSpace))
-            getList()
+        if(spaceOp !== String(idSpace)){
+            dispatch(treePages([]))
+            dispatch(openSpace(String(idSpace)))
         }else {
-            setIdTree(JSON.parse(localStorage.getItem('tree')!))
+            setIdTree(treeP)
         }
-
-        if(localStorage.getItem('space') === String(idSpace) && list.length === 0){
-            getList()
-        }
+        getList()
     }
 
     async function getList() {
-        let response = await fetch('/spaces/' + idSpace + '/pages?bunch=0&size=1000');
-        let json = await response.json()
-        setList(json)
-        localStorage.setItem("list", JSON.stringify(json))
+        dispatch<any>(getPages(idSpace))
     }
 
     async function handleSubmit() {
@@ -233,10 +231,10 @@ export const Page = ({idSpace, checkText}:Props) =>{
                     'Content-Type': 'application/json'
                 }
             });
+            getList()
             handleCloseMenu()
-            await getList();
 
-            backParent(response)
+            await backParent(response)
         }else {
             await fetch('/spaces/' + idSpace + '/pages/' + editId, {
                 method: 'DELETE',
@@ -307,7 +305,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
         setDocument({
             text: checkText
         })
-        localStorage.setItem('tree', JSON.stringify(idTree))
+        dispatch(treePages(idTree))
         setRedirectId(id)
         if (pageId !== undefined) {
             await checkSave(id)
@@ -364,7 +362,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
     }
 
 
-    const OList = list.map((l:any) => {
+    const OList = pageList.map((l:any) => {
         let i = 0;
         return (
             <div  key={l.id}
@@ -396,7 +394,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
                 <TreeView
                     aria-label="rich object"
                     defaultCollapseIcon={<ExpandMoreIcon sx={{color: '#747A80'}} />}
-                    defaultExpanded={JSON.parse(localStorage.getItem('tree')!)}
+                    defaultExpanded={treeP}
                     defaultExpandIcon={<ChevronRightIcon sx={{color: '#747A80'}} />}
                 >
                     {OList}
