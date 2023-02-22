@@ -23,10 +23,10 @@ export function getSpace(){
     }
 }
 
-export function spaceName(name:string){
+export function spaceNameAndShared(name:string, shared:boolean){
     return{
         type: SPACE_NAME,
-        payload: name
+        payload: {name, shared}
     }
 }
 

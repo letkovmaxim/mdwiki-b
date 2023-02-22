@@ -52,6 +52,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
     const pageList = useSelector((state:any) => state.app.pages)
     const treeP = useSelector((state:any) => state.app.tree)
     const spaceOp = useSelector((state:any) => state.app.openSpace)
+    const spaceN = useSelector((state:any) => state.app.space)
 
     const { pageId } = useParams();
     const { spaceId } = useParams();
@@ -67,7 +68,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
 
     const[newObject, setNewObject] = useState({
         name: '',
-        shared: true
+        shared: spaceN.shared
     })
 
     const [openSave, setOpenSave] = React.useState(false);
@@ -89,7 +90,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
         setEditId(undefined)
         setNewObject({
             name: '',
-            shared: true
+            shared: spaceN.shared
         })
         setAddSub(false)
         setStyles("addSpace")
@@ -103,7 +104,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
         setEditId(id);
         setNewObject({
             name: name,
-            shared: shared
+            shared: spaceN.shared ? shared : false
         })
     };
 
@@ -112,7 +113,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
         setEditId(undefined);
         setNewObject({
             name: '',
-            shared: true
+            shared: spaceN.shared
         });
     };
 
@@ -127,7 +128,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
         setAddSub(true)
         setNewObject({
             name: '',
-            shared: true
+            shared: spaceN.shared
         })
     };
 
@@ -173,7 +174,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
                     setEditId(undefined)
                     setNewObject({
                         name: '',
-                        shared: true
+                        shared: spaceN.shared
                     })
                 }else {
                     setStyles("addSpaceError")
@@ -200,7 +201,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
                     setEditId(undefined)
                     setNewObject({
                         name: '',
-                        shared: true
+                        shared: spaceN.shared
                     })
                 }else {
                     setStyles("addSpaceError")
@@ -248,7 +249,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
             setEditId(undefined)
             setNewObject({
                 name: '',
-                shared: true
+                shared: spaceN.shared
             })
         }
     }
@@ -421,6 +422,8 @@ export const Page = ({idSpace, checkText}:Props) =>{
                 handleSubmit={handleSubmit}
                 editId={editId}
                 error={error}
+                shared={spaceN.shared}
+                placeholder={"Страница"}
             />
 
             <Modal

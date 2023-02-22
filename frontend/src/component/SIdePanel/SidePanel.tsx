@@ -9,8 +9,7 @@ import {Page} from "./Page";
 import {ModalWindow} from "./Modal";
 import { useParams } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {cleanPages, getSpace, spaceName} from "../../redux/actions";
-import {AnyAction, Dispatch} from "redux";
+import {cleanPages, getSpace, spaceNameAndShared} from "../../redux/actions";
 
 interface IComp {
     id: number,
@@ -28,7 +27,7 @@ export const SidePanel = ({checkText}:Props) => {
 
     const dispatch = useDispatch()
     const spaceList = useSelector((state:any) => state.app.spaces)
-    const spaceN = useSelector((state:any) => state.app.spaceName)
+    const spaceN = useSelector((state:any) => state.app.space)
 
     const { spaceId } = useParams();
 
@@ -107,7 +106,7 @@ export const SidePanel = ({checkText}:Props) => {
     async function getNameSpace(){
         let response = await fetch('/spaces/' + spaceId);
         let json = await response.json()
-        dispatch(spaceName(json.name))
+        dispatch(spaceNameAndShared(json.name, json.shared))
     }
 
     async function handleSubmit() {
@@ -170,9 +169,9 @@ export const SidePanel = ({checkText}:Props) => {
         return error;
     }
 
-    const toPage = (id:number, name:string) =>{
+    const toPage = (id:number, name:string, shared:boolean) =>{
         setSpaceOpenId(id)
-        dispatch(spaceName(name))
+        dispatch(spaceNameAndShared(name, shared))
         dispatch(cleanPages())
     }
 
@@ -198,7 +197,7 @@ export const SidePanel = ({checkText}:Props) => {
                     <div>
                         <List>
                             <div className="headerText">
-                                {spaceN}
+                                {spaceN.name}
                             </div>
                         </List>
                         <Divider />
@@ -214,7 +213,10 @@ export const SidePanel = ({checkText}:Props) => {
                                 <ArrowBackIcon sx={{ height:25, width:25}}/>
                             </IconButton>
 
-                            <Page idSpace={spaceOpenId} checkText={checkText}/>
+                            <Page
+                                idSpace={spaceOpenId}
+                                checkText={checkText}
+                            />
 
                         </List>
 
@@ -231,6 +233,8 @@ export const SidePanel = ({checkText}:Props) => {
                 handleSubmit={handleSubmit}
                 editId={editId}
                 error={error}
+                shared={true}
+                placeholder={"Пространство"}
             />
         </div>
     )

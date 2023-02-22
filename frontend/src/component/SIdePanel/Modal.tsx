@@ -18,7 +18,9 @@ type Props ={
     AddSubpage: () => void,
     handleSubmit: () => void
     editId: any,
-    error: any
+    error: any,
+    shared: boolean,
+    placeholder: string
 }
 
 const style = {
@@ -37,7 +39,7 @@ const style = {
     p: 2,
 };
 
-export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, addSub, AddSubpage, handleSubmit, editId, error}: Props) => {
+export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, addSub, AddSubpage, handleSubmit, editId, error, shared, placeholder}: Props) => {
     return(
         <div>
             <Modal
@@ -52,6 +54,7 @@ export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, 
                         type="text"
                         name="name"
                         id="name"
+                        placeholder={placeholder}
                         value={newObject.name}
                         onChange={handleChange}
                         autoComplete="off"
@@ -70,13 +73,15 @@ export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, 
                             value={newObject.shared}
                             onChange={handleChange}
                         >
+                            {shared &&
                             <FormControlLabel className="text" value={true} control={<Radio
                                 sx={{color: '#FFFFFF', '&.Mui-checked': {color: '#8482FF',},}} size="small"/>}
-                                              label="public"/>
+                                              label="публичный"/>
+                            }
 
                             <FormControlLabel className="text" value={false} control={<Radio
                                 sx={{color: '#FFFFFF', '&.Mui-checked': {color: '#8482FF',},}} size="small"/>}
-                                              label="private"/>
+                                              label="приватный"/>
                         </RadioGroup>
                     </FormControl>
                     {(addSub ?
