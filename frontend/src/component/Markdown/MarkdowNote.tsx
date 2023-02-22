@@ -7,12 +7,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import Help from "./Help";
 
-const styleEdit = {
-    backgroundColor: '#4FB5D7',
-};
-
 function useWindowDimensions() {
-    const [height, setHeight] = useState(window.innerHeight);
+    const [height, setHeight] = useState(window.innerHeight > 630 ? window.innerHeight : 630);
 
     const updateWidthAndHeight = () => {
         if(window.innerHeight > 630){
@@ -45,34 +41,28 @@ export const MarkdowNote = ({save, edit, CloseEdit, OpenEdit, document, newText}
 
     return (
         <div data-color-mode="light">
-            <Box className='buttons'>
+            <Box className='buttonsBox'>
                 <Help/>
                 {(edit ?
-                        <Button style={styleEdit} className='editButton' variant="contained" onClick={CloseEdit}>
-                            <EditIcon className='iconEdit2'/>
+                        <Button className='editBtn !bg-blue-470 !text-white !text-xs' variant="contained" onClick={CloseEdit}>
+                            <EditIcon className='editIcon !text-white'/>
                             <div>&emsp;</div>
-                            <div className='edit2'>
-                                Редактировать
-                            </div>
+                            Редактировать
                         </Button>
                         :
-                        <Button className='editButton'  variant="outlined" onClick={OpenEdit}>
-                            <EditIcon className='iconEdit'/>
+                        <Button className='editBtn !text-xs !text-slate-500'  variant="outlined" onClick={OpenEdit}>
+                            <EditIcon className='editIcon !text-slate-500'/>
                             <div>&emsp;</div>
-                            <div className='edit'>
-                                Редактировать
-                            </div>
+                            Редактировать
                         </Button>
                 )}
-                <Button className='saveButton' variant="text" onClick={save}>
-                    <SaveOutlinedIcon className='iconEdit'/>
+                <Button className='saveBtn' variant="text" onClick={save}>
+                    <SaveOutlinedIcon className='editIcon !text-slate-500'/>
                     <div>&emsp;</div>
-                    <div className='edit'>
                         Сохранить
-                    </div>
                 </Button>
             </Box>
-            <Box className='markdown'>
+            <Box className='markdownBox'>
                 {(edit ?
                         <MDEditor
                             height = {height - 120}
@@ -93,10 +83,7 @@ export const MarkdowNote = ({save, edit, CloseEdit, OpenEdit, document, newText}
                             extraCommands={[]}
                         />
                 )}
-
             </Box>
-
-
         </div>
     );
 }

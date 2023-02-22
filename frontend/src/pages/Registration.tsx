@@ -1,16 +1,9 @@
 import React from "react";
 import {Container, Form, FormGroup, Input} from "reactstrap";
 import {Hello} from '../component/Hello'
-import '../css/registration.css'
 import Button from '@mui/material/Button';
-
-const styleButton = {
-    backgroundColor: '#70CCF2',
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderColor: '#FCFCFC',
-    borderRadius: 20,
-};
+import "../css/loginAndRegistratiom.css"
+import Box from "@mui/material/Box";
 
 export class Registration extends React.Component<any, any>{
 
@@ -158,92 +151,75 @@ export class Registration extends React.Component<any, any>{
         return(
             <div>
                 <Hello/>
-                <Container className="formReg">
+                <Container className="formInput">
                     <Button
-                        sx={{
-                            position: 'absolute',
-                            right: '3%',
-                            marginTop: '2.5%',
-                        }}
-                        style={styleButton}
+                        className="!absolute right-3 !mt-3 styleBut"
                         variant="contained"
                         size="small"
                         onClick={this.handleSubmitToLogin}
                     >
-                        <div className="butText">
-                            &emsp;ВХОД&emsp;
-                        </div>
+                        &emsp;ВХОД&emsp;
                     </Button>
 
                     <Form onSubmit={this.handleSubmit}>
-                        <FormGroup>
-                            <Input className="name" type="text" name="name" placeholder="Имя" id="name" value={person.name}
-                                   onChange={this.handleChange} autoComplete="name"/>
-                            <Container className="errorName">
-                                <div className="errText">
-                                    {this.state.checkName}
-                                </div>
-                            </Container>
-                        </FormGroup>
+                        <Box className='boxInput'>
+                            <Box className='space-y-[30px]'>
+                                <FormGroup className='h-[9vh]'>
+                                    <Input className="input" type="text" name="name" placeholder="Имя" id="name" value={person.name}
+                                           onChange={this.handleChange} autoComplete="name"/>
 
-                        <FormGroup>
-                            <Input className="userName" type="text" name="username" placeholder="Логин" id="username" value={person.username}
-                                   onChange={this.handleChange} autoComplete="username"/>
-                            <Container className="errorUserName">
-                                <div className="errText">
-                                    {this.state.checkUsername}
-                                </div>
-                            </Container>
-                        </FormGroup>
+                                    <div className="textError">
+                                        {this.state.checkName}
+                                    </div>
+                                </FormGroup>
 
-                        <FormGroup>
-                            <Input className="email" type="text" name="email" placeholder="Email" id="email" value={person.email}
-                                   onChange={this.handleChange} autoComplete="email"/>
-                            <Container className="errorEmail">
-                                <div className="errText">
-                                    {this.state.checkEmail}
-                                </div>
-                            </Container>
-                        </FormGroup>
+                                <FormGroup className='h-[9vh]'>
+                                    <Input className="input" type="text" name="username" placeholder="Логин" id="username" value={person.username}
+                                           onChange={this.handleChange} autoComplete="username"/>
 
-                        <FormGroup>
-                            <Input className="passw" type="password" name="password" placeholder="Пароль" id="password" value={person.password}
-                                   onChange={this.handleChange} autoComplete="password"/>
-                            <Container className="errorPassword">
-                                <div className="errText">
-                                    {this.state.checkPassword}
-                                </div>
-                            </Container>
-                        </FormGroup>
+                                    <div className="textError">
+                                        {this.state.checkUsername}
+                                    </div>
+                                </FormGroup>
 
-                        <FormGroup>
-                            <Input className="repeatPassword" type="password" name="repeatPassword" placeholder="Повторите пароль" id="repeatPassword" value={repeatPassword}
-                                   onChange={this.handleChangeRepeatPassword} autoComplete="repeatPassword"/>
-                            <Container className="errorRepeatPassword">
-                                <div className="errText">
-                                    {this.state.checkRepeatPassword}
-                                </div>
-                            </Container>
-                        </FormGroup>
+                                <FormGroup className='h-[9vh]'>
+                                    <Input className="input" type="text" name="email" placeholder="Email" id="email" value={person.email}
+                                           onChange={this.handleChange} autoComplete="email"/>
 
-                        <Container className="registrationButton">
+                                    <div className="textError">
+                                        {this.state.checkEmail}
+                                    </div>
+                                </FormGroup>
+
+                                <FormGroup className='h-[9vh]'>
+                                    <Input className="input" type="password" name="password" placeholder="Пароль" id="password" value={person.password}
+                                           onChange={this.handleChange} autoComplete="password"/>
+
+                                    <div className="textError">
+                                        {this.state.checkPassword}
+                                    </div>
+                                </FormGroup>
+
+                                <FormGroup className='h-[9vh]'>
+                                    <Input className="input" type="password" name="repeatPassword" placeholder="Повторите пароль" id="repeatPassword" value={repeatPassword}
+                                           onChange={this.handleChangeRepeatPassword} autoComplete="repeatPassword"/>
+
+                                    <div className="textError">
+                                        {this.state.checkRepeatPassword}
+                                    </div>
+                                </FormGroup>
+                            </Box>
+                        </Box>
+
+                        <Box className='regBox'>
                             <Button
-                                sx={{
-                                    position: 'absolute',
-                                    top: '50%',
-                                    left: '50%',
-                                    marginRight: '-50%',
-                                    transform: 'translate(-50%, -50%)'
-                                }}
-                                style={styleButton}
+                                className="regBut styleBut"
                                 variant="contained"
                                 size="medium"
                                 type="submit">
-                                <div className="buttonReg">
-                                    ЗАРЕГИСТРИРОВАТЬСЯ
-                                </div>
+                                ЗАРЕГИСТРИРОВАТЬСЯ
                             </Button>
-                        </Container>
+                        </Box>
                     </Form>
                 </Container>
             </div>

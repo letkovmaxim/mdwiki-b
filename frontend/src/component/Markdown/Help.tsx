@@ -1,27 +1,12 @@
-import * as React from 'react';
+ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import "../../css/document.css"
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import MDEditor from "@uiw/react-md-editor";
+import "../../css/document.css"
 
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '70%',
-    height: '80%',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 5,
-    borderColor: '#4FB5D7',
-    borderWidth: 4
-};
 
 export default function Help() {
     const [open, setOpen] = React.useState(false);
@@ -38,10 +23,10 @@ export default function Help() {
 
     return (
         <div>
-            <Button className='saveHelp' variant="text" onClick={handleOpen}>
-                <QuestionMarkIcon className='iconEdit'/>
-                <div>&emsp;</div>
-                <div className='edit'>
+            <Button className='helpBtn' variant="text" onClick={handleOpen}>
+                <QuestionMarkIcon className='helpIcon'/>
+                &emsp;
+                <div className='mt-[2px]'>
                     Помощь
                 </div>
             </Button>
@@ -51,8 +36,8 @@ export default function Help() {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style} data-color-mode="light">
-                    <Box className='doc'>
+                <Box className='helpModalWindow' data-color-mode="light">
+                    <Box className='documentation'>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                             Что такое Wiki-service
                         </Typography>

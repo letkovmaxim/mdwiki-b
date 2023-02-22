@@ -2,24 +2,8 @@ import React, {useEffect} from "react";
 import {useParams} from "react-router-dom";
 import {Box, Button, Modal, FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import "../../css/document.css"
 import { SelectChangeEvent } from '@mui/material/Select';
-
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '300px',
-    height: '200px',
-    backgroundColor: '#4FB5D7',
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderColor: '#FCFCFC',
-    borderRadius: 5,
-    boxShadow: 24,
-    p: 2,
-};
+import "../../css/document.css"
 
 const MenuProps = {
     PaperProps: {
@@ -129,7 +113,7 @@ export const Pdf  = () => {
     const listFronts = fonts.map((front) => {
         return (
             <MenuItem key={front.value} value={front.value}>
-                <div style={{fontSize: 13}}>
+                <div className='select'>
                     {front.name}
                 </div>
             </MenuItem>
@@ -139,7 +123,7 @@ export const Pdf  = () => {
     const listFrontsSize = fontsSize.map((frontSize) => {
         return (
             <MenuItem key={frontSize} value={String(frontSize)}>
-                <div style={{fontSize: 13}}>
+                <div className='select'>
                     {frontSize}
                 </div>
             </MenuItem>
@@ -149,7 +133,7 @@ export const Pdf  = () => {
     const listView = views.map((view) => {
         return (
             <MenuItem key={view.value} value={view.value}>
-                <div style={{fontSize: 13}}>
+                <div className='select'>
                     {view.name}
                 </div>
             </MenuItem>
@@ -158,12 +142,12 @@ export const Pdf  = () => {
 
     const select = (name: string, list: any, value: any, handleChange: any) => {
         return (
-            <Box sx={{minWidth: 120}}>
-                <FormControl fullWidth sx={{maxHeight: 100}}>
-                    <InputLabel id="demo-simple-select-label" className='fontText'>{name}</InputLabel>
+            <Box className='min-w-[120]'>
+                <FormControl fullWidth className='max-h-[100]'>
+                    <InputLabel id="demo-simple-select-label" className='!text-white' >{name}</InputLabel>
                     <Select
                         sx={styleSelect}
-                        className='fontInput'
+                        className='!h-[40px] !text-white !font-bold'
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={value}
@@ -180,12 +164,10 @@ export const Pdf  = () => {
 
     return (
         <div>
-            <Button className='pdfButton' variant="text" onClick={handleOpen}>
-                <PictureAsPdfIcon className='iconEdit'/>
+            <Button className='pdfBtn'  variant="text" onClick={handleOpen}>
+                <PictureAsPdfIcon className='editIcon !text-slate-500'/>
                 <div>&emsp;</div>
-                <div className='edit'>
-                    Загрузить
-                </div>
+                <div className='mt-[2px]'>Загрузить</div>
             </Button>
             <Modal
                 open={open}
@@ -193,16 +175,14 @@ export const Pdf  = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
+                <Box className='pdfBox'>
                     {select("Шрифт", listFronts, font, handleChangeFont)}
                     <br/>
                     {select("Размер шрифта", listFrontsSize, fontSize, handleChangeFontSize)}
                     <br/>
                     {select("", listView, view, handleChangeView)}
-                    <Button variant="text" className='pdfDownload' onClick={downloadPdf}>
-                        <div style={{color: '#FFFFFF', fontWeight: 'bold'}}>
-                            Загрузить
-                        </div>
+                    <Button variant="text" className='pdfDownBtn' onClick={downloadPdf}>
+                        Загрузить
                     </Button>
                 </Box>
             </Modal>

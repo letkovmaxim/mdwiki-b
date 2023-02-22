@@ -1,131 +1,74 @@
-.background{
-    min-height: 600px;
-    min-width: 1000px;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+
+    .size{
+        @apply min-h-[600px] min-w-[1000px]
+    }
+
+    .header{
+        @apply !absolute !h-[60px] !w-full !bg-blue-470 !min-h-[40px] !min-w-[1000px]
+    }
+
+    .iconMenu{
+        @apply !mt-0 !w-10 !h-10 !text-white
+    }
+
+    .wsLogoMain{
+        @apply font-algerian text-5xl text-center text-white mt-2
+    }
+
+    .rect1Main{
+        @apply absolute left-5 top-1/2 h-[3px] w-24 bg-white
+    }
+
+    .rect2Main{
+        @apply absolute right-5 top-1/2 h-[3px] w-24 bg-white
+    }
+
+    .logoBox{
+        @apply absolute right-1/2 translate-x-1/2 h-[60px] w-96
+    }
+
+    .noteBtn{
+        @apply !w-full !py-0 !text-slate-500 !text-base
+    }
+
+    .profileBox{
+        @apply !absolute !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2 !w-[500px] !h-[275px]
+        !bg-blue-470 !border-4 !border-white !rounded-xl !outline-none !px-4 !py-4
+    }
+
+    .titleProfileBox{
+        @apply !absolute !w-[460px] !h-24 !border-solid !border-b-4 !border-white
+    }
+
+    .profileIcon{
+        @apply !text-8xl !absolute !text-white !my-auto !mx-0
+    }
+
+    .profileName{
+        @apply !text-3xl !absolute !text-white !top-1/2 !translate-x-0 !-translate-y-1/2 !left-[100px]
+    }
+
+    .editBox{
+        @apply !absolute !w-[460px] !top-32 !h-24
+    }
+
+    .inputProfile{
+        @apply !w-[300px] !h-8 !bg-blue-470 !border-solid !border-4 !border-white
+        !rounded-md !outline-none !text-white !pl-2
+        focus:border-indigo-500
+        placeholder:text-white/[0.8] font-bold
+    }
+
+    .profileBtn{
+        @apply !text-white !font-bold !ml-[15px]
+    }
+
+    .profileError{
+        @apply !text-red-600 !font-bold
+    }
 }
-
-.img{
-    width: 40px;
-    height: 40px;
-}
-
-.logoText{
-    font-family: 'algerian';
-    font-style: normal;
-    font-size: 45px;
-    text-align: center;
-    color: #FEFCFC;
-    top: calc(1.5%);
-}
-
-.logo{
-    position: absolute;
-    height: calc(100%);
-    width: calc(20%);
-    top: calc(1%);
-    left: calc(40%);
-}
-
-.menu{
-    margin-top: 0px !important;
-    width: 40px !important;
-    height: 40px !important;
-    color: #FFFFFF !important;
-}
-
-.AppBar{
-    position: absolute !important;
-    height: 60px !important;
-    width: 100% !important;
-    background: #4FB5D7 !important;
-    min-height: 40px !important;
-    min-width: 1000px !important;
-}
-
-.rec1{
-    position: absolute;
-    height: calc(4%);
-    width: calc(30%);
-    top: calc(45%);
-    right: calc(75%);
-    background: #FFFFFF;
-}
-
-.rec2{
-    position: absolute;
-    height: calc(4%);
-    width: calc(30%);
-    top: calc(45%);
-    left: calc(75%);
-    background: #FFFFFF;
-}
-
-.btn {
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
-}
-
-.textBtn{
-    font-family: Scada, sans-serif;
-    color: #747A80;
-    font-size: 15px;
-}
-
-.titleBoxProfile{
-    position: absolute !important;
-    width: 94%;
-    height: 100px;
-    border-bottom: 3px solid #FFFFFF;
-}
-
-.titlePersonIcon{
-    font-size:100px !important;
-    position: absolute !important;
-    color: #FFFFFF !important;
-    margin: 0 auto !important;
-}
-
-.titlePersonName{
-    font-size:32px !important;
-    position: absolute !important;
-    color: #FFFFFF !important;
-    top: 50% !important;
-    transform: translate(0, -50%) !important;
-    left: 100px !important;
-}
-
-.boxEdit{
-    position: absolute !important;
-    top: 132px;
-    width: 94%;
-    height: 130px;
-}
-
-.textField{
-    font-size: 20px;
-    width: 250px;
-    height: 30px ;
-    background: #4FB5D7;
-    border: 3px solid white;
-    border-radius: 5px;
-}
-
-.textField:focus{
-    border-color: #8482FF;
-    outline: none !important;
-}
-
-.textField:valid{
-    color: #FFFFFF;
-    font-size: 16px;
-    font-weight: bold;
-    vertical-align: middle;
-}
-
-.textField::placeholder {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 16px;
-    font-weight: bold;
-    vertical-align: middle;
-}
-
-

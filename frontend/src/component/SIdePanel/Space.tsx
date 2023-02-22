@@ -9,6 +9,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
 import Box from "@mui/material/Box";
+import "../../css/sidePanel.css"
 
 type Props = {
     handleOpen: () => void,
@@ -36,21 +37,15 @@ export const Space = ({handleOpen, list, anchorEl, openMenu, handleCloseMenu, ha
             >
 
                 <Button
-                    sx={{
-                        alignItems: 'left',
-                        justifyContent: 'left'
-                    }}
-                    className="buttonSpace"
+                    className="spaceBtn"
                     variant="text"
                     size="small"
                     onClick={() => toPage(l.id, l.name, l.shared)}
                     onContextMenu={(e) => handleClickMenu(e, l.name, l.shared, l.id)}
                 >
-                    <FolderOpenOutlinedIcon sx = {{color: '#747A80', height: '18px', width: '18px'}}/>
+                    <FolderOpenOutlinedIcon className="openFolderIcon"/>
                     <div>&emsp;</div>
-                    <div className='textButton'>
-                        {l.name}
-                    </div>
+                    {l.name}
                 </Button>
             </div>
         )
@@ -59,32 +54,28 @@ export const Space = ({handleOpen, list, anchorEl, openMenu, handleCloseMenu, ha
     return(
         <div>
             <List>
-                <div className="headerText">
+                <div className="spaceName">
                     Пространства
                 </div>
             </List>
             <Divider />
             <List>
                 <IconButton
-                    sx={{
-                        marginLeft: '12px'
-                    }}
+                    className='!ml-3'
                     aria-label="delete"
                     size="small"
                     onClick={handleOpen}
                 >
-                    <AddIcon sx={{ height:25, width:25}}/>
+                    <AddIcon className="!h-6 !w-6"/>
                 </IconButton>
-                <Box className='box'>
+                <Box className='scrollbar'>
                     {OList}
                 </Box>
 
             </List>
 
             <Menu
-                sx={{
-                    left: '10px'
-                }}
+                className="left-2.5"
                 id="demo-positioned-menu"
                 aria-labelledby="demo-positioned-button"
                 anchorEl={anchorEl}
@@ -95,29 +86,23 @@ export const Space = ({handleOpen, list, anchorEl, openMenu, handleCloseMenu, ha
                 }}
             >
                 <Button
+                    className='btnContextMenu'
                     variant="text"
                     onClick={handleCloseMenuForEdit}
                 >
-                    <EditIcon className="icon"sx={{color: '#747A80'}}/>
+                    <EditIcon className="iconContextMenu"/>
                     &emsp;
-                    <div className="textContextMenu">
-                        Изменить
-                    </div>
+                    Изменить
                 </Button>
                 <br />
-                <Button sx={{
-                    width:'100%',
-                    alignItems: 'left',
-                    justifyContent: 'left'
-                }}
-                        variant="text"
-                        onClick={remove}
+                <Button
+                    className='btnContextMenu'
+                    variant="text"
+                    onClick={remove}
                 >
-                    <DeleteIcon className="icon"/>
+                    <DeleteIcon className="iconContextMenu"/>
                     &emsp;
-                    <div className="textContextMenu">
-                        Удалить
-                    </div>
+                    Удалить
                 </Button>
             </Menu>
         </div>

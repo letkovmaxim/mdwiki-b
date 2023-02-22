@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+
+    .formInput{
+        @apply absolute h-full w-2/5 bg-blue-450 min-h-[550px] right-0
+    }
+
+    .styleBut{
+        @apply !border-solid !border-white !border-4 !rounded-2xl !bg-blue-450 !text-white !font-bold !text-vw1
+    }
+
+    .input{
+        @apply bg-blue-450 border-solid border-white rounded-2xl outline-none py-4 px-5 w-[25vw] h-[7vh] border-[0.3vw] min-h-min min-w-min text-white text-[1.1vmax]
+        focus:border-indigo-500
+        placeholder:text-white font-bold
+    }
+
+    .boxInput{
+        @apply  !absolute !translate-y-[-50%] !translate-x-[-50%] !top-1/2 !left-1/2 !mr-[-50%]
+    }
+
+    .textError{
+        @apply text-red-600 text-[1vw] text-center font-bold
+    }
+
+    .loginBut{
+        @apply !absolute !translate-y-[450%] !translate-x-[-50%] !top-1/2 !left-1/2 !mr-[-50%] !text-white !text-[1.1vmax] !font-bold
+    }
+
+    .regBut{
+        @apply !absolute !translate-y-[-100%] !translate-x-[-50%] !top-1/2 !left-1/2 !mr-[-50%] !text-white !text-[1.1vmax] !font-bold
+    }
+
+    .regBox{
+        @apply !absolute !bottom-0 !min-w-full !h-1/6
+    }
+}

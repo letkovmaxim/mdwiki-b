@@ -1,228 +1,109 @@
-.buttons{
-    margin-top: -28px;
-    height: 30px !important;
-    width: 100% !important;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.markdown{
-    height:calc(95vh - 90px) !important;
-    max-width: 100% !important;
-    padding: 0 !important;
-    min-height: 530px;
-}
+@layer components{
+    .buttonsBox{
+        @apply !h-[30px] !w-full !-mt-7
+    }
 
-.edit{
-    margin-top: 2px;
-    font-size: 11px;
-    color: #747A80;
-}
+    .editBtn{
+        @apply !mt-[2px] !h-6 !border-none !left-[calc(100%-290px)]
+    }
 
-.edit2{
-    margin-top: 2px;
-    font-size: 11px;
-    color: #FFFFFF;
-}
+    .editIcon{
+        @apply !w-4 !h-4
+    }
 
-.editButton{
-    margin-top: 3px !important;
-    position: absolute !important;
-    height: 24px !important;
-    right: 140px !important;
-    border: none !important;
-}
+    .saveBtn{
+        @apply !mt-[2px] !h-6 !border-none !left-[calc(100%-290px)] !text-xs !text-slate-500
+    }
 
-.iconEdit{
-    width: 15px !important;
-    height: 15px !important;
-    color: #747A80 !important;
-}
+    .markdownBox{
+        @apply !h-[calc(95vh-90px)] !max-w-full !min-h-[530px] !p-0
+    }
 
-.iconEdit2{
-    width: 15px !important;
-    height: 15px !important;
-    color: #FFFFFF !important;
-}
+    .helpModalWindow{
+        @apply !absolute !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2 !w-3/4 !h-4/5
+        !bg-white !border-4 !border-blue-470 !rounded-xl !outline-none !px-10 !py-10
+    }
 
-.saveButton{
-    margin-top: 3px !important;
-    position: absolute !important;
-    height: 24px !important;
-    right: 22px !important;
-    border: none !important;
-}
+    .example{
+        @apply rounded-md text-black px-2.5 py-3.5 relative shadow-neutral-900
+        bg-slate-200
+    }
 
-.photo{
-    margin-top: 3px !important;
-    position: absolute !important;
-    height: 24px !important;
-    right: 300px !important;
-    border: none !important;
-}
+    .imageBox{
+        @apply !absolute !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2 !w-[700px] !h-[350px]
+        !bg-white !border-4 !border-blue-470 !rounded-xl !outline-none !px-6 !py-4
+    }
 
-.saveHelp{
-    margin-top: 3px !important;
-    position: absolute !important;
-    height: 24px !important;
-    border: none !important;
-}
+    .imageBtns{
+        @apply !absolute !h-full !w-1/5
+    }
 
-.doc{
-    height: 100% !important;
-    margin-top: 10px !important;
-    width: 100% !important;
-    overflow-y: auto !important;
-}
+    .imageBtn1{
+        @apply !bg-blue-470 !text-[13px]
+    }
 
-.doc::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-}
-.doc::-webkit-scrollbar-track {
-    background: white;
-}
-.doc::-webkit-scrollbar-thumb {
-    background-color: #A4A9AE;
-    border-radius: 20px;
-}
+    .imageBtn2{
+        @apply !text-slate-500 !text-[13px]
+    }
 
-.example{
-    border-radius: 5px;
-    color: #000000;
-    padding: 10px 14px 10px 14px;
-    position: relative;
-    box-shadow: 1px 2px 5px #999;
-    background-color: #EEEEEE;
-}
+    .ariaWork{
+        @apply absolute h-[91%] w-3/4 ml-[20%]
+    }
 
-.buttonsImage{
-    position: absolute !important;
-    height: 100% !important;
-    margin-top: 3px !important;
-    width: 20% !important;
-}
+    .tracing{
+        @apply !border-dashed !border-4 !border-blue-470
+        !absolute !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2 !-mr-[50%]
+        !h-[90%] !w-[90%] !ml-1 !-mt-1 !rounded-xl
+    }
 
-.textImage{
-    font-size: 13px !important;
-}
+    .cameraI{
+        @apply !text-blue-470 !h-12 !w-12
+    }
 
-.workingAria{
-    position: absolute !important;
-    height: 91% !important;
-    margin-top: 3px !important;
-    width: 75% !important;
-    margin-left: 20% !important;
-}
+    .addPathNew{
+        @apply mt-5 h-7 w-[95%] bg-white border-4 border-blue-470 rounded-md outline-none align-middle text-blue-470 p-1
+        focus:border-indigo-500
+        placeholder:text-blue-470 font-bold
+    }
 
-.rectangle{
-    position: absolute !important;
-    height: 90% !important;
-    width: 90% !important;
-    margin-top: 2% !important;
-    margin-left: 5% !important;
-    border-style: dashed;
-    border-color: #4FB5D7;
-    border-radius: 20px;
-}
+    .errorPath{
+        @apply text-sm text-red-600 font-bold
+    }
 
-.camera{
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    margin-right: -50% !important;
-    transform: translate(-50%, -50%) !important;
-    height: 90%!important;
-    width: 90% !important;
-    margin-left: 3px !important;
-    margin-top: -3px !important;
-    border-radius: 15px !important;
-}
+    .pathBtn{
+        @apply !absolute !right-6 !bottom-4 !bg-blue-470 !text-[13px]
+    }
 
-.iconCamera{
-    color: #4FB5D7 !important;
-    width: 50px !important;
-    height: 50px !important;
-}
+    .delImage{
+        @apply !w-full !justify-start !h-6 !font-bold !text-slate-500 !text-[10px]
+    }
 
-.addPath{
-    margin-top: 20px;
-    height: 28px;
-    width: 95%;
-    background: #FFFFFF;
-    border: 3px solid #4FB5D7;
-    border-radius: 5px;
-}
+    .helpBtn{
+        @apply !mt-[3px] !absolute !h-6 !border-none !text-xs !text-slate-500
+    }
 
-.addPath:focus{
-    border: 3px solid #8482FF;
-    outline: none !important;
-}
+    .helpIcon{
+        @apply !h-[15px] !w-[15px] !text-slate-500
+    }
 
-.addPath::placeholder {
-    color: rgba(79,181,215, 0.8);
-    font-size: 16px;
-    font-weight: bold;
-    vertical-align: middle;
-}
+    .pdfBox{
+        @apply !absolute !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2 !w-[400px] !h-[250px]
+        !bg-blue-470 !border-4 !border-white !rounded-xl !outline-none !px-6 !py-4
+    }
 
-.addPath:valid{
-    color: #747A80;
-    font-size: 16px;
-    font-weight: bold;
-    vertical-align: middle;
-}
+    .pdfDownBtn{
+        @apply !absolute !bottom-2.5 !right-6 !text-white !font-bold
+    }
 
-.addLink{
-    position: absolute !important;
-    right: 23px !important;
-    bottom: 15px !important;
-}
+    .select{
+        @apply !mt-0.5 !text-sm
+    }
 
-.iconAddImage{
-    width: 15px !important;
-    height: 15px !important;
-}
-
-.delText{
-    font-size: 10px;
-    color: red;
-}
-
-.delIcon{
-    font-size: 12px!important;
-    color: red !important;
-}
-
-.linkErrorText{
-    font-size: 15px;
-    color: red;
-    font-weight: bold;
-}
-
-
-.pdfButton{
-    margin-top: 3px !important;
-    position: absolute !important;
-    height: 24px !important;
-    right: 305px !important;
-    border: none !important;
-}
-
-.fontInput{
-    height: 40px !important;
-    color: #FFFFFF !important;
-    font-weight: bold !important;
-}
-
-.fontText{
-    color: #FFFFFF !important;
-}
-
-.fontText:focus{
-    color: #FFFFFF !important;
-}
-
-.pdfDownload{
-    position: absolute !important;
-    bottom: 10px !important;
-    right: 15px !important;
+    .pdfBtn{
+        @apply !mt-[2px] !h-6 !border-none !text-xs !text-slate-500 !absolute !ml-28
+    }
 }

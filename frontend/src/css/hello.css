@@ -1,89 +1,38 @@
-@media all and (max-width: 1000px) {
-    .buttonText{
-        font-size: 10px !important;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+
+    .formHello{
+        @apply absolute h-full w-3/5 bg-blue-470 min-h-[550px]
     }
-}
 
-.formText {
-    position: absolute;
-    height: calc(100%);
-    width: calc(60%);
-    top: 0;
-    left: 0;
-    background: #4FB5D7;
-    min-height: 500px;
-    min-width: 450px;
-}
+    .helloBox{
+        @apply !absolute !translate-y-[-50%] !translate-x-[-50%] !top-1/2 !left-1/2 !mr-[-50%]
+    }
 
-.greetingText1{
-    position: absolute;
-    width: calc(80%);
-    height: calc(20%);
-    left: calc(10%);
-    top: calc(35%);
+    .wsLogo{
+        @apply font-algerian text-[6vw] text-center text-white
+    }
 
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 3.5vw;
-    line-height: 67px;
-    text-align: center;
+    .rect1{
+        @apply absolute left-[30%] top-[14%]  h-[2%] w-[11%] bg-white
+    }
 
-    color: #FFFFFF;
-}
+    .rect2{
+        @apply absolute right-[30%] top-[14%]  h-[2%] w-[11%] bg-white
+    }
 
-.greetingText2{
-    position: absolute;
-    width: calc(80%);
-    height: calc(20%);
-    left: calc(10%);
-    top: calc(60%);
+    .text1{
+        @apply text-center text-white text-[3.5vw] mx-[20%] font-montserrat mt-10
+    }
 
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 2.5vw;
-    line-height: 67px;
-    text-align: center;
+    .text2{
+        @apply text-center text-white text-[2.5vw] mx-[25%] font-montserrat mt-10
+    }
 
-    color: #FFFFFF;
-}
-
-.formLogo{
-    position: absolute;
-    height: 6vw;
-    width: calc(100%);
-    top: calc(20%);
-}
-
-.ws{
-    font-family: 'algerian';
-    font-style: normal;
-    font-size: 6vw;
-    text-align: center;
-    color: #FEFCFC;
-}
-
-.rectangle1{
-    position: absolute;
-    height: calc(3%);
-    width: calc(25%);
-    left: calc(12%);
-    top: calc(50%);
-    background: #FFFFFF;
-}
-
-.rectangle2{
-    position: absolute;
-    height: calc(3%);
-    width: calc(25%);
-    right: calc(12%);
-    top: calc(50%);
-    background: #FFFFFF;
-}
-
-.buttonText{
-    color: #FFFFFF;
-    font-size: 1vw;
-    font-weight: bold;
+    .contact{
+        @apply !absolute !bg-blue-470 !ml-3 !mt-3 !border-solid !border-white !border-4 !rounded-2xl !text-white !font-bold !text-vw1
+    }
 }

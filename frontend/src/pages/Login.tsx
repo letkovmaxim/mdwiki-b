@@ -1,21 +1,13 @@
 import React from "react";
 import { Container, Form, FormGroup, Input} from "reactstrap";
-import "../css/login.css"
 import {Hello} from '../component/Hello'
 import Button from '@mui/material/Button';
 import {personLogIn} from "../redux/actions";
 import {connect} from "react-redux";
-
-const styleButton = {
-    backgroundColor: '#70CCF2',
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderColor: '#FCFCFC',
-    borderRadius: 20,
-};
+import Box from "@mui/material/Box";
+import "../css/loginAndRegistratiom.css"
 
 class Login extends React.Component<any, any>{
-
     newPerson = {
         usernameOrEmail: '',
         password: ''
@@ -75,58 +67,45 @@ class Login extends React.Component<any, any>{
         return(
             <div>
                 <Hello/>
-                <Container className="formLogin">
+                <Container className="formInput">
                     <Button
-                        sx={{
-                            position: 'absolute',
-                            right: '3%',
-                            marginTop: '2.5%',
-                        }}
-                        style={styleButton}
+                        className="!absolute right-3 !mt-3 styleBut"
                         variant="contained"
                         size="small"
                         onClick={this.handleSubmitToRegistration}
                     >
-                        <div className="buttonText">
-                            РЕГИСТРАЦИЯ
-                        </div>
+                        РЕГИСТРАЦИЯ
                     </Button>
 
                     <Form onSubmit={this.handleSubmit}>
-                        <FormGroup>
-                            <Input className="login" type="text" name="usernameOrEmail" placeholder="ЛОГИН ИЛИ EMAIL" id="usernameOrEmail" value={person.usernameOrEmail}
-                                   onChange={this.handleChange} autoComplete="usernameOrEmail"/>
-                        </FormGroup>
 
-                        <FormGroup>
-                            <Input className="password" type="password" name="password" placeholder="ПАРОЛЬ" id="password" value={person.password}
-                                   onChange={this.handleChange} autoComplete="password"/>
-                        </FormGroup>
+                        <Box className='boxInput'>
+                            <Box  className='space-y-[45px]'>
+                                <FormGroup>
+                                    <Input className="input" type="text" name="usernameOrEmail" placeholder="ЛОГИН ИЛИ EMAIL" id="usernameOrEmail" value={person.usernameOrEmail}
+                                           onChange={this.handleChange} autoComplete="off"/>
+                                </FormGroup>
 
-                        <Container className="errorForm">
-                            <FormGroup className="errorText">
-                                {this.state.message}
-                            </FormGroup>
-                        </Container>
+                                <Box className='h-[9vh]'>
+                                    <FormGroup>
+                                        <Input className="input" type="password" name="password" placeholder="ПАРОЛЬ" id="password" value={person.password}
+                                               onChange={this.handleChange} autoComplete="off"/>
+                                    </FormGroup>
 
+                                    <div className='textError'>
+                                        {this.state.message}
+                                    </div>
+                                </Box>
+                            </Box>
+                        </Box>
 
                         <Button
-                            sx={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                marginRight: '-50%',
-                                transform: 'translate(-50%, 500%)'
-                            }}
-                            style={styleButton}
+                            className="loginBut styleBut"
                             variant="contained"
                             size="medium"
                             type="submit">
-                            <div className="buttonSinIN">
-                                &emsp;ВОЙТИ&emsp;
-                            </div>
+                            &emsp;ВОЙТИ&emsp;
                         </Button>
-
                     </Form>
                 </Container>
             </div>

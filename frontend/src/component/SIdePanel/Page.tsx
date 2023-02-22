@@ -15,6 +15,7 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import {useDispatch, useSelector} from "react-redux";
 import {getPages, openSpace, treePages} from "../../redux/actions";
+import "../../css/sidePanel.css"
 
 type Props = {
     idSpace: number,
@@ -29,22 +30,6 @@ interface IComp {
     subpages?: readonly IComp[],
     updatedAt: any
 }
-
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '350px',
-    height: '80px',
-    backgroundColor: '#4FB5D7',
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderColor: '#FCFCFC',
-    borderRadius: 5,
-    boxShadow: 24,
-    p: 2,
-};
 
 export const Page = ({idSpace, checkText}:Props) =>{
 
@@ -337,21 +322,16 @@ export const Page = ({idSpace, checkText}:Props) =>{
             <CustomTreeItem key={String(nodes.id)} nodeId={String(nodes.id)}   onClickCapture={() => tree(nodes.id, i)}
                             label={
                                 <Button
-                                    sx={{
-                                        alignItems: 'left',
-                                        justifyContent: 'left',
-                                        minWidth: '100%'
-                                    }}
-                                    className="buttonPage"
+                                    className="spaceBtn"
                                     variant="text"
                                     size="small"
 
                                     onClick={()=> toPage(nodes.id)}
                                     onContextMenu={(e) => handleClickMenu(e, nodes.name, nodes.shared, nodes.id)}
                                 >
-                                    {(String(nodes.id) === pageId ?  <DescriptionOutlinedIcon sx={{color: '#4FB5D7'}} className='description'/> :  <DescriptionOutlinedIcon className='description'/> )}
+                                    {(String(nodes.id) === pageId ?  <DescriptionOutlinedIcon className='!h-5 !w-5 !text-blue-470'/> :  <DescriptionOutlinedIcon className='!h-5 !w-5'/> )}
                                     <div>&emsp;</div>
-                                    {(String(nodes.id) === pageId ? <div style={{marginTop: '3px', color: '#4FB5D7'}}>{nodes.name}</div> : <div className='textButton'>{nodes.name}</div>)}
+                                    {(String(nodes.id) === pageId ? <div className='!mt-1 !text-blue-470'>{nodes.name}</div> : <div className="mt-1">{nodes.name}</div>)}
                                 </Button>
                             }
             >
@@ -379,24 +359,20 @@ export const Page = ({idSpace, checkText}:Props) =>{
     return(
         <div>
             <IconButton
-                sx={{
-                    position: 'absolute',
-                    marginLeft: '55px',
-                    marginTop: '-45px'
-                }}
+                className='!absolute !ml-14 !-mt-[44px]'
                 aria-label="delete"
                 size="small"
                 onClick={handleOpen}
             >
-                <AddIcon sx={{ height:25, width:25}}/>
+                <AddIcon className="!h-6 !w-6"/>
             </IconButton>
 
-            <Box className='box'>
+            <Box className='scrollbar'>
                 <TreeView
                     aria-label="rich object"
-                    defaultCollapseIcon={<ExpandMoreIcon sx={{color: '#747A80'}} />}
+                    defaultCollapseIcon={<ExpandMoreIcon className="!text-slate-500" />}
                     defaultExpanded={treeP}
-                    defaultExpandIcon={<ChevronRightIcon sx={{color: '#747A80'}} />}
+                    defaultExpandIcon={<ChevronRightIcon className="!text-slate-500" />}
                 >
                     {OList}
                 </TreeView>
@@ -431,21 +407,17 @@ export const Page = ({idSpace, checkText}:Props) =>{
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
+                <Box className='modalWindowNotSave'>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        <div style={{color:"white"}}>
+                        <div className="text-white mx-5 my-3">
                             Последние изменения не сохранены
                         </div>
                     </Typography>
-                    <Button variant="text" sx={{position: 'absolute', bottom: '0px', right: '135px'}} onClick={save}>
-                        <div style={{color:"white"}}>
-                            Сохранить
-                        </div>
+                    <Button variant="text"  className="notSave !right-36" onClick={save}>
+                        Cохранить
                     </Button>
-                    <Button variant="text" sx={{position: 'absolute', bottom: '0px', right: '10px'}} onClick={() => redirect(redirectId)}>
-                        <div style={{color:"white"}}>
-                            Продолжить
-                        </div>
+                    <Button variant="text" className="notSave !right-5" onClick={() => redirect(redirectId)}>
+                        Продолжить
                     </Button>
                 </Box>
             </Modal>

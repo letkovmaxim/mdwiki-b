@@ -8,6 +8,7 @@ import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
 import LogoutIcon from '@mui/icons-material/Logout';
 import {Profile} from "./Profile";
+import Box from "@mui/material/Box";
 
 type Props = {
     handleDrawerOpen: () => void,
@@ -27,32 +28,30 @@ export const Header = ({handleDrawerOpen, open, handleSubmitToLogout}: Props) =>
     };
 
     return(
-        <Container className='AppBar' open={open}>
+        <Container className='header' open={open}>
+
+            <Box className="logoBox">
+                <div className="rect1Main"></div>
+
+                <div className="wsLogoMain">
+                    WS
+                </div>
+
+                <div className="rect2Main"></div>
+            </Box>
+
             <IconButton
+                className="absolute left-2 top-[5px]"
                 color="inherit"
                 onClick={handleDrawerOpen}
                 size="small"
                 sx={{  ...(open && { display: 'none' }), top:'5px' }}
             >
-                <MenuIcon className='menu' />
+                <MenuIcon className='iconMenu' />
             </IconButton>
 
-            <Container className="logo">
-                <div className="rec1"></div>
-
-                <div className="logoText">
-                    WS
-                </div>
-
-                <div className="rec2"></div>
-            </Container>
-
             <IconButton
-                sx={{
-                    position: 'absolute',
-                    right: '1%',
-                    top: '5px'
-                }}
+                className="!absolute right-2 top-[5px]"
                 size="small"
                 id="basic-button"
                 aria-controls={openMenu ? 'basic-menu' : undefined}
@@ -60,7 +59,7 @@ export const Header = ({handleDrawerOpen, open, handleSubmitToLogout}: Props) =>
                 aria-expanded={openMenu ? 'true' : undefined}
                 onClick={handleClick}
             >
-                <AccountCircleOutlinedIcon className='menu'/>
+                <AccountCircleOutlinedIcon className='iconMenu'/>
             </IconButton>
             <Menu
                 id="basic-menu"
@@ -72,12 +71,9 @@ export const Header = ({handleDrawerOpen, open, handleSubmitToLogout}: Props) =>
                 }}
             >
                 <Profile/>
-                <Button sx={{alignItems: 'left', justifyContent: 'left', width: '100%'}} color="primary" type="submit" onClick={handleSubmitToLogout}>
-                    <LogoutIcon sx={{color: '#F34646', height:20}}/>
-                    <div>&emsp;</div>
-                    <div style={{color: '#F34646'}}>
-                        ВЫХОД
-                    </div>
+                <Button className="!text-red-600 !w-full" color="primary" type="submit" onClick={handleSubmitToLogout}>
+                    <LogoutIcon className="!h-5 !text-red-600"/>
+                    &emsp;ВЫХОД
                 </Button>
             </Menu>
 

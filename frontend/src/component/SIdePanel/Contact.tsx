@@ -2,6 +2,7 @@ import * as React from 'react';
 import AlternateEmailOutlinedIcon from '@mui/icons-material/AlternateEmailOutlined';
 import Menu from '@mui/material/Menu';
 import IconButton from '@mui/material/IconButton';
+import "../../css/sidePanel.css"
 
 export default function Contact() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -16,10 +17,7 @@ export default function Contact() {
     return (
         <div>
             <IconButton
-                sx={{
-
-                    right: '200px'
-                }}
+                className='right-52'
                 onClick={handleClick}
             >
                 <AlternateEmailOutlinedIcon/>

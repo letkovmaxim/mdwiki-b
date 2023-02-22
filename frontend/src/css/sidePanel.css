@@ -1,151 +1,52 @@
-.sidePanel{
-    position: absolute;
-    height: 0px;
-    width: 300px;
-    bottom: calc(5%);
-    left: calc(2%);
-    background: #FFFFFF;
-    border-radius: 10px;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+    .spaceName{
+        @apply text-center text-xl text-slate-500
+    }
+
+    .spaceBtn{
+        @apply !min-w-full !text-left !h-9 !justify-start !text-slate-500 !normal-case
+    }
+
+    .openFolderIcon{
+        @apply !text-slate-500 !h-5 !w-5
+    }
+
+    .iconContextMenu{
+        @apply !h-4 !w-4 !text-slate-500
+    }
+
+    .btnContextMenu{
+        @apply !text-xs !text-slate-500 !w-full !justify-start
+    }
+
+    .notSave{
+        @apply !absolute !bottom-0 !text-white !mb-2
+    }
+
+    .modalWindowNotSave{
+        @apply !absolute !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2
+        !w-[400px] !h-32 !bg-blue-470 !border-solid !border-4 !border-white
+        !rounded-2xl !shadow-md
+    }
+
+    .modalWindowEditOrAdd{
+        @apply !absolute !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2
+        !w-[340px] !h-40 !bg-blue-470 !border-solid !border-4 !border-white
+        !rounded-2xl !shadow-md
+    }
+
+    .addSpaceOrPage{
+        @apply !w-[300px] !h-8 !bg-blue-470 !border-solid !border-4 !border-white
+        !rounded-md !outline-none !ml-4 !mt-4 !text-white !pl-2
+        focus:border-indigo-500
+        placeholder:text-white/[0.8] font-bold
+    }
+
+    .addOrEditBtn{
+        @apply !absolute !bottom-0 !right-3 !text-white !font-bold !text-[15px] !mb-1
+    }
 }
-
-.spaceText{
-    font-family: Scada, sans-serif !important;
-    font-size: 15px;
-    color: #747A80 !important;
-}
-
-.headerText{
-    font-family: Scada, sans-serif ;
-    text-align: center;
-    font-size: 20px;
-    color: #747A80 !important;
-}
-
-.buttonSpace{
-    min-width: 100% !important;
-    height: 37px !important;
-    text-transform: none !important;
-}
-
-
-.text{
-    color: #FFFFFF;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-
-.addSpace{
-    height: 28px;
-    width: 290px;
-    background: #4FB5D7;
-    border: 3px solid #FFFFFF;
-    border-radius: 5px;
-}
-
-.addSpace:focus{
-    border: 3px solid #8482FF;
-    outline: none !important;
-}
-
-.addSpace::placeholder {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 16px;
-    font-weight: bold;
-    vertical-align: middle;
-}
-
-.addSpace:valid{
-    color: #FFFFFF;
-    font-size: 16px;
-    font-weight: bold;
-    vertical-align: middle;
-}
-
-.addSpaceError{
-    height: 28px;
-    width: 290px;
-    background: #4FB5D7;
-    border: 3px solid #F34646;
-    border-radius: 5px;
-}
-
-.addSpaceError:valid{
-    color: #FFFFFF;
-    font-size: 16px;
-    font-weight: bold;
-    vertical-align: middle;
-}
-
-.addSpaceError:focus{
-    outline: none !important;
-}
-
-.addSpaceError::placeholder {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 16px;
-    font-weight: bold;
-    vertical-align: middle;
-}
-
-.addSpaceError:valid{
-    color: #FFFFFF;
-    font-size: 16px;
-    font-weight: bold;
-    vertical-align: middle;
-}
-
-.icon{
-    color: #747A80 !important;
-    height: 15px !important;
-    width: 15px !important;
-}
-
-.textContextMenu{
-    color: #747A80 !important;
-    font-size: 11px !important;
-}
-
-.buttonPage{
-    color: #747A80 !important;
-    min-width: 100% !important;
-    height: 37px !important;
-    text-transform: none !important;
-}
-
-.buttonPage:hover{
-    background: none !important;
-}
-
-.description{
-    height: 18px !important;
-    width: 18px !important;
-}
-
-.textButton{
-    margin-top: 3px !important;
-    color: #747A80 !important;
-}
-
-.box{
-    height: calc(100vh - 210px) !important;
-    margin-top: 10px !important;
-    max-width: 300px !important;
-    overflow-y: auto !important;
-
-}
-
-.box::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-}
-.box::-webkit-scrollbar-track {
-    background: white;
-}
-.box::-webkit-scrollbar-thumb {
-    background-color: #A4A9AE;
-    border-radius: 20px;
-}
-
-
-
