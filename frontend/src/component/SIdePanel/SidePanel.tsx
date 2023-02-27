@@ -28,6 +28,8 @@ export const SidePanel = ({checkText}:Props) => {
     const dispatch = useDispatch()
     const spaceList = useSelector((state:any) => state.app.spaces)
     const spaceN = useSelector((state:any) => state.app.space)
+    const errorPath = useSelector((state:any) => state.app.error)
+    const [notBlock, setNotBlock] = useState(true)
 
     const { spaceId } = useParams();
 
@@ -93,20 +95,11 @@ export const SidePanel = ({checkText}:Props) => {
     }
 
     useEffect(() => {
-        if(spaceId !== undefined){
-            getNameSpace()
-        }
         getList()
     }, [])
 
     async function getList() {
         dispatch<any>(getSpace())
-    }
-
-    async function getNameSpace(){
-        let response = await fetch('/spaces/' + spaceId);
-        let json = await response.json()
-        dispatch(spaceNameAndShared(json.name, json.shared))
     }
 
     async function handleSubmit() {
@@ -171,6 +164,7 @@ export const SidePanel = ({checkText}:Props) => {
 
     const toPage = (id:number, name:string, shared:boolean) =>{
         setSpaceOpenId(id)
+        setNotBlock(false)
         dispatch(spaceNameAndShared(name, shared))
         dispatch(cleanPages())
     }
@@ -179,7 +173,7 @@ export const SidePanel = ({checkText}:Props) => {
 
     return(
         <div>
-            {( !spaceOpenId ?
+            {( !spaceOpenId || (errorPath && notBlock) ?
                     <div>
                         <Space
                             handleOpen={handleOpen}

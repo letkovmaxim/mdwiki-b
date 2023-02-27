@@ -29,7 +29,7 @@ function App() {
                 <Route path="/wiki" element={checkLogin()}/>
                 <Route path="/wiki/space/:spaceId" element={checkLogin()}/>
                 <Route path="/wiki/space/:spaceId/page/:pageId" element={checkLogin()}/>
-                <Route path="/*" element={<NotFound />} />
+                <Route path="/*" element={<NotFound/>}/>
             </Routes>
         </BrowserRouter>
     );

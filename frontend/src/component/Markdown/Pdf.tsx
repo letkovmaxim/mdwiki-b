@@ -4,6 +4,7 @@ import {Box, Button, Modal, FormControl, InputLabel, MenuItem, Select} from "@mu
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { SelectChangeEvent } from '@mui/material/Select';
 import "../../css/document.css"
+import {useSelector} from "react-redux";
 
 const MenuProps = {
     PaperProps: {
@@ -54,8 +55,7 @@ export const Pdf  = () => {
 
     const {spaceId} = useParams();
     const {pageId} = useParams();
-
-    const [nameFile, setNameFile] = React.useState('');
+    const nameFile = useSelector((state:any) => state.app.namePage)
 
     const [font, setFont] = React.useState('times');
 
@@ -83,16 +83,6 @@ export const Pdf  = () => {
         setFontSize('16')
         setView("false")
     };
-
-    useEffect(() => {
-        getName()
-    }, [])
-
-    const getName = async () => {
-        let response = await fetch('/spaces/' + spaceId + '/pages/' + pageId)
-        let json = await response.json()
-        setNameFile(json.name)
-    }
 
     const downloadPdf = async () => {
         fetch('/spaces/' + spaceId + '/pages/' + pageId + '/document/pdf?font=' + font + '&fontSize=' + fontSize + '&tree=' + view).then(response => {

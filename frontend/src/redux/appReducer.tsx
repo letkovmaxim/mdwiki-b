@@ -1,4 +1,14 @@
-import {CLEAN_PAGES, GET_PAGES, GET_SPACES, IS_LOGIN, IS_NOT_LOGIN, OPEN_SPACE, SPACE_NAME, TREE_PAGES} from "./types";
+import {
+    CLEAN_PAGES,
+    GET_PAGES,
+    GET_SPACES,
+    IS_ERROR,
+    IS_LOGIN, IS_NOT_ERROR,
+    IS_NOT_LOGIN, NAME_PAGE,
+    OPEN_SPACE,
+    SPACE_NAME,
+    TREE_PAGES
+} from "./types";
 
 const initialState = {
     spaces: [],
@@ -9,7 +19,9 @@ const initialState = {
     openSpace: '',
     pages: [],
     login: false,
-    tree: []
+    tree: [],
+    error: false,
+    namePage: ''
 }
 
 const defaultState = {
@@ -21,7 +33,9 @@ const defaultState = {
     openSpace: '',
     pages: [],
     login: false,
-    tree: []
+    tree: [],
+    error: false,
+    namePage: ''
 }
 
 export const appReducer = (state = initialState, action:any) => {
@@ -42,6 +56,12 @@ export const appReducer = (state = initialState, action:any) => {
             return {...state, pages: []}
         case TREE_PAGES:
             return {...state, tree: action.payload}
+        case IS_ERROR:
+            return {...state, error: action.payload}
+        case IS_NOT_ERROR:
+            return {...state, error: action.payload}
+        case NAME_PAGE:
+            return {...state, namePage: action.payload}
         default: return state
     }
 }

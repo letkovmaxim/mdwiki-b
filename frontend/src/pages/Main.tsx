@@ -17,7 +17,8 @@ import List from "@mui/material/List";
 import Button from "@mui/material/Button";
 import {Note} from "../component/Markdown/Note";
 import {useDispatch, useSelector} from "react-redux";
-import {logOut} from "../redux/actions";
+import {isError, isNotError, logOut, namePage, spaceNameAndShared} from "../redux/actions";
+import {Error} from "../component/Main/Error";
 
 const drawerWidth = 300;
 
@@ -52,7 +53,9 @@ export default function MainPage() {
 
     const dispatch = useDispatch()
     const isLogin = useSelector((state:any) => state.app.login)
+    const error = useSelector((state:any) => state.app.error)
 
+    const {spaceId} = useParams();
     const {pageId} = useParams();
 
     const [checkText, setCheckText] = useState("")
@@ -73,7 +76,52 @@ export default function MainPage() {
         if(!isLogin){
             window.location.replace("/login");
         }
-    })
+        checkSpaceAndPage()
+    }, [])
+
+    const checkSpaceAndPage = async () => {
+        if(spaceId && pageId){
+            let response1 = await fetch('/spaces/' + spaceId);
+
+            let response2 = await fetch('/spaces/' + spaceId + '/pages/' + pageId);
+
+            if(response1.ok && response2.ok){
+                let json1 = await response1.json()
+                dispatch(spaceNameAndShared(json1.name, json1.shared))
+
+                let json2 = await response2.json()
+                dispatch(namePage(json2.name))
+
+                dispatch(isNotError())
+            }else {
+                dispatch(isError())
+            }
+        }else if(spaceId || pageId){
+            if(spaceId){
+                let response = await fetch('/spaces/' + spaceId);
+                if(response.ok){
+                    let json = await response.json()
+                    dispatch(spaceNameAndShared(json.name, json.shared))
+                    dispatch(isNotError())
+                }else {
+                    dispatch(isError())
+                }
+            }
+
+            if(pageId){
+                let response = await fetch('/spaces/' + spaceId + '/pages/' + pageId);
+                if(response.ok){
+                    let json = await response.json()
+                    dispatch(namePage(json.name))
+                    dispatch(isNotError())
+                }else{
+                    dispatch(isError())
+                }
+            }
+        }else{
+            dispatch(isNotError())
+        }
+    }
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
@@ -97,6 +145,7 @@ export default function MainPage() {
                 open={open}
                 handleSubmitToLogout={handleSubmitToLogout}
             />
+
             <Drawer
                 sx={{
                     width: drawerWidth,
@@ -129,7 +178,7 @@ export default function MainPage() {
 
             <Main open={open} >
                 <DrawerHeader />
-                {(pageId ? <Document addText={addText}/> : <Note/>)}
+                {error ? <Error/> : (pageId ? <Document addText={addText}/> : <Note/>)}
             </Main>
         </Box>
     );

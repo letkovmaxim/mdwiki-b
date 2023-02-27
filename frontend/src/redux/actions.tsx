@@ -1,4 +1,14 @@
-import {CLEAN_PAGES, GET_PAGES, GET_SPACES, IS_LOGIN, IS_NOT_LOGIN, OPEN_SPACE, SPACE_NAME, TREE_PAGES} from "./types";
+import {
+    CLEAN_PAGES,
+    GET_PAGES,
+    GET_SPACES,
+    IS_ERROR,
+    IS_LOGIN, IS_NOT_ERROR,
+    IS_NOT_LOGIN, NAME_PAGE,
+    OPEN_SPACE,
+    SPACE_NAME,
+    TREE_PAGES
+} from "./types";
 import {Dispatch} from "redux";
 
 export function personLogIn(){
@@ -40,8 +50,10 @@ export function openSpace(id:string){
 export function getPages(idSpace:number){
     return async (dispatch:Dispatch) => {
         let response = await fetch('/spaces/' + idSpace + '/pages?bunch=0&size=1000');
-        const json = await response.json();
-        dispatch({type: GET_PAGES, payload: json})
+        if(response.ok){
+            const json = await response.json();
+            dispatch({type: GET_PAGES, payload: json})
+        }
     }
 }
 
@@ -55,5 +67,26 @@ export function treePages(tree:string[]){
     return{
         type: TREE_PAGES,
         payload: tree
+    }
+}
+
+export function isError(){
+    return{
+        type: IS_ERROR,
+        payload: true
+    }
+}
+
+export function isNotError(){
+    return{
+        type: IS_NOT_ERROR,
+        payload: false
+    }
+}
+
+export function namePage(name:string){
+    return{
+        type: NAME_PAGE,
+        payload: name
     }
 }

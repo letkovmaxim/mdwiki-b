@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import {useDispatch, useSelector} from "react-redux";
-import {getPages, openSpace, treePages} from "../../redux/actions";
+import {getPages, isNotError, openSpace, treePages} from "../../redux/actions";
 import "../../css/sidePanel.css"
 
 type Props = {
@@ -38,6 +38,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
     const treeP = useSelector((state:any) => state.app.tree)
     const spaceOp = useSelector((state:any) => state.app.openSpace)
     const spaceN = useSelector((state:any) => state.app.space)
+    const errorPath = useSelector((state:any) => state.app.error)
 
     const { pageId } = useParams();
     const { spaceId } = useParams();
@@ -301,6 +302,11 @@ export const Page = ({idSpace, checkText}:Props) =>{
     }
 
     const redirect = (id: number) => {
+
+        if(errorPath){
+            dispatch(isNotError())
+        }
+
         window.location.replace("/wiki/space/" + idSpace + "/page/" + id);
     }
 
@@ -329,9 +335,9 @@ export const Page = ({idSpace, checkText}:Props) =>{
                                     onClick={()=> toPage(nodes.id)}
                                     onContextMenu={(e) => handleClickMenu(e, nodes.name, nodes.shared, nodes.id)}
                                 >
-                                    {(String(nodes.id) === pageId ?  <DescriptionOutlinedIcon className='!h-5 !w-5 !text-blue-470'/> :  <DescriptionOutlinedIcon className='!h-5 !w-5'/> )}
+                                    {(String(nodes.id) === pageId && spaceId == spaceOp ?  <DescriptionOutlinedIcon className='!h-5 !w-5 !text-blue-470'/> :  <DescriptionOutlinedIcon className='!h-5 !w-5'/> )}
                                     <div>&emsp;</div>
-                                    {(String(nodes.id) === pageId ? <div className='!mt-1 !text-blue-470'>{nodes.name}</div> : <div className="mt-1">{nodes.name}</div>)}
+                                    {(String(nodes.id) === pageId && spaceId == spaceOp ? <div className='!mt-1 !text-blue-470'>{nodes.name}</div> : <div className="mt-1">{nodes.name}</div>)}
                                 </Button>
                             }
             >
