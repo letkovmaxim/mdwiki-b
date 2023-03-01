@@ -43,9 +43,6 @@ export const Page = ({idSpace, checkText}:Props) =>{
     const { pageId } = useParams();
     const { spaceId } = useParams();
 
-    const[idTree, setIdTree] = useState<string[]>([])
-    const [lastId, setLastId] = useState(0)
-
     const[editId, setEditId] = useState<number>()
 
     const[styles, setStyles] = useState("addSpace")
@@ -133,8 +130,6 @@ export const Page = ({idSpace, checkText}:Props) =>{
         if(spaceOp !== String(idSpace)){
             dispatch(treePages([]))
             dispatch(openSpace(String(idSpace)))
-        }else {
-            setIdTree(treeP)
         }
         getList()
     }
@@ -292,7 +287,6 @@ export const Page = ({idSpace, checkText}:Props) =>{
         setDocument({
             text: checkText
         })
-        dispatch(treePages(idTree))
         setRedirectId(id)
         if (pageId !== undefined) {
             await checkSave(id)
@@ -310,22 +304,9 @@ export const Page = ({idSpace, checkText}:Props) =>{
         window.location.replace("/wiki/space/" + idSpace + "/page/" + id);
     }
 
-    const tree = ( id:number, i:number) => {
-        if(i === 1 && lastId != 0){
-            if(idTree.includes(String(lastId))){
-                const arr = idTree.filter((id) => id !== String(lastId));
-                setIdTree(arr)
-            }else{
-                setIdTree([...idTree, String(lastId)])
-            }
-        }
-        setLastId(id)
-    }
-
-    const renderTree = (nodes: any, i:number) => {
+    const renderTree = (nodes: any) => {
         return(
-
-            <CustomTreeItem key={String(nodes.id)} nodeId={String(nodes.id)}   onClickCapture={() => tree(nodes.id, i)}
+            <CustomTreeItem key={String(nodes.id)} nodeId={String(nodes.id)}
                             label={
                                 <Button
                                     className="spaceBtn"
@@ -342,7 +323,7 @@ export const Page = ({idSpace, checkText}:Props) =>{
                             }
             >
                 {Array.isArray(nodes.subpages)
-                    ? nodes.subpages.map((node:any) => renderTree(node,++i))
+                    ? nodes.subpages.map((node:any) => renderTree(node))
                     : null}
             </CustomTreeItem>
         );
@@ -350,14 +331,13 @@ export const Page = ({idSpace, checkText}:Props) =>{
 
 
     const OList = pageList.map((l:any) => {
-        let i = 0;
         return (
             <div  key={l.id}
                   onContextMenu={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                   }}>
-                {renderTree(l, i)}
+                {renderTree(l)}
             </div>
         )
     });
