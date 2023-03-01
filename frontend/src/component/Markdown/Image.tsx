@@ -5,30 +5,11 @@ import Modal from '@mui/material/Modal';
 import {useParams} from "react-router-dom";
 import {PhotoCamera} from "@mui/icons-material";
 import {Input} from "reactstrap";
-import {CircularProgress, ImageList, Snackbar} from "@mui/material";
+import {ImageList} from "@mui/material";
 import Menu from "@mui/material/Menu";
 import DeleteIcon from "@mui/icons-material/Delete";
+import "../../css/document.css"
 
-const styleB = {
-    backgroundColor: '#4FB5D7',
-};
-
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 700,
-    height: 350,
-    backgroundColor: '#FCFCFC',
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderColor: '#4FB5D7',
-    borderRadius: 5,
-    boxShadow: 24,
-    p: 2,
-    outline: 'none'
-};
 
 type Props ={
     image: (text:string) => void,
@@ -160,7 +141,7 @@ export const Image = ({image, open, handleClose}:Props) =>{
     }
 
     const OList =
-        <ImageList sx={{ width: 550, height: '*', maxHeight: 300, position: 'absolute' }} cols={5} rowHeight={10}>
+        <ImageList className="imagesPreview" cols={5} rowHeight={10}>
             {images.map((l: any) => (
                 <div
                     key={l.fileGUID}
@@ -170,13 +151,13 @@ export const Image = ({image, open, handleClose}:Props) =>{
                     }}
                 >
                     <Button
-                        sx={{height:60, width: 100}}
+                        className='!h-[60px] !w-[100px]'
                         variant="text"
                         size="large"
                         onClick={()=> addImage(l.fileGUID)}
                         onContextMenu={(e) => handleClick(e, l.fileGUID)}
                     >
-                        <img style={{height: 45, maxWidth:80}} src={'http://localhost:3000/download/thumbnail/'+l.fileGUID}/>
+                        <img className='!h-[45px] !w-max-[80px]' src={'http://localhost:3000/download/thumbnail/'+l.fileGUID}/>
                     </Button>
                 </div>
             ))}
@@ -191,55 +172,43 @@ export const Image = ({image, open, handleClose}:Props) =>{
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
-                    <Box className='buttonsImage'>
+                <Box className='imageBox'>
+                    <Box className='imageBtns'>
                         {(loadImage ?
-                            <Button style={styleB} variant="contained">
-                                <div className='textImage'>
-                                    Загрузить изображение
-                                </div>
+                            <Button className='imageBtn1' variant="contained">
+                                Загрузить изображение
                             </Button>
                             :
-                            <Button variant="text" onClick={ChangeLoadImage}>
-                                <div style={{color: '#747A80'}} className='textImage'>
-                                    Загрузить изображение
-                                </div>
+                            <Button className="imageBtn2"  variant="text" onClick={ChangeLoadImage}>
+                                Загрузить изображение
                             </Button>
                         )}
                         {(linkImage ?
-                                <Button style={styleB} variant="contained">
-                                    <div className='textImage'>
-                                        Вставить ссылку
-                                    </div>
+                                <Button className='imageBtn1' variant="contained">
+                                    Вставить ссылку
                                 </Button>
                                 :
-                                <Button sx={{width: '100%'}} variant="text" onClick={ChangeLinkImage}>
-                                    <div style={{color: '#747A80'}} className='textImage'>
-                                        Вставить <br/> ссылку
-                                    </div>
+                                <Button className="imageBtn2 !w-full" variant="text" onClick={ChangeLinkImage}>
+                                    Вставить <br/> ссылку
                                 </Button>
                         )}
                         {(allImage ?
-                                <Button style={styleB} variant="contained">
-                                    <div className='textImage'>
-                                        Загруженные изображения
-                                    </div>
+                                <Button className='imageBtn1' variant="contained">
+                                    Загруженные изображения
                                 </Button>
                                 :
-                                <Button variant="text" onClick={ChangeAllImage}>
-                                    <div style={{color: '#747A80'}} className='textImage'>
-                                        Загруженные изображения
-                                    </div>
+                                <Button className="imageBtn2" variant="text" onClick={ChangeAllImage}>
+                                    Загруженные изображения
                                 </Button>
                         )}
                     </Box>
-                    <Box className='workingAria'>
+                    <Box className='ariaWork'>
                         {(loadImage ?
                           <div>
                               <div className='rectangle'/>
-                              <Button variant="text" className='camera' color="primary" aria-label="upload picture" component="label" size="large">
+                              <Button variant="text" className='tracing' color="primary" aria-label="upload picture" component="label" size="large">
                                   <input hidden accept="image/*" type="file" onChange={submitForm} />
-                                  <PhotoCamera className='iconCamera' />
+                                  <PhotoCamera className='cameraI' />
                               </Button>
                           </div>
                           :
@@ -248,7 +217,7 @@ export const Image = ({image, open, handleClose}:Props) =>{
                         {(linkImage ?
                           <div>
                               <Input
-                                  className='addPath'
+                                  className='addPathNew'
                                   type="text"
                                   name="name"
                                   id="name"
@@ -257,13 +226,11 @@ export const Image = ({image, open, handleClose}:Props) =>{
                                   onChange={handleChange}
                                   autoComplete="off"
                               />
-                              <div className='linkErrorText'>
+                              <div className='errorPath'>
                                   {error}
                               </div>
-                              <Button style={styleB} className='addLink' variant="contained" onClick={submitLink}>
-                                  <div className='textImage'>
-                                      Добавить
-                                  </div>
+                              <Button className='pathBtn' variant="contained" onClick={submitLink}>
+                                  Добавить
                               </Button>
                           </div>
                           :
@@ -288,22 +255,15 @@ export const Image = ({image, open, handleClose}:Props) =>{
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <Button sx={{
-                    height: 25,
-                    width:'100%',
-                    alignItems: 'left',
-                    justifyContent: 'left'
-                }}
-                        variant="text"
-                        onClick={remove}
+                <Button
+                    className='delImage'
+                    variant="text"
+                    onClick={remove}
                 >
-                    <DeleteIcon className="delIcon"/>
+                    <DeleteIcon className="!text-xs !text-slate-500"/>
                     &emsp;
-                    <div className="delText">
-                        Удалить
-                    </div>
+                    Удалить
                 </Button>
-
             </Menu>
         </div>
     );

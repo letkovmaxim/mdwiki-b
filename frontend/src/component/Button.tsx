@@ -14,23 +14,10 @@ export default function Contacts() {
         setAnchorEl(null);
     };
 
-    const styleContacts = {
-        backgroundColor: '#4FB5D7',
-        borderStyle: 'solid',
-        borderWidth: 3,
-        borderColor: '#FCFCFC',
-        borderRadius: 20,
-        marginLeft: '1%',
-        marginTop: '1%',
-    };
-
     return (
         <div>
             <Button
-                sx={{
-                    position: 'absolute'
-                }}
-                style={styleContacts}
+                className='contact'
                 variant="contained"
                 id="basic-button"
                 size="small"
@@ -39,9 +26,7 @@ export default function Contacts() {
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
             >
-                <div className="buttonText">
-                    КОНТАКТЫ
-                </div>
+                КОНТАКТЫ
             </Button>
             <Menu
                 id="basic-menu"

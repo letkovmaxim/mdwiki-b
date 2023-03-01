@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import List from '@mui/material/List';
 import IconButton from "@mui/material/IconButton";
-import "../../css/sidePanel.css";
+import "../../css/sidePanel.css"
 import Divider from "@mui/material/Divider";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {Space} from "./Space";
@@ -196,21 +196,19 @@ export const SidePanel = ({checkText}:Props) => {
                     :
                     <div>
                         <List>
-                            <div className="headerText">
+                            <div className="spaceName">
                                 {spaceN.name}
                             </div>
                         </List>
                         <Divider />
                         <List>
                             <IconButton
-                                sx={{
-                                    marginLeft: '12px'
-                                }}
+                                className='!ml-3'
                                 aria-label="delete"
                                 size="small"
                                 onClick={handleBack}
                             >
-                                <ArrowBackIcon sx={{ height:25, width:25}}/>
+                                <ArrowBackIcon className="!h-6 !w-6"/>
                             </IconButton>
 
                             <Page

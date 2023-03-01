@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import "../../css/sidePanel.css"
 
 type Props ={
     anchorEl:any,
@@ -19,9 +19,7 @@ export const ContextMenu = ({ anchorEl, openMenu, handleCloseMenu, handleCloseMe
     return(
         <div>
             <Menu
-                sx={{
-                    left: '10px'
-                }}
+                className='!left-2.5'
                 id="demo-positioned-menu"
                 aria-labelledby="demo-positioned-button"
                 anchorEl={anchorEl}
@@ -32,44 +30,36 @@ export const ContextMenu = ({ anchorEl, openMenu, handleCloseMenu, handleCloseMe
                 }}
             >
                 <Button
+                    className='btnContextMenu'
                     variant="text"
                     onClick={handleCloseMenuForAdd}
                 >
-                    <AddIcon className="icon"sx={{color: '#747A80'}}/>
+                    <AddIcon className="iconContextMenu"/>
                     &emsp;
-                    <div className="textContextMenu">
-                        Добавить
-                    </div>
+                    Добавить
                 </Button>
                 <br />
                 <Button
+                    className='btnContextMenu'
                     variant="text"
                     onClick={handleCloseMenuForEdit}
                 >
-                    <EditIcon className="icon"sx={{color: '#747A80'}}/>
+                    <EditIcon className="iconContextMenu"/>
                     &emsp;
-                    <div className="textContextMenu">
-                        Изменить
-                    </div>
+                    Изменить
                 </Button>
                 <br />
-                <Button sx={{
-                    width:'100%',
-                    alignItems: 'left',
-                    justifyContent: 'left'
-                }}
-                        variant="text"
-                        onClick={remove}
+                <Button
+                    className='btnContextMenu'
+                    variant="text"
+                    onClick={remove}
                 >
-                    <DeleteIcon className="icon"/>
+                    <DeleteIcon className="iconContextMenu"/>
                     &emsp;
-                    <div className="textContextMenu">
-                        Удалить
-                    </div>
+                    Удалить
                 </Button>
             </Menu>
 
         </div>
     )
-
 }

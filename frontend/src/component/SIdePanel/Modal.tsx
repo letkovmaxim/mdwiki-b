@@ -7,6 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
+import "../../css/sidePanel.css"
 
 type Props ={
     open: boolean,
@@ -23,22 +24,6 @@ type Props ={
     placeholder: string
 }
 
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '300px',
-    height: '130px',
-    backgroundColor: '#4FB5D7',
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderColor: '#FCFCFC',
-    borderRadius: 5,
-    boxShadow: 24,
-    p: 2,
-};
-
 export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, addSub, AddSubpage, handleSubmit, editId, error, shared, placeholder}: Props) => {
     return(
         <div>
@@ -48,9 +33,9 @@ export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, 
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
+                <Box className='modalWindowEditOrAdd'>
                     <Input
-                        className={styles}
+                        className='addSpaceOrPage'
                         type="text"
                         name="name"
                         id="name"
@@ -59,14 +44,10 @@ export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, 
                         onChange={handleChange}
                         autoComplete="off"
                     />
-                    <div style={{color:"red", fontWeight: "bold"}}>
+                    <div className='text-red-600 font-bold ml-4'>
                         {error}
                     </div>
-                    <FormControl
-                        sx={{
-                            top: '8px'
-                        }}
-                    >
+                    <FormControl className='!ml-4'>
                         <RadioGroup
                             aria-labelledby="demo-controlled-radio-buttons-group"
                             name="shared"
@@ -74,46 +55,37 @@ export const ModalWindow = ({open, handleClose, styles,newObject, handleChange, 
                             onChange={handleChange}
                         >
                             {shared &&
-                            <FormControlLabel className="text" value={true} control={<Radio
+                            <FormControlLabel className="text-white" value={true} control={<Radio
                                 sx={{color: '#FFFFFF', '&.Mui-checked': {color: '#8482FF',},}} size="small"/>}
                                               label="публичный"/>
                             }
 
-                            <FormControlLabel className="text" value={false} control={<Radio
+                            <FormControlLabel className="text-white" value={false} control={<Radio
                                 sx={{color: '#FFFFFF', '&.Mui-checked': {color: '#8482FF',},}} size="small"/>}
                                               label="приватный"/>
                         </RadioGroup>
                     </FormControl>
                     {(addSub ?
                             <Button
-                                sx={{
-                                    position: 'absolute',
-                                    bottom: '0px',
-                                    right: '10px'
-                                }}
+                                className='addOrEditBtn'
                                 variant="text"
                                 size="small"
                                 onClick={AddSubpage}
                             >
-                                <div className="text" >Создать</div>
+                                Создать
                             </Button>
                             :
                             <Button
-                                sx={{
-                                    position: 'absolute',
-                                    bottom: '0px',
-                                    right: '10px'
-                                }}
+                                className='addOrEditBtn'
                                 variant="text"
                                 size="small"
                                 onClick={handleSubmit}
                             >
-                                {(!editId ? <div className="text" >Создать</div> : <div className="text" >Изменить</div>)}
+                                {(!editId ? <div>Создать</div> : <div>Изменить</div>)}
                             </Button>
                     )}
                 </Box>
             </Modal>
         </div>
     )
-
 }

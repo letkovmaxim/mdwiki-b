@@ -1,5 +1,4 @@
 import React, { useEffect, useState} from "react";
-import "../../css/document.css"
 import { MarkdowNote} from "./MarkdowNote";
 import {useDispatch} from "react-redux";
 import {logOut} from "../../redux/actions";

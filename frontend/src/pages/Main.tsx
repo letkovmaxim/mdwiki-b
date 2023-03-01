@@ -19,7 +19,6 @@ import {Note} from "../component/Markdown/Note";
 import {useDispatch, useSelector} from "react-redux";
 import {logOut} from "../redux/actions";
 
-
 const drawerWidth = 300;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -48,7 +47,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
 }));
-
 
 export default function MainPage() {
 
@@ -93,7 +91,7 @@ export default function MainPage() {
     }
 
     return (
-        <Box sx={{ display: 'flex' }} className='background'>
+        <Box sx={{ display: 'flex' }} className='size'>
             <Header
                 handleDrawerOpen={handleDrawerOpen}
                 open={open}
@@ -120,10 +118,8 @@ export default function MainPage() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    <Button sx={{width:'100%'}} className="btn" variant="text" onClick={toNote}>
-                        <div className='textBtn'>
-                            Заметки
-                        </div>
+                    <Button className="noteBtn" variant="text" onClick={toNote}>
+                        Заметки
                     </Button>
 
                 </List>

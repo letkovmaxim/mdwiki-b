@@ -8,23 +8,6 @@ import "../../css/main.css"
 import {useDispatch} from "react-redux";
 import {logOut} from "../../redux/actions";
 
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '500px',
-    height: '250px',
-    backgroundColor: '#4FB5D7',
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderColor: '#FCFCFC',
-    borderRadius: 5,
-    boxShadow: 24,
-    p: 2,
-    outline: 'none'
-};
-
 export const Profile = () => {
 
     const dispatch = useDispatch()
@@ -158,17 +141,17 @@ export const Profile = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
-                    <Box className='titleBoxProfile'>
-                        <PersonIcon className='titlePersonIcon'/>
-                        <div className='titlePersonName'>
+                <Box className='profileBox'>
+                    <Box className='titleProfileBox'>
+                        <PersonIcon className='profileIcon'/>
+                        <div className='profileName'>
                             {person.username}
                         </div>
                     </Box>
-                    <Box className='boxEdit'>
+                    <Box className='editBox'>
                         <Box>
                             <Input
-                                className='textField'
+                                className='inputProfile'
                                 type="text"
                                 name="name"
                                 id="username"
@@ -177,15 +160,15 @@ export const Profile = () => {
                                 placeholder="Имя"
                                 autoComplete="off"
                             />
-                            <Button style={{color: '#FFFFFF', fontWeight: 'bold', marginLeft: '15px'}} variant="text" onClick={personUpdateLogin}>ИЗМЕНИТЬ</Button>
-                            <div style={{color:"red", fontWeight: "bold"}}>
+                            <Button className='profileBtn' variant="text" onClick={personUpdateLogin}>ИЗМЕНИТЬ</Button>
+                            <div className='profileError'>
                                 {nameError}
                             </div>
                         </Box>
 
                         <Box style={{position: 'absolute', top: '65px'}}>
                             <Input
-                                className='textField'
+                                className='inputProfile'
                                 type='text'
                                 name="email"
                                 id="email"
@@ -194,8 +177,8 @@ export const Profile = () => {
                                 placeholder="Email"
                                 autoComplete="off"
                             />
-                            <Button style={{color: '#FFFFFF', fontWeight: 'bold', marginLeft: '15px'}} variant="text" onClick={personUpdateEmail}>ИЗМЕНИТЬ</Button>
-                            <div style={{color:"red", fontWeight: "bold"}}>
+                            <Button className='profileBtn' variant="text" onClick={personUpdateEmail}>ИЗМЕНИТЬ</Button>
+                            <div className='profileError'>
                                 {emailError}
                             </div>
                         </Box>
