@@ -6,6 +6,8 @@ import TreeItem, {
 } from '@mui/lab/TreeItem';
 import clsx from 'clsx';
 import Typography from '@mui/material/Typography';
+import {useDispatch, useSelector} from "react-redux";
+import {treePages} from "../../redux/actions";
 
 const CustomContent = React.forwardRef(function CustomContent(
     props: TreeItemContentProps,
@@ -33,6 +35,9 @@ const CustomContent = React.forwardRef(function CustomContent(
 
     const icon = iconProp || expansionIcon || displayIcon;
 
+    const dispatch = useDispatch()
+    const treeP = useSelector((state:any) => state.app.tree)
+
     const handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         preventSelection(event);
     };
@@ -41,6 +46,13 @@ const CustomContent = React.forwardRef(function CustomContent(
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     ) => {
         handleExpansion(event);
+        let arr: string[] = treeP
+        if(treeP.includes(nodeId)){
+            arr = arr.filter((id) => id !== nodeId);
+        }else {
+            arr.push(nodeId)
+        }
+        dispatch(treePages(arr))
     };
 
     const handleSelectionClick = (
