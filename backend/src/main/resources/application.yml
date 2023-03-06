@@ -1,14 +1,13 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: 'jdbc:postgresql://localhost:5432/mdwiki_db'
-    username: 'postgres'
-    password: 'postgres'
+    url: jdbc:postgresql://${DATASOURCE_URL:localhost}:${DATASOURCE_PORT:5432}/${DATASOURCE_DB:mdwiki_db}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        show_sql: true
     hibernate:
       ddl-auto: validate
   liquibase:
@@ -22,13 +21,12 @@ spring:
   session:
     store-type: redis
   redis:
-    host: localhost
-    port: 6379
-    password: 'redispassword'
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
 server:
   error:
     include-message: always
     include-binding-errors: always
 file:
-  uploads-directory: "uploads"
-  thumbnails-directory: "thumbnails"
+  uploads-directory: uploads
+  thumbnails-directory: thumbnails

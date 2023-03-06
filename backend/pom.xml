@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>mdwiki-backend</artifactId>
-	<version>${parent.version}</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>MdWiki</name>
 	<description>Markdown based wiki project for Spring Boot</description>
 

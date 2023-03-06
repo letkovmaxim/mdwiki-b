@@ -1,0 +1,41 @@
+version: "3"
+services:
+  redis:
+    image: redis:7.0.8-alpine
+    container_name: redis
+  db:
+    image: postgres:15-alpine
+    container_name: pg
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mdwiki_db
+  backend:
+    build: ./backend
+    deploy:
+      replicas: 3
+    environment:
+      DATASOURCE_URL: db
+      DATASOURCE_PORT: 5432
+      DATASOURCE_DB: mdwiki_db
+      DATASOURCE_USERNAME: postgres
+      DATASOURCE_PASSWORD: postgres
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - db
+      - redis
+  nginx:
+    image: nginx:1.21.3-alpine
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - '80:3000'
+    depends_on:
+      - nginx
