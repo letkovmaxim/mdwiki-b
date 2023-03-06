@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DATASOURCE_URL}:${DATASOURCE_PORT}/${DATASOURCE_DB}
-    username: ${DATASOURCE_USERNAME}
-    password: ${DATASOURCE_PASSWORD}
+    url: jdbc:postgresql://${DATASOURCE_URL:localhost}:${DATASOURCE_PORT:5432}/${DATASOURCE_DB:mdwiki_db}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
   jpa:
     properties:
       hibernate:
@@ -21,12 +21,12 @@ spring:
   session:
     store-type: redis
   redis:
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
 server:
   error:
     include-message: always
     include-binding-errors: always
 file:
-  uploads-directory: 'uploads'
-  thumbnails-directory: 'thumbnails'
+  uploads-directory: uploads
+  thumbnails-directory: thumbnails
