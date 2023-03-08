@@ -93,7 +93,7 @@ public class PersonService implements IPersonService {
             throw new AccessDeniedException("Отказано в доступе");
         }
 
-        if(!user.getEmail().equals(updatedPerson.getEmail())){
+        if (!user.getEmail().equals(updatedPerson.getEmail())) {
             if (personRepository.findByEmail(updatedPerson.getEmail()).isPresent()) {
                 throw new ElementAlreadyExistsException("Почта уже используется");
             }

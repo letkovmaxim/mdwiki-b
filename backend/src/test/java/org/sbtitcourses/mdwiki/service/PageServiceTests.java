@@ -39,6 +39,7 @@ class PageServiceTests {
     private final Page pageToCreate = new Page();
     private final Page pageWithId = Page.builder()
             .id(1)
+            .name("pageName")
             .space(space)
             .build();
     private final Page parentPage = Page.builder()

@@ -37,6 +37,7 @@ class SpaceServiceTests {
     private final Space spaceToCreate = new Space();
     private final Space spaceWithId = Space.builder()
             .id(1)
+            .name("spaceName")
             .owner(owner)
             .build();
     private final Space spaceToUpdateWith = Space.builder()

@@ -15,6 +15,9 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 /**
  * Сервис с логикой взаимодействия с сущностью {@link Document}.
  */
@@ -156,6 +159,10 @@ public class DocumentService implements IDocumentService {
         Document document = page.getDocument();
         Person user = entityFetcher.getLoggedInUser();
 
+        if (document == null) {
+            throw new PdfConversionException("Ошибка конвертации документа");
+        }
+
         if (ResourceAccessHelper.isAccessToReadDocumentDenied(document, user)) {
             throw new AccessDeniedException("Доступ запрещен");
         }
@@ -163,8 +170,10 @@ public class DocumentService implements IDocumentService {
         String markdown = tree ? treeOf(page) : document.getText();
         String documentName = document.getPage().getName();
 
-        InputStreamResource inputStreamResource = PdfConverter
-                .convert(markdown, font, size);
+        byte[] bytes = PdfConverter.convert(markdown, font, size);
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+
+        InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
 
         return new ConvertedDocument(inputStreamResource, documentName);
     }
