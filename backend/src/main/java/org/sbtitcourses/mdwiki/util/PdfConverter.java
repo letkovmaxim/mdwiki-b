@@ -7,15 +7,11 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.sbtitcourses.mdwiki.util.exception.PdfConversionException;
-import org.springframework.core.io.InputStreamResource;
-import org.xhtmlrenderer.layout.SharedContext;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +44,7 @@ public final class PdfConverter {
      * @return поток ввода с текстом документа в виде ресурса.
      * @throws PdfConversionException если произошла ошибка при конвертации.
      */
-    public static InputStreamResource convert(String markdown, String font, int size) {
+    public static byte[] convert(String markdown, String font, int size) {
         if (size < 6 || size > 66) {
             size = 16;
         }
@@ -75,17 +71,11 @@ public final class PdfConverter {
                     BaseFont.EMBEDDED
             );
 
-            SharedContext sharedContext = renderer.getSharedContext();
-            sharedContext.setPrint(true);
-            sharedContext.setInteractive(false);
-
-            renderer.setDocumentFromString(document.html());
+            renderer.setDocumentFromString(document.html(), null);
             renderer.layout();
             renderer.createPDF(outputStream);
 
-            try (InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray())) {
-                return new InputStreamResource(inputStream);
-            }
+            return outputStream.toByteArray();
 
         } catch (IOException e) {
             throw new PdfConversionException("Ошибка конвертации документа");

@@ -1,7 +1,5 @@
 package org.sbtitcourses.mdwiki.service;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,9 +12,7 @@ import org.sbtitcourses.mdwiki.util.exception.AccessDeniedException;
 import org.sbtitcourses.mdwiki.util.exception.ElementNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +33,10 @@ class PersonServiceTests {
     private EntityFetcher entityFetcher;
     @InjectMocks
     private PersonService personService;
-    private final Person personWithId = Person.builder().id(1).build();
+    private final Person personWithId = Person.builder()
+            .id(1)
+            .email("testEmail@mail.com")
+            .build();
     private final Person personToUpdateWith = Person.builder()
             .id(1)
             .username("newUsername")

@@ -208,7 +208,7 @@ public class PageService implements IPageService {
             throw new AccessDeniedException("Отказано в доступе");
         }
 
-        if(!page.getName().equals(pageToUpdateWith.getName())){
+        if (!page.getName().equals(pageToUpdateWith.getName())) {
             if (pageRepository.findBySpaceAndName(space, pageToUpdateWith.getName()).isPresent()) {
                 throw new ElementAlreadyExistsException("Страница с таким именем уже существует в этом пространстве");
             }

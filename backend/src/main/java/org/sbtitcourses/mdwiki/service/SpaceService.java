@@ -138,7 +138,7 @@ public class SpaceService implements ISpaceService {
             throw new AccessDeniedException("Отказано в доступе");
         }
 
-        if(!space.getName().equals(spaceToUpdateWith.getName())){
+        if (!space.getName().equals(spaceToUpdateWith.getName())) {
             if (spaceRepository.findByOwnerAndName(user, spaceToUpdateWith.getName()).isPresent()) {
                 throw new ElementAlreadyExistsException("Пространство с таким именем уже существует");
             }
