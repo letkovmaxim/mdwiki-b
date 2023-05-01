@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DATASOURCE_URL:localhost}:${DATASOURCE_PORT:5432}/${DATASOURCE_DB:mdwiki_db}
-    username: ${DATASOURCE_USERNAME:postgres}
-    password: ${DATASOURCE_PASSWORD:postgres}
+    url: jdbc:postgresql://${PGHOST:localhost}:${PGPORT:5432}/${PGDATABASE:mdwiki_db}
+    username: ${PGUSER:postgres}
+    password: ${PGPASSWORD:postgres}
   jpa:
     properties:
       hibernate:
