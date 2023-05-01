@@ -25,6 +25,7 @@ import javax.validation.constraints.Min;
 @RestController
 @RequestMapping("/spaces/{spaceId}/pages/{pageId}/document")
 @Validated
+@CrossOrigin
 public class DocumentController {
 
     /**

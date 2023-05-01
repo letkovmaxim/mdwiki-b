@@ -23,6 +23,7 @@ import java.util.List;
  */
 @RestController
 @Validated
+@CrossOrigin
 public class FileController {
 
     /**

@@ -22,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/spaces")
 @Validated
+@CrossOrigin
 public class SpaceController {
 
     /**

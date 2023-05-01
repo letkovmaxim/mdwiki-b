@@ -23,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/people")
 @Validated
+@CrossOrigin
 public class PersonController {
 
     /**

@@ -23,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/spaces/{spaceId}/pages")
 @Validated
+@CrossOrigin
 public class PageController {
 
     /**
