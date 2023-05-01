@@ -21,8 +21,10 @@ spring:
   session:
     store-type: redis
   redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
+    host: ${REDISHOST:localhost}
+    port: ${REDISPORT:6379}
+    username: ${REDISUSER}
+    password: ${REDISPASSWORD}
 server:
   error:
     include-message: always
