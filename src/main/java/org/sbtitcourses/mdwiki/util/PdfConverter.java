@@ -66,7 +66,7 @@ public final class PdfConverter {
         Elements links = document.select("img[src]");
         for (Element link : links) {
             String linkText = link.attr("src");
-            if (linkText.startsWith("http://localhost")) {
+            if (linkText.startsWith("https://mdwiki-b.up.railway.app")) {
                 String newLink = "uploads/" + username + linkText.substring(linkText.lastIndexOf("/")) + ".jpg";
                 link.attr("src", newLink);
             }
