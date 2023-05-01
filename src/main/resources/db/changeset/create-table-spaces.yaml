@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: '20.2'
+      author: Maxim Letkov
+      changes:
+        - createTable:
+            tableName: spaces
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: owner_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                    foreignKeyName: spaces_persons_id_fkey
+                    references: persons(id)
+                    deleteCascade: true
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shared
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false

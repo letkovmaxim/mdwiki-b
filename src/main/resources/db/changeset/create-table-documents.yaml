@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: '20.4'
+      author: Maxim Letkov
+      changes:
+        - createTable:
+            tableName: documents
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: text
+                  type: VARCHAR
+              - column:
+                  name: page_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                    foreignKeyName: documents_pages_id_fkey
+                    references: pages(id)
+                    deleteCascade: true

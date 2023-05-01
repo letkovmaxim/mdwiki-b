@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: '20.5'
+      author: Maxim Letkov
+      changes:
+        - createTable:
+            tableName: files
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: guid
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: size
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: owner_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                    foreignKeyName: files_persons_id_fkey
+                    references: persons(id)
+                    deleteCascade: true
+              - column:
+                  name: space_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                    foreignKeyName: files_spaces_id_fkey
+                    references: spaces(id)
+                    deleteCascade: true

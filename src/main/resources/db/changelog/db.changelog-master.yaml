@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: db/changeset/create-table-persons.yaml
+  - include:
+      file: db/changeset/create-table-spaces.yaml
+  - include:
+      file: db/changeset/create-table-pages.yaml
+  - include:
+      file: db/changeset/create-table-documents.yaml
+  - include:
+      file: db/changeset/create-table-files.yaml
+  - include:
+      file: db/changeset/add-column-note.yaml
